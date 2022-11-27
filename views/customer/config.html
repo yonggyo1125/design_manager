@@ -1,0 +1,239 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<form method="post" action="/customer/config" target='ifrmProcess' autocomplete='off'>
+<div class='stitle top flex_between'>
+    상담 가능 시간
+    <div class='tit_btns'>
+        <span class='layer_popup sbtn' data-width='500' data-height='600' data-title='상담가능 시간대 확인' data-url='/customer/config/avail_schedule'>
+            <i class='xi-check'></i>
+            상담가능 시간대 확인
+        </span>
+    </div>
+</div>
+<table class='table-cols'>
+    <tr>
+        <th>상담가능시간</th>
+        <td>
+            <select name='csShour' class='wauto'>
+            {% for hour in hours %}
+                <option value='{{ hour }}'{{ ' selected' if csShour == hour }}>{{ '0' if hour < 10 }}{{ hour }}</option>
+            {% endfor %}
+            </select>시
+            ~   
+            <select name='csEhour' class='wauto'>
+            {% for hour in hours %}
+                <option value='{{ hour }}'{{ ' selected' if csEhour == hour }}>{{ '0' if hour < 10 }}{{ hour }}</option>
+            {% endfor %} 
+            </select>시 까지
+        </td>
+    </tr>
+    <tr>
+        <th>점심시간</th>
+        <td>
+            <select name='lunchShour' class='wauto'>
+                {% for hour in hours %}
+                    <option value='{{ hour }}'{{ ' selected' if lunchShour == hour }}>{{ '0' if hour < 10 }}{{ hour }}</option>
+                {% endfor %}
+                </select>시
+                ~   
+                <select name='lunchEhour' class='wauto'>
+                {% for hour in hours %}
+                    <option value='{{ hour }}'{{ ' selected' if lunchEhour == hour }}>{{ '0' if hour < 10 }}{{ hour }}</option>
+                {% endfor %} 
+            </select>시 까지
+        </td>
+    </tr>
+    <tr>
+        <th>상담접수간격</th>
+        <td>
+            <select name='csSpan' class='wauto'>
+            {% for hour in csSpan %}
+                <option value='{{ hour }}'{{ ' selected' if csSpan == hour }}>{{ hour }}</option>
+            {% endfor %}
+            </select>시간 간격
+        </td>
+    </tr>
+    <tr>
+        <th>예약버튼<br>노출시간</th>
+        <td>
+            <select name='availShour' class='wauto'>
+                {% for hour in hours %}
+                    <option value='{{ hour }}'{{ ' selected' if availShour == hour }}>{{ '0' if hour < 10 }}{{ hour }}</option>
+                {% endfor %}
+                </select>시
+                ~   
+                <select name='availEhour' class='wauto'>
+                {% for hour in hours %}
+                    <option value='{{ hour }}'{{ ' selected' if availEhour == hour }}>{{ '0' if hour < 10 }}{{ hour }}</option>
+                {% endfor %} 
+            </select>시 까지
+        </td>
+    </tr>
+    <tr>
+        <th>예약버튼<br>노출요일</th>
+        <td>
+        {% for yoil in yoils %}
+            <input type='checkbox' name='availYoils' value='{{ loop.index - 1 }}' id='availYoils_{{ loop.index }}'{{ ' checked' if availYoils.indexOf("" + (loop.index - 1)) != -1 }}>
+            <label for='availYoils_{{ loop.index }}'>{{ yoil }}</label>
+        {% endfor %}
+        </td>
+    </tr>
+</table>
+
+<div class="stitle">상담접수 관리자 알림설정</div>
+<table class="table-cols">
+    <tr>
+        <th>알림사용</th>
+        <td>
+            <input type="radio" name="useSendAlimToAdmin" value="1" id="useSendAlimToAdmin_1"{{ ' checked' if useSendAlimToAdmin == 1 }}>
+            <label for="useSendAlimToAdmin_1">사용</label>
+            <input type="radio" name="useSendAlimToAdmin" value="0" id="useSendAlimToAdmin_0"{{ ' checked' if useSendAlimToAdmin != 1 }}>
+            <label for="useSendAlimToAdmin_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>전화상담 템플릿</th>
+        <td>
+            <select name="telTmpltCode">
+                <option value="">템플릿 선택</option>
+            {% if templates and templates.length > 0 %}
+            {% for item in templates %}
+                <option value="{{ item.tmpltCode }}"{{ ' selected' if telTmpltCode == item.tmpltCode }}>{{ item.tmpltNm }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>API 잡수 템플릿</th>
+        <td>
+            <select name="apiTmpltCode">
+                <option value="">템플릿 선택</option>
+            {% if templates and templates.length > 0 %}
+            {% for item in templates %}
+                <option value="{{ item.tmpltCode }}"{{ ' selected' if apiTmpltCode == item.tmpltCode }}>{{ item.tmpltNm }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>알림 수신관리자</th>
+        <td>
+            <ul id="alimManagers">
+            {% if alimManagers and alimManagers.length > 0 %}
+            {% for m in alimManagers %}
+            <li>
+                <input type="hidden" name="alimManagers" value="{{ m.id }}">
+                {{ m.managerNm}}({{ m.managerId }})
+                <i class="remove xi-minus-square"></i>
+            </li>
+            {% endfor %}
+            {% endif %}
+            </ul>
+            <span class="sbtn select_managers" data-id="alimManagers"><i class='xi-check'></i>관리자 선택</span>
+        </td>
+    </tr>
+</table>
+
+<div class="stitle">상담답변 알림설정</div>
+<table class="table-cols">
+    <tr>
+        <th>알림사용</th>
+        <td>
+            <input type="radio" name="useReplayAlim" value="1" id="useReplayAlim_1"{{ ' checked' if useSendAlimToAdmin == 1 }}>
+            <label for="useSendAlimToAdmin_1">사용</label>
+            <input type="radio" name="useReplayAlim" value="0" id="useReplayAlim_0"{{ ' checked' if useSendAlimToAdmin != 1 }}>
+            <label for="useSendAlimToAdmin_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>템플릿</th>
+        <td>
+            <select name="replyTmpltCode">
+                <option value="">템플릿 선택</option>
+            {% if templates and templates.length > 0 %}
+            {% for item in templates %}
+                <option value="{{ item.tmpltCode }}"{{ ' selected' if replyTmpltCode == item.tmpltCode }}>{{ item.tmpltNm }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+</table>
+
+<div class="stitle">상답답변 WEB HOOK URL 설정</div>
+<table class="table-cols">
+    <tr>
+        <th>데이터 전송 URL</th>
+        <td>
+            <textarea name="webhookUrls">{{ webhookUrls }}</textarea>
+        </td>
+    </tr>
+</table>
+
+<div class="stitle">전화상담 접수 WEB HOOK URL 설정</div>
+<table class="table-cols">
+    <tr>
+        <th>데이터 전송 URL</th>
+        <td>
+            <textarea name="telWebHookUrls">{{ telWebHookUrls }}</textarea>
+        </td>
+    </tr>
+</table>
+
+<div class='stitle'>상담 분류</div>
+<table class='table-cols'>
+    <tr>
+        <th>분류명</th>
+        <td>
+            <input type='text' name='csCategory' value='{{ csCategory }}' placeholder='여러개 분류를 등록할 경우 ||로 구분하여 입력'>
+        </td>
+    </tr>
+</table>
+
+<div class="stitle">A/S신청 게시판</div>
+<table class="table-cols">
+    <tr>
+        <th>게시판</th>
+        <td>
+            <select name="idBoard">
+                <option value="">게시판 선택</option>
+            {% if boards and boards.length > 0 %}
+            {% for item in boards %}
+                <option value="{{ item.id }}"{{ ' selected' if idBoard == item.id }}>{{ item.title }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+</table>
+
+<div class='btns'>
+    <button type="submit" class="btn">저장하기</button>
+    <button type="button" class="btn white cancel_back">취소하기</button>
+</div>
+</form>
+
+<div class='mtitle'>상담 신청 팝업 URL</div>
+
+<div class="mb10"'>http://{{ host }}/popup/customer/apply?channel=업체명 &nbsp;
+<span class='sbtn' onclick="codefty.common.copyToClipBoard('http://{{ host }}/popup/customer/apply?channel=업체명');"><i class='xi-paperclip'></i> PC URL 복사</span>
+<a href='/popup/customer/apply?channel=디자인관리자' class='sbtn black' target='_blank'>미리보기</a>
+</div>
+<div>
+    http://{{ host }}/popup/customer/apply?channel=업체명&is_mobile=1 &nbsp;
+<span class='sbtn' onclick="codefty.common.copyToClipBoard('http://{{ host }}/popup/customer/apply?channel=업체명&is_mobile=1');"><i class='xi-paperclip'></i> MOBILE URL 복사</span>
+<a href='/popup/customer/apply?channel=디자인관리자&is_mobile=1' class='sbtn black' target='_blank'>미리보기</a>
+</div>
+</div>
+
+<script type="text/html" id="tplMembers">
+    <li>
+        <input type="hidden" name="alimManagers" value="<%=id%>">
+        <%=managerNm%>(<%=managerId%>)
+        <i class="remove xi-minus-square"></i>
+    </li>
+</script>
+{% endblock %}

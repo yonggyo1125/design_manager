@@ -1,0 +1,17 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+{% if type == 'deliveryCompany' %} 
+{% include './_config_delivery_company.html' %}
+{% elif type == 'deliveryPolicy' %}
+{% include './_config_delivery_policy.html' %}
+{% elif type == 'deliveryAreaPolicy' %}
+{% include './_config_delivery_area_policy.html' %}
+{% elif type == 'designStatus' %} 
+{% include './_config_design_status.html' %}
+{% elif type == 'doMany' %}
+{% include './_config_do_many.html' %}
+{% else %}
+{% include './_config_order_status.html' %}
+{% endif %}
+
+{% endblock %}

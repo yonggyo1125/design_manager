@@ -1,0 +1,72 @@
+{% extends '../../layout/popup.html' %}
+{% block content %}
+{% if not isPopup %}
+<div class='top_tit'>
+    <span class='big'>디자인샘플</span>
+    원하는 샘플이 있다면, 주문시 요청사항에 샘플번호를 기재해주세요.
+    <div class='xi-close' id='close_popup'></div>
+</div>
+{% endif %}
+<form class='frmSearch' id='frmSearch' method='get' action='{{ requestURI }}' autocomplete='off'>
+    {% for col in cols %}
+    <input type='hidden' name='cols' value='{{ col }}'>
+    {% endfor %}
+    {% if search.copy %}
+    <input type='hidden' name='copy' value='1'>
+    {% endif %}
+    {% if search.userSelect %}
+    <input type='hidden' name='userSelect' value='1'>
+    {% endif %}
+    {% if isPopup %} 
+    <input type='hidden' name='isPopup' value='1'>
+    {% endif %}
+    <input type='hidden' name='subCategory' value='{{ search.subCategory }}'>
+    <select name='sopt'>
+        <option value='all'{{ ' selected' if not search.sopt or search.sopt == 'all' }}>통합검색</option>
+        <option value='itemCd'{{ ' selected' if search.sopt == 'itemCd' }}>샘플번호</option>
+        <option value='itemNm'{{ ' selected' if search.sopt == 'itemNm' }}>샘플명</option>
+    </select>
+    <input type='text' name='skey' value='{{ search.skey }}' placeholder='원하는 디자인을 검색하세요.'>
+    <input type='submit' value='조회하기'>
+</form>
+
+<div class='top_links'>
+    <div class='total'><span class='no montserrat'>{{ total.toLocaleString() if total  else '0' }}</span>개의 디자인</div>
+    {% if subCategories %} 
+    <div class='links'>
+        {% for sub in subCategories %}
+        <span class='subCategory{{ ' on' if search.subCategory == sub }}' data-sub-category='{{ sub }}'>{{ sub }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+{% if list.length > 0 %}  
+<ul class='items cols_{{ selectedCols }}'>
+{% for item in list %}
+    <li class='item'>
+        <img src='{{ item.image }}'>
+        <div class='info'>
+            샘플번호: <span class='no montserrat'>{{ item.itemCd }}</span>
+            {% if search.copy %} 
+            <span class='sbtn' onclick="codefty.common.copyToClipBoard('{{ item.itemCd }}');"><i class='xi-paperclip'></i>복사</span>
+            {% endif %}
+            {% if search.userSelect %}
+            <span class='sbtn select_item' 
+                data-item-cd='{{ item.itemCd }}'
+                data-item-nm='{{ item.itemNm }}'
+                data-item-download-url='{{ item.downloadUrl }}' 
+                data-item-download-ai-url='{{ item.downloadAiUrl }}'>
+                <i class='xi-check'></i> 선택
+            </span>
+            {% endif %}
+        </div>
+    </li>
+{% endfor %}
+</ul>
+{% else %} 
+<ul class='no-items'>검색된 샘플상품이 없습니다.</ul>
+{% endif %}
+
+
+{% endblock %}

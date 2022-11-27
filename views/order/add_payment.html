@@ -1,0 +1,32 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<form id="frmRegist" method="post" action="{{ '/order/update_payment/' + id if mode == 'update' else '/order/add_payment/' + orderNo }}" target="ifrmProcess" autocomplete="off">
+    <table class="table-cols">
+        <tr>
+            <th>주문번호</th>
+            <td>{{ orderNo }}</td>
+        </tr>
+        <tr>
+            <th>추가항목</th>
+            <td>
+                <input type="text" name="itemNm" value="{{ itemNm }}">
+            </td>
+        </tr>
+        <tr>
+            <th>추가금액</th>
+            <td>
+                <input type="number" name="itemPrice" value="{{ itemPrice }}" class="wauto right">원
+            </td>
+        </tr>
+        <tr>
+            <th>상담원 메모</th>
+            <td>
+                <textarea name="csMemo">{{ csMemo }}</textarea>
+            </td>
+        </tr>
+    </table>
+    <div class="table-btn">
+        <input type="submit" value="추가금액 {{ '수정' if mode == 'update' else '등록' }}">
+    </div>
+</form>
+{% endblock %}

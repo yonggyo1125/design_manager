@@ -1,0 +1,12 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<form id="frmUpdate" method="post" target="ifrmProcess" autocomplete="off">
+    <input type="hidden" name="type" value="{{ type }}">
+    <input type="hidden" name="statusCd" value="{{ statusCd }}">
+    {% include './_popup_config_order_status.html' %}
+    <div class="mbtns">
+        <input type="submit" value="저장하기" class='btn'>
+        <button type='button' class="btn" onclick="parent.codefty.popup.close();">취소하기</button>
+    </div>
+</form>
+{% endblock %}

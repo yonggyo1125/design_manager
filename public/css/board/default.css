@@ -1,0 +1,124 @@
+/** default 스킨 - 쓰기, 수정 */
+.board-default .notice { margin-left: 10px; }
+.board-default .attach_files_wrap { margin-top: 10px; }
+.board-default .attach_files { display: flex; flex-wrap: wrap; }
+.board-default .attach_files li { display: flex;  border: 1px solid #222; color: #222; font-size: 12px; margin-top: 5px; padding: 5px 10px; border-radius: 3px; margin-right: 3px; }
+.board-default .attach_files li a:hover { text-decoration: underline; }
+.board-default .attach_files li i { vertical-align: middle; margin-left: 5px; cursor: pointer; font-size: 14px; }
+.board-default #frmRegist #content { width: 100%; border: 1px solid #d5d5d5; height: 300px; padding: 10px; resize: none; }
+.board-default .form_box dl { align-items: stretch;  border-bottom: 1px solid #d5d5d5; }
+.board-default .form_box dl:first-of-type { border-top: 3px solid #222; }
+.board-default .form_box dl dt { background: #f2f3f4; padding: 10px 15px; font-weight: bold; }
+.board-default .form_box dl dd { padding: 10px 15px; }
+.board-default .form_box input[type='text'] { max-width: 350px; }
+.board-default .w120 { width: 120px !important; }
+.board-default .wFull { width: 100% !important; max-width: 100% !important; }
+.board-default .sbtn { border: 1px solid #727272; display: inline-block; border-radius: 5px; min-width: 93px; text-align: center; padding: 5px 15px 6px; cursor: pointer; font-size: 12px; background: #fff; }
+.board-default .sbtn i { vertical-align: middle; font-size: 13px; margin-right: 7px; }
+.board-default .sbtn:hover { background:#000; color: #fff; transition: all 0.5s;  }
+.board-default .sbtn:hover * { color: #fff; transition: all 0.5s; }
+.board-default .sbtn.red { background:#ff221f; color: #fff; border-color: #ff221f; font-weight: bold; }
+.board-default .sbtn.red * { color: #fff; }
+.board-default .sbtn.black { background: #000; color: #fff; }
+.board-default .sbtn.black *  { color: #fff; }
+
+.board-default .btns { text-align: center; margin-top: 50px; }
+.board-default .btns .btn { display: inline-block; height: 45px; line-height: 45px; border: 1px solid #000; color: #fff; background-color: #000; min-width: 170px; padding: 0 15px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: all 0.7s;  }
+.board-default .btns .btn.white { background: #fff; color: #000; }
+
+/** default 스킨 - 글 보기 */
+.board-default .view_box .subject { border: 1px solid #222; padding: 10px; font-size: 15px; font-weight: bold; border-radius: 3px; margin-bottom: 10px; }
+.board-default .view_box .post_info { display: flex; justify-content: space-between; border: 1px solid #222; padding: 10px; }
+.board-default .view_box .post_info .ip { margin-left: 10px; }
+.board-default .view_box .post_info .poster { margin-right: 10px; }
+.board-default .view_box .download_files li { background: #f8f8f8; padding: 10px; border-bottom: 1px solid #d5d5d5; }
+
+.board-default .view_box .content { padding: 10px;  min-height: 500px; }
+.board-default .view_box .controls { text-align: right; }
+.board-default .controls a { display: inline-block; padding: 8px 15px; border: 1px solid #222; transition: all 1s; }
+.board-default .controls a:hover { background: #222; color: #fff; font-size: 13px; }
+.board-default .controls a i { vertical-align: middle; position: relative; top: -1px; margin-right: 3px; }
+.board-default .near_post { margin-bottom: 15px; }
+.board-default .near_post li { border-bottom: 1px solid #d5d5d5;  }
+.board-default .near_post li:first-of-type { border-top: 1px solid #d5d5d5; }
+
+.board-default .near_post li a { display: block; padding: 15px 10px; }
+.board-default .near_post li .direction i { vertical-align: middle; margin-right: 5px; font-size: 15px; }
+.board-default .near_post li .direction { padding-right: 10px;  color: #666; }
+/** default 스킨 - 비회원 비밀번호 */
+.board-default #guest_password .password_box { margin: 0 auto; margin-top: 15%; width: 320px; text-align: center; }
+.board-default #guest_password .password_box .tit { font-size: 16px; line-height: 1.5; margin-bottom: 15px; }
+.board-default #guest_password input[type='password'] { height: 44px; width: 100%; max-width: 100%; }
+.board-default #guest_password button[type='submit'] { margin-top: 15px; border-radius: 5px; font-size: 15px; padding: 0 42px; height: 44px; background: #36466d; color: #fff; font-weight: bold; cursor: pointer; }
+
+/** default 스킨 - 게시글 목록 */
+.board-default .categories { margin-bottom: 25px; display: flex; height: 45px; background: #fff; box-shadow: 1px 1px 5px #cdced5; }
+.board-default .categories .tab { line-height: 45px; padding: 0 25px; font-size: 14px;  }
+.board-default .categories .tab.on { background: #596b99; color: #fff; font-weight: bold;  }
+
+.board-default .list_box { min-height: 700px; }
+.board-default .list_box .data_list li { border-bottom: 1px solid #d5d5d5; display: flex; justify-content: space-between; height: 50px; padding: 0 10px; }
+.board-default .list_box .data_list li:first-of-type { border-top: 1px solid #d5d5d5; line-height: 49px; }
+.board-default .list_box .data_list li .post_info { width: 350px; text-align: right; } 
+.board-default .list_box .data_list li .subject { width: calc(100% - 350px); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 49px; }
+.board-default .list_box .data_list li .post_info span { font-size: 12px; margin-right: 5px; line-height: 49px; }
+.board-default .list_box .data_list li:hover { background: #f8f8f8; }
+
+.board-default .list_box .list_top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+
+.board-default .list_box .total .no { color: #3c4e7a; font-weight: bold; }
+.board-default .no-list { border: 1px solid #d5d5d5; border-left: 0; border-right: 0; }
+
+.board-default .search_box { display: flex; padding: 10px; border-bottom: 1px solid #d5d5d5; background: #f8f8f8; }
+.board-default .search_box select { margin-right: 3px; }
+.board-default .search_box input[type='text'] { margin-right: 3px; width: 200px; }
+.board-default .search_box button { background: #36466d; border: 0; color:#fff; font-weight: bold; padding: 0 20px; font-size: 12px;  cursor: pointer; }
+
+.board-default .depth1 { padding-left: 15px; }
+.board-default .depth2 { padding-left: 30px; }
+.board-default .depth3 { padding-left: 45px; }
+.board-default .depth3 { padding-left: 60px; }
+.board-default .depth4 { padding-left: 75px; }
+.board-default .depth5 { padding-left: 90px; }
+.board-default .depth6 { padding-left: 105px; }
+.board-default .depth7 { padding-left: 120px; }
+.board-default .depth8 { padding-left: 135px; }
+.board-default .depth9 { padding-left: 150px; }
+.board-default .depth10 { padding-left: 165px; }
+.board-default .depth11 { padding-left: 180px; }
+
+.board-default .viewing .icon_view { font-weight: bold; color: #ff0000;  }
+.board-default .data_list .icon_list { vertical-align: middle; }
+.board-default .data_list .icon_notice { height: 20px; }
+.board-default .data_list .list_item.notice a { font-weight: bold; }
+.board-default .data_list li i.icon { vertical-align: middle; font-size: 12px; }
+.board-default .data_list li .icon.new { color: #ff0000; }
+
+/** default 스킨 - 댓글 */
+.board-default #frmComment .comment_box { margin-bottom: 10px; }
+.board-default #frmComment .comment { display: flex; justify-content: space-between; }
+.board-default #frmComment .comment button { width: 120px; background: #fff; border: 1px solid #000; cursor: pointer; font-size: 14px; transition: all 1s; }
+.board-default #frmComment .comment button:hover { background: #000; color: #fff; transition: all 1s; }
+.board-default #frmComment .comment .comment_form { width: calc(100% - 125px); }
+.board-default #frmComment .comment textarea { height: 100px; width: 100%; padding: 10px; resize: none; border: 1px solid #000;  }
+.board-default #frmComment .comment_info { margin-bottom: 5px; display: flex; justify-content: space-between; align-items: end;  }
+.board-default #frmComment .comment_info input[type='text'],
+.board-default #frmComment .comment_info input[type='password'] { width: 120px; }
+.board-default #frmComment .comment_box .attach_box {  border-bottom: 1px solid #d5d5d5; padding: 10px 0;  }
+
+.board-default #frmComment .editor_size i { font-size: 30px; cursor: pointer; }
+.board-default #comments_list li { display: flex; }
+.board-default #comments_list li i.reply { display: inline-block;  font-size: 15px; }
+.board-default #comments_list li > .inner { border: 1px solid #d5d5d5; padding: 10px; border-radius: 3px; margin-bottom: 10px; width: calc(100% - 20px); }
+.board-default #comments_list li .comment_content { font-size: 12px; }
+.board-default #comments_list li .comment_content img { max-width: 500px; cursor: pointer; }
+.board-default #comments_list .comment_info { display: flex; justify-content: space-between; align-items: end; }
+.board-default #comments_list .comment_info { padding-top: 10px; border-top: 1px solid #d5d5d5; }
+
+.board-default #comments_list .download_files .download { border-top: 1px solid #d5d5d5;  padding: 10px; background: #f8f8f8; }
+.board-default #comments_list .download_files .download i { margin-right: 3px; vertical-align: middle; }
+.board-default #comments_list .download_files .download a:hover { text-decoration: underline; }
+.board-default #comments_list .cbtn { border: 1px solid #000; padding: 5px 10px; font-size: 12px; cursor: pointer; display: inline-block; }
+.board-default #comments_list .cbtn i { vertical-align: middle; margin-right: 3px; }
+.board-default #comments_list .cbtn.black { background: #000; color: #fff; }
+.board-default #comments_list .cbtn.black i { color: #fff; position: relative; top: -1px; }

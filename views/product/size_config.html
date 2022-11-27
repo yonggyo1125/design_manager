@@ -1,0 +1,129 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<div class="mtitle top flex_between">
+    설정 관리
+    <div class="tit_btns">
+        <a href="/product/size_config/add" class="sbtn">
+            <i class="xi-plus"></i>
+            설정 등록 
+        </a>
+    </div>
+</div>
+
+<div class="scroll_x">
+<form id="frmList" method="post" action="/product/size_config" target="ifrmProcess" autocomplete="off">
+    <table class="table-rows">
+        <thead>
+            <tr>
+                <th width="30">
+                    <input type="checkbox" class="js-checkall" data-target-name="id" id="js_checkall">
+                    <label for="js_checkall" class="standalone"></label>
+                </th>
+                <th nowrap>설정명</th>
+                <th nowrap>1헤배단가</th>
+                <th nowrap>1헤배단가(사업자)</th>
+                <th nowrap>최소헤베</th>
+                <th nowrap>최대헤베</th>
+                <th nowrap>기본사이즈</th>
+                <th nowrap>최대사이즈</th>
+                <th nowrap>샘플사이즈</th>
+                <th nowrap>보드형사이즈</th>
+                <th nowrap>보드형추가설정</th>
+                <th nowrap>사이즈배송비</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list and list.length > 0 %}
+        {% for item in list %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="id" value="{{ item.id }}" id="id_{{ item.id }}">
+                    <label for="id_{{ item.id }}" class="standalone"></label>
+                </td>
+                <td>
+                    <input type="text" name="configNm_{{ item.id }}" value="{{ item.configNm }}">
+                </td>
+                <td>
+                    <input type="number" name="sqmPrice_{{ item.id }}" value="{{ item.sqmPrice }}">
+                </td>
+                <td>
+                    <input type="number" name="sqmPriceB2B_{{ item.id }}" value="{{ item.sqmPriceB2B }}">
+                </td>
+                <td>
+                    <input type="number" name="minSqm_{{ item.id }}" value="{{ item.minSqm }}">
+                </td>
+                <td>
+                    <input type="number" name="maxSqm_{{ item.id }}" value="{{ item.maxSqm }}">
+                </td>
+                <td>
+                    <input type="text" name="basicSize_{{ item.id }}" value="{{ item.basicSize }}" placeholder="예시 - 240|120">
+                </td>
+                <td>
+                    <input type="text" name="maxSize_{{ item.id }}" value="{{ item.maxSize }}" placeholder="예시 - 240|120">
+                </td>
+                <td>
+                    <input type="text" name="sampleSize_{{ item.id }}" value="{{ item.sampleSize }}" placeholder="예시 - 240|120">
+                </td>
+                <td>
+                    <select name="boardSizeNm_{{ item.id }}">
+                        <option value=''>- 선택하세요 -</option>
+                    {% if boardSizeNms and boardSizeNms.length > 0 %}
+                    {% for sName in boardSizeNms %}
+                    <option value="{{ sName }}"{{ ' selected' if sName == item.boardSizeNm }}>{{ sName }}</option>
+                    {% endfor %}
+                    {% endif %}
+                    </select>
+                </td>
+                <td>
+                    <select name="idBoardSizeAdd_{{ item.id }}">
+                        <option value=''>- 선택하세요 -</option>
+                    {% if boardSizeAdds and boardSizeAdds.length > 0 %}
+                    {% for add in boardSizeAdds %}
+                        <option value="{{ add.id }}"{{ ' selected' if item.idBoardSizeAdd == add.id }}>{{ add.configNm }}</option>
+                    {% endfor %}
+                    {% endif %}
+                    </select>
+                </td>
+                <td>
+                    <select name="idSizeDeliveryConfig_{{ item.id }}">
+                        <option value=''>- 선택하세요 -</option>
+                    {% if sizeDeliveries and sizeDeliveries.length > 0 %}
+                    {% for sizeDelivery in sizeDeliveries %}
+                        <option value="{{ sizeDelivery.id }}"{{ ' selected' if item.idSizeDeliveryConfig == sizeDelivery.id }}>{{ sizeDelivery.configNm }}</option>
+                    {% endfor %}
+                    {% endif %}
+                    </select>
+                </td>
+                <td nowrap>
+                    <a href="/product/size_config/{{ item.id }}" class="sbtn">상세보기</a>
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %}
+            <tr class="no-list">
+                <td colspan="12">등록된 설정이 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    {% if list and list.length > 0 %}
+    <div class="table-action">
+        <div>
+            <span class="sbtn black form_update" data-id='frmList'>
+                <i class="xi-check-min"></i>
+                선택 설정 수정하기
+            </span>
+            <span class="sbtn form_delete" data-id='frmList'>
+                <i class="xi-trash-o"></i>
+                선택 설정 삭제하기
+            </span>
+        </div>
+    </div>
+    {% endif %}
+</form>
+</div>
+<!--// scroll_x -->
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% if bundleCodes and bundleCodes.length > 0 %}
+<form id='frmChangeDelivery' method='post' autocomplete='off'>
+{% for item in bundleCodes %}
+<div class='stitle'>
+    묶음배송코드 : {{ item.bundleCode if item.bundleCode else '공통' }}
+    {% if item.deliveryPolicy and item.deliveryPolicy.policyNm %}
+    / 배송조건 : {{ item.deliveryPolicy.policyNm }}
+    {% endif %}
+</div>
+<input type='hidden' name='orderNo' value='{{ orderNo }}'>
+<input type='hidden' name='bundleCodeKey' value='{{ item.bundleCodeKey }}'>
+<table class='table-cols mb20'>
+    <tr>
+        <th>수령인/업체명</th>
+        <td>
+            <input type='text' name='receiverNm_{{ item.bundleCodeKey }}' value='{{ item.receiverNm }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>수령인 휴대전화</th>
+        <td>
+            <input type='text' name='receiverCellPhone_{{ item.bundleCodeKey }}' value='{{ item.receiverCellPhone }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>주소</th>
+        <td>
+            <div class='mb5'>
+                <input type='text' name='receiverZonecode_{{ item.bundleCodeKey }}' value='{{ item.receiverZonecode }}' readonly class='w100'>
+                <span class='sbtn medium black' onclick="codefty.common.showSearchAddress('receiverZonecode_{{ item.bundleCodeKey }}', 'receiverAddress_{{ item.bundleCodeKey }}');">
+                    <i class='xi-search'></i> 우편번호 검색
+                </span>
+            
+            </div>
+            <input type='text' name='receiverAddress_{{ item.bundleCodeKey }}' value='{{ item.receiverAddress }}' readonly class='mb5'>
+            <input type='text' name='receiverAddressSub_{{ item.bundleCodeKey }}' value='{{ item.receiverAddressSub }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>배송메세지</th>
+        <td>
+            <input type='text' name='deliveryMemo_{{ item.bundleCodeKey }}' value='{{ item.deliveryMemo }}'>
+        </td>
+    </tr>
+</table>
+{% endfor %}
+<div class='btns'>
+    <input type='submit' value='변경하기' class='btn'>
+    <button type='button' class='btn' onclick="codefty.popup.close();">취소하기</button>
+</div>
+</form>
+{% endif %}

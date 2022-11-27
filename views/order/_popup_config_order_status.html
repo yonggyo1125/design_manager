@@ -1,0 +1,66 @@
+<table class="table-cols">
+    <tr>
+        <th>처리상태코드</th>
+        <td width="180">{{ statusCd }}</td>
+        <th>처리상태명</th>
+        <td>
+            <input type="text" name="statusNm" value="{{ statusNm }}">
+        </td>
+    </tr>
+    <tr>
+        <th>진열가중치</th>
+        <td>
+            <input type='number' name="listOrder" value="{{ listOrder }}">
+        </td>
+        <th>사용여부</th>
+        <td>
+            <select name="isUse">
+                <option value="1"{{ ' selected' if isUse == 1 }}>사용</option>
+                <option value="0"{{ ' selected' if isUse != 1 }}>미사용</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>주문 통제설정</th>
+        <td colspan="3">
+            <input type="checkbox" name="orderDeletePossible" value="1" id="orderDeletePossible"{{ ' checked' if setting and setting.orderDeletePossible }}>
+            <label for="orderDeletePossible">주문서 삭제가능</label><br>
+            <input type="checkbox" name="orderUpdatePossible" value="1" id="orderUpdatePossible"{{ ' checked' if setting and setting.orderUpdatePossible }}>
+            <label for="orderUpdatePossible">주문서 수정가능</label><br>
+
+            <input type="checkbox" name="orderDeliveryUpdate" value="1" id="orderDeliveryUpdate"{{ ' checked' if setting and setting.orderDeliveryUpdate  }}>
+            <label for="orderDeliveryUpdate">배송지 등록/수정가능</label><br>
+
+            <input type="checkbox" name="orderDesignUpdate" value="1" id="orderDesignUpdate"{{ ' checked' if setting and setting.orderDesignUpdate }}>
+            <label for="orderDesignUpdate">디자인시안 등록/수정 가능</label><br>
+
+            <input type="checkbox" name="showWorkingList" value="1" id="showWorkingList"{{ ' checked' if setting and setting.showWorkingList }}>
+            <label for="showWorkingList">작업관리 목록에 노출</label><br>
+
+            <input type="checkbox" name="orderAddPayment" value="1" id="orderAddPayment"{{ ' checked' if setting and setting.orderAddPayment }}>
+            <label for="orderAddPayment">추가 금액 등록 가능</label><br>
+
+            <input type="checkbox" name="orderCreatePayment" value="1" id="orderCreatePayment"{{ ' checked' if setting and setting.orderCreatePayment }}>
+            <label for="orderCreatePayment">결제 생성 가능</label><br>
+
+            <input type="checkbox" name="sendAlimTalk" value="1" id="sendAlimTalk"{{ ' checked' if setting and setting.sendAlimTalk }}>
+            <label for="sendAlimTalk">알림톡 자동전송</label><br>
+
+            <input type="checkbox" name="sendAlimTalkOnce" value="1" id="sendAlimTalkOnce"{{ ' checked' if setting and setting.sendAlimTalkOnce }}>
+            <label for="sendAlimTalkOnce">알림톡 주문서 상태변경시 1회만 전송</label>
+        </td>
+    </tr>
+    <tr>
+        <th nowrap>알림톡 전송메시지</th>
+        <td colspan="3">
+            <select name="tmpltCode">
+                <option value="">- 전송 메세지 선택 -</option>
+                {% if kakaoTemplates.length > 0 %}
+                {% for tpl in kakaoTemplates %}
+                <option value="{{ tpl.tmpltCode }}"{{ ' selected' if setting.tmpltCode == tpl.tmpltCode }}>[{{ tpl.tmpltCode }}] {{ tpl.tmpltNm }}</option>
+                {% endfor %}
+                {% endif %}
+            </select>
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,50 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+
+
+<div class="top_box mt50">
+    <img src="/images/common/main.png" id="main_logo">
+
+    <div class="welcome">마커스 디자인관리자에 접속하셨습니다.</div>
+
+    {% if isSuper or availableMainMenus.indexOf('order') != -1 %}
+    <div class="center mt20">
+        <a class='go_order' href='/order'{{ "class=on" if menuOn == 'order' }}>
+           {{ '디자인관리' if isDesigner else '주문관리' }} 하기
+        </a>
+   </div>
+    {% endif %}
+</div>
+<!--// top_box -->
+
+<div class="content_box">
+{% if latests and latests.length > 0 %}
+<section class="latest_posts">
+{% for board in latests %}
+    <div class="posts">
+        <div class="tit"><a href='/board/list/{{ board.id }}'>{{ board.title }}</a></div>
+        {% if board.list and board.list.length > 0 %}
+        <ul>
+        {% for item in board.list %}
+            <li>
+                <a href="/board/view/{{ item.id }}">
+                    {% if item.isNotice %}
+                    <img src="/images/icon/notice.png" class='icon_notice'>
+                    {% endif %}
+                    {% if item.icons.new %}
+                    <i class="xi-new icon new"></i>
+                    {% endif %}
+                    {{ item.subject }}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <!--// posts -->
+{% endfor %}
+</section>
+{% endif %}
+</div>
+
+{% endblock %}

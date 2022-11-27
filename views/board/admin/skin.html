@@ -1,0 +1,105 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+    <div class="mtitle top">스킨 등록</div>
+    <form method="post" action="/board/admin/skin" target="ifrmProcess" autocomplete="off">
+        <table class="table-cols style2">
+            <tr>
+                <th>스킨ID</th>
+                <td class="w350">
+                    <input type="text" name="id">
+                </td>
+                <th>스킨명</th>
+                <td>
+                    <input type="text" name="skinNm">
+                </td>
+            </tr>
+            <tr>
+                <th>종류</th>
+                <td colspan="3">
+                    <input type="radio" name="skinType" value="default" id="skinType_default" checked>
+                    <label for="skinType_default">기본형</label>
+
+                    <input type="radio" name="skinType" value="gallery" id="skinType_gallery">
+                    <label for="skinType_gallery">갤러리형</label>
+
+                    <input type="radio" name="skinType" value="qna" id="skinType_qna">
+                    <label for="skinType_qna">질문과 답변형</label>
+
+                    <input type="radio" name="skinType" value="review" id="skinType_review">
+                    <label for="skinType_review">후기 작성형</label>
+                </td>
+            </tr>
+        </table>
+        <div class="table-btn">
+            <button type="submit">등록하기</button>
+        </div>
+    </form>
+</div>
+
+<div class="content_box">
+    <div class="mtitle">스킨 목록</div>
+    <form id="frmList" method="post" action="/board/admin/skin" target="ifrmProcess" autocomplete="off">
+    <table class="table-rows">
+        <thead>
+            <tr>
+                <th width="40">
+                    <input type="checkbox" class='js-checkall' id="js_checkall" data-target-name="id">
+                    <label for="js_checkall" class="standalone"></label>
+                </th>
+                <th width="200">스킨ID</th>
+                <th width="250">스킨명</th>
+                <th>스킨종류</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list and list.length > 0 %}
+        {% for item in list %}
+            <tr>
+                <td align="center">
+                    <input type="checkbox" name="id" id="id_{{ item.id }}" value="{{ item.id }}">
+                    <label for="id_{{ item.id }}" class="standalone"></label>
+                </td>
+                <td align="center">{{ item.id }}</td>
+                <td align="center">
+                    <input type="text" name="skinNm_{{ item.id }}" value="{{ item.skinNm }}">
+                </td>
+                <td>
+                    {% if item.skinType == 'default' %}
+                        기본형
+                    {% elif item.skinType == 'gallery' %}
+                        갤러리형 
+                    {% elif item.skinType == 'qna' %}
+                        질문과 답변형
+                    {% elif item.skinType == 'review' %}
+                        후기 작성형
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %}
+            <tr class="no-list">
+                <td colspan="4">등록된 스킨이 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    {% if list and list.length > 0 %}
+    <div class="table-action">
+        <div>
+            <span class="btn4 black form_update" data-id="frmList">
+                <i class="xi-check"></i>
+                수정하기
+            </span>
+            <span class="btn4 form_delete" data-id="frmList">
+                <i class="xi-trash"></i>
+                삭제하기
+            </span>
+        </div>
+    </div>
+    {% endif %}
+    </form>
+</div>
+<!--// content_box -->
+
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+<div class="mtitle top">전송목록 검색</div>
+<form method="get" autocomplete="off">
+    <table class="table-cols style2">
+        <tr>
+            <th>발송요청일</th>
+            <td colspan="3">
+                <input  type='date' name='requestSdate'  value='{{ search.requestSdate }}' class='w120'> ~ 
+                <input type='date' name='requestEdate' value='{{ search.requestEdate }}' class='w120'>
+                <span class='quick_date' data-target-name='requestSdate,requestEdate'>
+                    <span class='date_span' data-span='1_week'>1주</span>
+                    <span class='date_span' data-span='2_week'>2주</span>
+                    <span class='date_span' data-span='3_week'>3주</span>
+                    <span class='date_span' data-span='4_week'>4주</span>
+                    <span class='date_span' data-span='1_month'>1개월</span>
+                    <span class='date_span' data-span='2_month'>2개월</span>
+                    <span class='date_span' data-span='3_month'>3개월</span>
+                    <span class='date_span' data-span='6_month'>6개월</span>
+                    <span class='date_span' data-span='1_year'>1년</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <th>수신자번호</th>
+            <td width='300'>
+                <input type="text" name="recipient" value="{{ search.recipient }}">
+            </td>
+            <th>템플릿코드</th>
+            <td>
+                <input type="text" name="tmpltCode" value="{{ search.tmpltCode }}">
+            </td>
+        </tr>
+    </table>
+    <div class="table-btn">
+        <input type="submit" value="검색하기">
+    </div>
+</form>
+</div>
+
+<div class="content_box">
+<div class="mtitle">전송 목록</div>
+<div class="scroll_x">
+<table class="table-rows">
+    <thead>
+        <tr>
+            <th width="150" nowrap>MSGIDX</th>
+            <th width="180" nowrap>비즈톡UID</th>
+            <th width="150" nowrap>템플릿</th>
+            <th class="nowrap">전송메세지</th>
+            <th width="120" nowrap>수신자번호</th>
+            <th width="200" nowrap>응답코드</th>
+            <th width="100" nowrap>발송요청</th>
+            <th nowrap">결과수신시간</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if list.length > 0 %}
+    {% for item in list %}
+        <tr>
+            <td align="center" valign="top">{{ item.msgIdx }}</td>
+            <td align="center" valign="top">{{ item.biztalkUid }}</td>
+            <td align="center" valign="top">{{ item.tmpltCode }}<div>({{ item.tmpltNm }})</div></td>
+            <td align="center" valign="top">{{ nl2br(item.message) | safe }}</td>
+            <td align="center" valign="top">{{ item.recipient }}</td>
+            <td align="center" valign="top">
+                G/W 접수결과 코드<br>
+                {{ item.responseCode}}<br>
+                ({{ item.responseCodeStr }})    
+                {% if item.resultCode %}
+                    <br>
+                    메시지 전송 결과<br>
+                    {{ item.resultCode }}<br>
+                    ({{ item.resultCodeStr }})
+                {% endif %}
+            </td>
+            <td align="center" valign="top">
+                {% if item.requestAt %}
+                    {{ getLocalDate(item.requestAt, '%Y.%m.%d<br> %H:%i:%s') | safe }}
+                {% endif %}
+            </td>
+            <td align="center" valign="top">
+                {% if item.receivedAt %}
+                    {{ getLocalDate(item.receivedAt, '%Y.%m.%d<br> %H:%i:%s') | safe }}
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    {% else %}
+        <tr class="no-list">
+            <td colspan="8">전송 요청기록이 없습니다.</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
+</div>
+{{ pagination | safe }}
+</div>
+{% endblock %}

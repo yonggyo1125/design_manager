@@ -1,0 +1,40 @@
+<form id='frmSearch' method='get' autocomplete='off'>
+    <table class='table-cols style2'>
+        <tr>
+            <th>조회방식</th>
+            <td>
+                <input type='radio' name='searchType' value='and' id='searchType_and' checked>
+                <label for='searchType_and'>결합</label>
+                <input type='radio' name='searchType' value='or' id='searchType_or'>
+                <label for='searchType_or'>포함</label>
+            </td>
+        </tr>
+        <tr>
+            <th>주문번호</th>
+            <td>
+                <input type='text' name='orderNo' value='{{ search.orderNo }}'>
+            </td>
+        </tr>
+        <tr>
+            <th>고객명</th>
+            <td>
+                <input type='text' name='customerNm' value='{{ search.customerNm }}'>
+            </td>
+        </tr>
+        <tr>
+            <th>연락처</th>
+            <td>
+                <input type='text' name='cellPhone' value='{{ search.cellPhone }}'>
+            </td>
+        </tr>
+        <tr>
+            <th>이메일</th>
+            <td>
+                <input type='text' name='email' value='{{ email }}'>
+            </td>
+        </tr>
+    </table>
+    <div class='btns'>
+        <button type="submit" class="btn">조회하기</button>
+    </div>
+</form>

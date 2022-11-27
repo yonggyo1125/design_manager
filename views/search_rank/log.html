@@ -1,0 +1,88 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+<form method="get" autocomplete="off">
+    <table class="table-cols style2">
+        <tr>
+            <th>기간 조회</th>
+            <td colspan="3">
+                <input type="date" name="createdSdate" value="{{ search.createdSdate }}" class="wauto"> ~ 
+                <input type="date" name="createdEdate" value="{{ search.createEdate }}" class="wauto">
+                <span class='quick_date' data-target-name='createdSdate,createdEdate'>
+                    <span class='date_span' data-span='1_week'>1주</span>
+                    <span class='date_span' data-span='2_week'>2주</span>
+                    <span class='date_span' data-span='3_week'>3주</span>
+                    <span class='date_span' data-span='4_week'>4주</span>
+                    <span class='date_span' data-span='1_month'>1개월</span>
+                    <span class='date_span' data-span='2_month'>2개월</span>
+                    <span class='date_span' data-span='3_month'>3개월</span>
+                    <span class='date_span' data-span='6_month'>6개월</span>
+                    <span class='date_span' data-span='1_year'>1년</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <th>작업구분</th>
+            <td>
+                <select name="jobType">
+                    <option value="">전체 조회</option>
+                    <option value="START"{{ ' selected' if search.jobType == 'START' }}>작업시작</option>
+                    <option value="DONE"{{ ' selected' if search.jobType == 'DONE' }}>작업종료</option>
+                </select>
+            </td>
+            <th>장치구분</th>
+            <td>
+                <select name="deviceType">
+                    <option value="">전체 조회</option>
+                    <option value="PC"{{ ' selected' if search.deviceType == 'PC' }}>PC</option>
+                    <option value="Mobile"{{ ' selected' if search.deviceType == 'Mobile' }}>Mobile</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>키워드</th>
+            <td colspan="3">
+                <input type="text" name="keyword" value="{{ search.keyword }}">
+            </td>
+        </tr>
+    </table>
+    <div class="table-btn">
+        <button type="submit">조회하기</button>
+    </div>
+</form>
+</div>
+<!--// top_box -->
+<div class="content_box">
+<table class="table-rows">
+    <thead>
+        <tr>
+            <th width="100">로그번호</th>
+            <th width="80">처리구분</th>
+            <th width="80">장치구분</th>
+            <th>키워드</th>
+            <th width="150">실행일시</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if list.length > 0 %}
+    {% for item in list %}
+    <tr>
+        <td align="center">{{ item.id }}</td>
+        <td align="center">{{ '작업시작' if item.jobType == 'START' else '작업종료' }}</td>
+        <td align="center">{{ item.deviceType }}</td>
+        <td>{{ item.keyword }}</td>
+        <td align="center">{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i:%s') }}</td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr class="no-list">
+        <td colspan="5">등록된 로그가 없습니다.</td>
+    </tr>
+    {% endif %}
+    </tbody>
+</table>
+    
+{{ pagination | safe }}
+</div>
+<!--// conent_box -->
+{% endblock %}

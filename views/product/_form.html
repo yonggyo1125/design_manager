@@ -1,0 +1,231 @@
+<form class='form_box' name='frmAdd' method="post" action="/product/{{ mode }}" target='ifrmProcess' autocomplete='off'>
+    <dl>
+        <dt>구분</dt>
+        <dd>
+            <input type="radio" name="itemType" value="head" id='itemType_head'{{ ' checked' if not item or item.itemType == 'head' }}>
+            <label for="itemType_head">본사</label>
+
+            <input type="radio" name="itemType" value="branch" id='itemType_branch'{{ ' checked' if item.itemType == 'branch' }}>
+            <label for="itemType_branch">지사</label>
+
+            <input type="radio" name="itemType" value="company" id='itemType_company'{{ ' checked' if item.itemType == 'company' }}>
+            <label for="itemType_company">거래처</label>
+            <select name='idCompany' class='w150'>
+                <option value=''>- 거래처 선택 -</option>
+                {% for company in companies %}
+                <option value='{{ company.id }}'{{ ' selected' if item.idCompany == company.id }}>{{ company.companyNm }}</option>
+                {% endfor %}
+            </select>
+        </dd>
+    </dl>
+    <dl>
+        <dt>품목코드</dt>
+        <dd>
+            {% if item.itemCode %}
+            {{ item.itemCode }}
+            {% else %}
+            <input type="text" name="itemCode" class='w200' value='{{ item.itemCode }}'>
+            <span class='btn5 generate_uid'>자동생성</span>
+            {% endif %}
+        </dd>
+    </dl>
+    <dl>
+        <dt>품목분류</dt>
+        <dd>
+            <select name='idProductCategory'>
+                <option value=''>- 분류 선택 -</option>
+            {% for cate in categories %} 
+                <option value='{{ cate.id }}'{{ ' selected' if item.idProductCategory == cate.id }}>
+                    [{{ cateTypes[cate.cateType] }}]
+                    [{{ cate.cateCd }}]{{ cate.cateNm }}
+                </option>
+            {% endfor %}
+            </select>
+        </dd>
+    </dl>
+    <dl>
+        <dt>품목명/관리규격</dt>
+        <dd>
+            <input type="text" name="itemNm" value='{{ item.itemNm }}'>
+        </dd>
+    </dl>
+    <dl>
+        <dt>매입처</dt>
+        <dd>
+            <input type="text" name="provider" value='{{ item.provider }}'>            
+        </dd>
+    </dl>
+    <dl>
+        <dt>구입가</dt>
+        <dd>
+            <input type="number" name="providerPrice" class='w120' value='{{ item.providerPrice }}'> 원
+        </dd>
+    </dl>
+    <dl>
+        <dt>판매원가</dt>
+        <dd>
+            <input type="number" name="itemPrice" class='w120' value='{{ item.itemPrice }}'> 원
+        </dd>
+    </dl>
+    <dl>
+        <dt>재질</dt>
+        <dd>
+            <input type="text" name="texture" value='{{ item.texture }}'>
+        </dd>
+    </dl>
+    <dl>
+        <dt>사이즈</dt>
+        <dd>
+            <input type="text" name="itemSize" value='{{ item.itemSize }}'>
+        </dd>
+    </dl>
+    <dl>
+        <dt>재고</dt>
+        <dd>
+            <input type='checkbox' name='useStock' value='1' id='useStock'{{ ' checked' if item.useStock }}>
+            <label for='useStock'>재고차감 사용</label>
+            {% if item and item.useStock %}
+            {% if item.stock  %}
+            / {{ item.stock.toLocaleString() }} / 
+            {% endif %}
+            <a class='sbtn' href='/product/stock/{{ item.id }}' target='_blank'>재고관리</a>
+            {% endif %}
+        </dd>
+    </dl>
+    <dl>
+        <dt>재고구분</dt>
+        <dd>
+            <input type='radio' name='stockType' value='ea' id='stockType_ea'{{ ' checked' if not item or item.stockType == 'ea' }}>
+            <label for='stockType_ea'>수량(매/본)</label>
+            <input type='radio' name='stockType' value='yard' id='stockType_yard'{{ ' checked' if item.stockType == 'yard' }}>
+            <label for='stockType_yard'>길이(yd)</label>
+        </dd>
+    </dl>
+    <dl>
+        <dt>재고차감단위</dt>
+        <dd>
+            <input type='number' name='itemSaleUnit' class='w100' value='{{ item.itemSaleUnit }}'> 개씩
+        </dd>
+    </dl>
+    <dl>
+        <dt>옵션설정</dt>
+        <dd>
+            <span class='sbtn option_config'{{ 'data-id=' + item.id if item }}>
+                <i class='xi-cog'></i> 옵션설정
+            </span>
+            <div class='selected_options'>
+                기본옵션 : 
+                <span id='selected_options'>
+                {% if item and item.options and item.options.length > 0 %}
+                {% for opt in item.options %}
+                    <span class='opts'><input type='hidden' name='idOptions' value='{{ opt.id }}'>{{ opt.cateNm }}</span>
+                {% endfor %}
+                {% endif %}
+                </span>
+            </div>
+            <div class="selected_options">
+                텍스트옵션 : 
+                <span id="selected_textOptions">
+                    {% if item and item.textOptions and item.textOptions.length > 0 %}
+                    {% for opt in item.textOptions %}
+                        <span class='opts'><input type='hidden' name='idSubOptions' value='{{ opt.id }}'>{{ opt.cateNm }}</span>
+                    {% endfor %}
+                    {% endif %}
+                </span>
+            </div>
+            <div class='selected_options'>
+                추가옵션 : 
+                <span id='selected_subOptions'>
+                {% if item and item.subOptions and item.subOptions.length > 0 %}
+                {% for opt in item.subOptions %}
+                    <span class='opts'><input type='hidden' name='idSubOptions' value='{{ opt.id }}'>{{ opt.cateNm }}</span>
+                {% endfor %}
+                {% endif %}
+                </span>
+            </div>
+        </dd>
+    </dl>
+    <dl>
+        <dt>사이즈계산기</dt>
+        <dd>
+            <select name="idSizeConfig">
+                <option value="">- 선택하세요 -</option>
+            {% if sizeConfigs and sizeConfigs.length > 0 %}
+            {% for conf in sizeConfigs %}
+                <option value="{{ conf.id }}"{{ ' selected' if item.idSizeConfig == conf.id }}>{{ conf.configNm }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </dd>
+    </dl>
+    <dl>
+        <dt>품목별 배송정책</dt>
+        <dd>
+        {% if deliveryPolicies and deliveryPolicies.length > 0 %}
+        {% for policy in deliveryPolicies %}
+            <div class="mb5">
+            <input type="checkbox" name="idDeliveryPolicies" value="{{ policy.id }}" id="idDeliveryPolicies_{{ policy.id }}"{{ ' checked' if "" + policy.id in item.idDeliveryPolicies }}>
+            <label for="idDeliveryPolicies_{{ policy.id }}">
+                {{ policy.policyNm }}
+                {{ "(" + policy.description + ")" if policy.description }}
+            </label>
+            </div>
+        {% endfor %}
+        {% endif %}
+        </dd>
+    </dl>
+    <dl>
+        <dt>특이사항</dt>
+        <dd>
+            <textarea name='memo'>{{ item.memo }}</textarea>
+        </dd>
+    </dl>
+    <div class='btns'>
+        <input type="submit" value="{{ '수정하기' if item else '등록하기' }}" class='btn'>
+        <button type="button" class="btn cancel_back white">취소하기</button>
+    </div>
+</form>
+
+<script>
+/** 옵션 설정 콜백 처리 S */
+function callbackOptionConfig(data) {
+    console.log(data);
+    let html1 = "", html2 =  "", html3 = "";
+    if (data.options && data.options.length > 0) {
+        for (var i = 0; i < data.options.length; i++) {
+            html1 += "<span class='opts'><input type='hidden' name='idOptions' value='" + data.options[i] + "'>";
+            html1 += "" + data.optionCateNms[i];
+            html1 += "</span>";
+        }
+    }
+
+    if (data.subOptions && data.subOptions.length > 0) {
+        for (var i = 0; i < data.subOptions.length; i++) {
+            html2 += "<span class='opts'><input type='hidden' name='idSubOptions' value='" + data.subOptions[i] + "'>";
+            html2 += "" + data.subOptionCateNms[i];
+            html2 += "</span>";
+        }
+    }
+    
+
+    if (data.textOptions && data.textOptions.length > 0) {
+        for (var i = 0; i < data.textOptions.length; i++) {
+            html3 += "<span class='opts'><input type='hidden' name='idTextOptions' value='" + data.textOptions[i] + "'>";
+            html3 += "" + data.textOptionCateNms[i];
+            html3 += "</span>";
+        }
+    }
+
+    var optionsEl = document.getElementById("selected_options");
+    if (optionsEl) optionsEl.innerHTML = html1;
+
+    var subOptionsEl = document.getElementById("selected_subOptions");
+    if (subOptionsEl) subOptionsEl.innerHTML = html2;
+
+    var textOptionsEl = document.getElementById("selected_textOptions");
+    if (textOptionsEl) textOptionsEl.innerHTML = html3;
+
+    codefty.popup.close();
+}
+/** 옵션 설정 콜백 처리 E */
+</script>

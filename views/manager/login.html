@@ -1,0 +1,21 @@
+{% extends "../layout/main.html" %}
+{% block content %}
+<div class='login_box'>
+    <div>
+    <div class='mtitle'>관리자 로그인</div>
+    <form method="post" action="../manager/login" target='ifrmProcess' autocomplete='off'>
+        {% if requestURL %}
+        <input type="hidden" name="requestURL" value="{{ requestURL }}">
+        {% endif %}
+        <input type="text" name="managerId" placeholder="아이디" class='focus'>
+        <input type="password" name="managerPw" placeholder="비밀번호">
+        <input type="submit" value="로그인">
+    </form>
+    <ul class='links'>
+        <li><a href='../manager/find_id'><i class='xi-lock'></i>아이디 찾기</a></li>
+        <li><a href='../manager/find_pw'><i class='xi-key'></i>비밀번호 찾기</a></li>
+        <li><a href='../manager/join'><i class='xi-user-plus'></i>회원가입</a></li>
+    </ul>
+    </div>
+</div>
+{% endblock %}

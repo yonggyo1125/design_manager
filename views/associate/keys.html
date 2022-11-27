@@ -1,0 +1,79 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+<div class='mtitle'>API키 발급하기</div>
+<form name='frm' method='post' action='/associate/keys/{{ id }}' target='ifrmProcess' autocomplete='off'>
+    <table class='table-cols'>
+        <tr>
+            <th>도메인</th>
+            <td>
+                <input type="text" name="domain">
+            </td>
+        </tr>
+        <tr>
+            <th>REDIRECT URL</th>
+            <td>
+                <input type="text" name="redirectURL">
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type="submit" value="발급하기">
+    </div>
+</form> 
+</div>
+<div class="content_box">
+<div class='mtitle'>API키 발급목록</div>
+<div class="scroll_x">
+<form name='frmList' method="post" action="/associate/keys" autocomplete='off' target='ifrmProcess'>
+    <input type="hidden" name="mode" value="cancel">
+    <table class='table-rows'>
+        <thead>
+            <tr>
+                <th width='20'>
+                    <input type='checkbox' class='js-checkall' id='js-checkall' data-target-name='id'>
+                    <label for='js-checkall' class='standalone'></label>
+                </th>
+                <th width='100' nowrap>아이디</th>
+                <th width='150' nowrap>관리자명</th>
+                <th width='250' nowrap>도메인</th>
+                <th width='250' nowrap>REST API KEY</th>
+                <th width='250' nowrap>JAVASCRIPT API KEY</th>
+                <th width='250' nowrap>CLIENT SECRET</th>
+                <th width='300'>REDIRECT URL</th>
+                <th nowrap>생성일시</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if apikeys.length > 0 %}
+        {% for item in apikeys %}
+            <tr>
+               <td nowrap>
+                    <input type='checkbox' name='id' id='id_{{ item.id }}' value='{{ item.id }}'>
+                    <label for='id_{{ item.id }}' class='standalone'></label>
+                </td> 
+               <td align='center' nowrap>{{ item['Manager.managerId'] }}</td>
+               <td align='center' nowrap>{{ item['Manager.managerNm'] }}</td>
+               <td align='center' nowrap>{{ item.domain }}</td>
+               <td align='center' nowrap>{{ item.restKey }}</td>
+               <td align='center' nowrap>{{ item.javaScriptKey }}</td>
+               <td align='center' nowrap>{{ item.clientSecret }}</td>
+               <td align="center">{{ item.redirectURL }}</td>
+               <td align='center' nowrap>{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i') }}</td>
+            </tr>
+        {% endfor %}
+        {% else %} 
+            <tr class='no-list'>
+                <td colspan='9'>등록된 API키가 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <div class='table-action'>
+        <input type="submit" value="발급취소" class='sbtn' onclick="return confirm('정말 발급을 취소하시겠습니까?');">
+    </div>
+    {{ pagination | safe }}
+</form>
+</div>
+</div>
+{% endblock %}

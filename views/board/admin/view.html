@@ -1,0 +1,212 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+
+    
+    <div class="mtitle">게시글 상세</div>
+    <table class="table-cols style2">
+        <tr>
+            <th>작성자</th>
+            <td width="350">{{ poster }}{{ "(" + managerId + ")" if managerId }}</td>
+            <th>등록일시</th>
+            <td>{{ getLocalDate(createdAt, '%Y.%m.%d %H:%i:%s')}}</td>
+        </tr>
+        <tr>
+            <th>조회수</th>
+            <td>{{ hit.toLocaleString() }}</td>
+            <th>IP</th>
+            <td>{{ ipAddr }}</td>
+        </tr>
+        <tr>    
+            <th>이메일</th>
+            <td>{{ email }}</td>
+            <th>휴대전화번호</th>
+            <td>{{ mobile }}</td>
+        </tr>
+        {% if category %}
+        <tr>
+            <th>분류</th>
+            <td colspan="3">{{ category }}</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <th>제목</th>
+            <td colspan="3">
+                {{ subject }}
+            </td>
+        </tr>
+        <tr>
+            <th>내용</th>
+            <td colspan="3">
+                {% if useEditor %}
+                {{ content | safe }}
+                {% else %}
+                {{ nl2br(content) | safe }}
+                {% endif %}
+                {% if isSuper or isBoarder %}
+                <div class="controls mt10">
+                    <a href="/board/delete/{{ id }}" onclick="return confirm('정말 삭제하시겠습니까?');" class='sbtn' target="_blank">
+                        <i class='xi-trash'></i>삭제
+                    </a>
+                    <a href="/board/update/{{ id }}" class='sbtn' target="_blank">
+                        <i class='xi-check'></i>수정
+                    </a>
+                    <a href="/board/reply/{{ id }}" class='sbtn' target="_blank">
+                        <i class='xi-reply'></i>답글
+                    </a>
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    {% if attachImages and attachImages.length > 0 %} 
+    <!-- 첨부 파일 관리(이미지) S -->
+    <section id="attachImages">
+        <div class="stitle">첨부파일 관리(이미지)</div>
+        
+        <table class="table-cols style2">
+        {% for item in attachImages %}
+            <tr>
+                <th>첨부파일 #{{ loop.index }}</th>
+                <td>
+                    <a href="/file/download/{{ item.id }}">{{ item.fileName }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </section>
+    <!-- 첨부 파일 관리(이미지) E -->
+    {% endif %}
+    
+    {% if attachFiles and attachFiles.length > 0 %}
+    <!-- 첨부 파일 관리(파잏) S -->
+    <section id="attachFiles">
+        <div class="stitle">첨부파일 관리(파일)</div>
+        <table class="table-cols style2">
+        {% for item in attachFiles %}
+            <tr>
+                <th>첨부파일 #{{ loop.index }}</th>
+                <td>
+                    <a href="/file/download/{{ item.id }}">{{ item.fileName }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </section>
+    <!-- 첨부 파일 관리(파잏) E -->
+    {% endif %}
+
+    {% if board.skinType == 'qna' %}
+    <!-- 문의 답변 관리 S -->
+    <section id="answer">
+
+        <div class="stitle">문의답변하기</div>
+        <form method="post" action="/board/admin/view" target="ifrmProcess" autocomplete="off">
+            <input type="hidden" name="id" value="{{ id }}">
+            <table class="table-cols style2 mb10">
+                <tr>
+                    <th>답변알림</th>
+                    <td>
+                        <input type="checkbox" name="sendAlimTalk" value="1" id="sendAlimTalk">
+                        <label for="sendAlimTalk">답변 알림톡 전송</label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>휴대전화번호</th>
+                    <td>
+                        <input type="text" name="mobile" value="{{ mobile }}">
+                    </td>
+                </tr>
+            </table>
+   
+            <textarea name="text1" id="text1">{{ text1 | safe }}</textarea>
+            <div class="attach_files_wrap mt10">
+                <span class="sbtn attach_file image">
+                    <input type="file" data-gid="{{ gid }}_answer" data-file-type="image" data-is-single="1" class="uploadFile dn">
+                    <i class="xi-image-o"></i>
+                    이미지 추가
+                </span>
+                <ul class="attach_files" id="attach_image_files">
+                    {% if attachAnswerFiles and attachAnswerFiles.length > 0 %}
+                    {% for item in attachAnswerFiles %}
+                        <li>
+                            <a href="/file/download/{{ item.id }}">{{ item.fileName }}</a>
+                            <i class="deleteFile xi-file-remove" data-id="{{ item.id }}"></i>
+                        </li>
+                    {% endfor %}
+                    {% endif %}   
+                </ul>
+            </div>
+            <div class="btns mt10">
+                <button type="submit" class="btn">답변하기</button>
+            </div>
+        </form>
+    </section>
+    <!-- 답변 관리 E -->
+    {% endif %}
+
+    {% if comments and comments.length > 0 %} 
+    <!-- 댓글 관리 S -->
+    <section id="comment">
+        <div class="stitle">댓글관리</div>
+        {% if comments and comments.length > 0 %}
+        <ul id="comments_list">
+        {% for item in comments %}
+            <li id="comment_{{ item.id }}" class="depth{{ item.depth }}">
+                {% if item.depth %}
+                <i class="xi-subdirectory-arrow reply"></i>
+                <div class="inner" style="width:calc(100% - {{ item.depth * 15 + 20 }}px)">
+                {% else %}
+                <div class="inner">
+                {% endif %}
+                    <div class="comment_content">
+                    {% if item.useEditor %}
+                    {{ item.content | safe }}
+                    {% else %}
+                    {{ nl2br(item.content) | safe }}
+                    {% endif %}
+                    </div>
+                    <!--// comment_content -->
+                    {% if item.attachFiles and item.attachFiles.length > 0 %}
+                    <div class="download_files">
+                        {% for file in item.attachFiles %} 
+                        <div class="download">
+                            <a href="/file/download/{{ file.id }}">
+                                <i class='xi-attachment'></i>{{ file.fileName }}
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="comment_info">
+                        <div class="left">
+                        {% if not item.isMine %}
+                            <a href="/board/comment/reply/{{ item.id }}" class="cbtn reply black"><i class='xi-reply'></i>답변</a>
+                        {% endif %}
+                        {% if item.isEditable or not item.idManager %}
+                            <a href="/board/comment/{{ item.id }}" class="cbtn edit"><i class='xi-pen-o'></i>수정</a>
+                            <a href="/board/comment/delete/{{ item.id }}" class="cbtn delete" onclick="return confirm('정말 삭제하시겠습니까?');"><i class='xi-trash'></i>삭제</a>
+                        {% endif %}
+                        
+                        </div>
+                        <div class="right">
+                            <span class="commenter">{{ item.commenter }}{{ '(' + item.managerId + ')' if item.managerId }}</span> | 
+                            <span class="date">{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i:%s') }}</span>
+                        </div>
+                    </div>
+                    <!--// comment_info -->
+                </div>
+                <!--// inner -->
+            </li>
+        {% endfor %}
+        </ul>
+        <!--// comments_list -->
+        {% endif %}
+    </section>
+    <!-- 댓글 관리 E -->
+    {% endif %}
+</div>
+<!--// content_box -->
+{% include './skins/default/_fileTpl.html' %}
+{% endblock %}

@@ -1,0 +1,129 @@
+/** default 스킨 - 쓰기, 수정 */
+.board-qna .notice { margin-left: 10px; }
+.board-qna .attach_files_wrap { margin-top: 10px; }
+.board-qna .attach_files { display: flex; flex-wrap: wrap; }
+.board-qna .attach_files li { display: flex;  border: 1px solid #222; color: #222; font-size: 12px; margin-top: 5px; padding: 5px 10px; border-radius: 3px; margin-right: 3px; }
+.board-qna .attach_files li a:hover { text-decoration: underline; }
+.board-qna .attach_files li i { vertical-align: middle; margin-left: 5px; cursor: pointer; font-size: 14px; }
+.board-qna #frmRegist #content { width: 100%; border: 1px solid #d5d5d5; height: 300px; padding: 10px; resize: none; }
+.board-qna .form_box dl { align-items: stretch;  border-bottom: 1px solid #d5d5d5; }
+.board-qna .form_box dl:first-of-type { border-top: 3px solid #222; }
+.board-qna .form_box dl dt { background: #f2f3f4; padding: 10px 15px; font-weight: bold; }
+.board-qna .form_box dl dd { padding: 10px 15px; }
+.board-qna .form_box input[type='text'] { max-width: 350px; }
+.board-qna .w120 { width: 120px !important; }
+.board-qna .wFull { width: 100% !important; max-width: 100% !important; }
+.board-qna .sbtn { border: 1px solid #727272; display: inline-block; border-radius: 5px; min-width: 93px; text-align: center; padding: 5px 15px 6px; cursor: pointer; font-size: 12px; background: #fff; }
+.board-qna .sbtn i { vertical-align: middle; font-size: 13px; margin-right: 7px; }
+.board-qna .sbtn:hover { background:#000; color: #fff; transition: all 0.5s;  }
+.board-qna .sbtn:hover * { color: #fff; transition: all 0.5s; }
+.board-qna .sbtn.red { background:#ff221f; color: #fff; border-color: #ff221f; font-weight: bold; }
+.board-qna .sbtn.red * { color: #fff; }
+.board-qna .sbtn.black { background: #000; color: #fff; }
+.board-qna .sbtn.black *  { color: #fff; }
+
+.board-qna .btns { text-align: center; margin-top: 50px; }
+.board-qna .btns .btn { display: inline-block; height: 45px; line-height: 45px; border: 1px solid #000; color: #fff; background-color: #000; min-width: 170px; padding: 0 15px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: all 0.7s;  }
+.board-qna .btns .btn.white { background: #fff; color: #000; }
+
+/** default 스킨 - 글 보기 */
+.board-qna .view_box .subject { border: 1px solid #222; padding: 10px; font-size: 15px; font-weight: bold; border-radius: 3px; margin-bottom: 10px; }
+.board-qna .view_box .post_info { display: flex; justify-content: space-between; border: 1px solid #222; padding: 10px; }
+.board-qna .view_box .post_info .ip { margin-left: 10px; }
+.board-qna .view_box .post_info .poster { margin-right: 10px; }
+.board-qna .view_box .download_files li { background: #f8f8f8; padding: 10px; border-bottom: 1px solid #d5d5d5; }
+
+.board-qna .view_box .content { padding: 10px;  min-height: 500px; }
+.board-qna .view_box .controls { text-align: right; }
+.board-qna .view_box .question { padding-left: 45px; background:url("../../images/icon/icon_q.png") no-repeat 10px top; min-height: 250px; border-bottom: 1px solid #d5d5d5; padding-bottom: 20px; margin-bottom: 20px; }
+.board-qna .view_box .answer { padding-left: 45px; background:url("../../images/icon/icon_a.png") no-repeat 10px top; min-height: 250px; padding-bottom: 20px; }
+
+.board-qna .controls a { display: inline-block; padding: 8px 15px; border: 1px solid #222; transition: all 1s; }
+.board-qna .controls a:hover { background: #222; color: #fff; font-size: 13px; }
+.board-qna .controls a i { vertical-align: middle; position: relative; top: -1px; margin-right: 3px; }
+.board-qna .near_post { margin-bottom: 15px; }
+.board-qna .near_post li { border-bottom: 1px solid #d5d5d5;  }
+.board-qna .near_post li:first-of-type { border-top: 1px solid #d5d5d5; }
+
+.board-qna .near_post li a { display: block; padding: 15px 10px; }
+.board-qna .near_post li .direction i { vertical-align: middle; margin-right: 5px; font-size: 15px; }
+.board-qna .near_post li .direction { padding-right: 10px;  color: #666; }
+/** default 스킨 - 비회원 비밀번호 */
+.board-qna #guest_password .password_box { margin: 0 auto; margin-top: 15%; width: 320px; text-align: center; }
+.board-qna #guest_password .password_box .tit { font-size: 16px; line-height: 1.5; margin-bottom: 15px; }
+.board-qna #guest_password input[type='password'] { height: 44px; width: 100%; max-width: 100%; }
+.board-qna #guest_password button[type='submit'] { margin-top: 15px; border-radius: 5px; font-size: 15px; padding: 0 42px; height: 44px; background: #36466d; color: #fff; font-weight: bold; cursor: pointer; }
+
+/** default 스킨 - 게시글 목록 */
+.board-qna .categories { margin-bottom: 25px; display: flex; height: 45px; background: #fff; box-shadow: 1px 1px 5px #cdced5; }
+.board-qna .categories .tab { line-height: 45px; padding: 0 25px; font-size: 14px;  }
+.board-qna .categories .tab.on { background: #596b99; color: #fff; font-weight: bold;  }
+
+.board-qna .list_box { min-height: 700px; }
+.board-qna .list_box .data_list li { border-bottom: 1px solid #d5d5d5; display: flex; justify-content: space-between; height: 50px; padding: 0 10px; }
+.board-qna .list_box .data_list li:first-of-type { border-top: 1px solid #d5d5d5; line-height: 49px; }
+.board-qna .list_box .data_list li .post_info { width: 350px; text-align: right; } 
+.board-qna .list_box .data_list li .subject { width: calc(100% - 350px); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 49px; }
+.board-qna .list_box .data_list li .post_info span { font-size: 12px; margin-right: 5px; line-height: 49px; }
+.board-qna .list_box .data_list li:hover { background: #f8f8f8; }
+
+.board-qna .list_box .list_top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+
+.board-qna .list_box .total .no { color: #3c4e7a; font-weight: bold; }
+.board-qna .no-list { border: 1px solid #d5d5d5; border-left: 0; border-right: 0; }
+
+.board-qna .search_box { display: flex; padding: 10px; border-bottom: 1px solid #d5d5d5; background: #f8f8f8; }
+.board-qna .search_box select { margin-right: 3px; }
+.board-qna .search_box input[type='text'] { margin-right: 3px; width: 200px; }
+.board-qna .search_box button { background: #36466d; border: 0; color:#fff; font-weight: bold; padding: 0 20px; font-size: 12px;  cursor: pointer; }
+
+.board-qna .depth1 { padding-left: 15px; }
+.board-qna .depth2 { padding-left: 30px; }
+.board-qna .depth3 { padding-left: 45px; }
+.board-qna .depth3 { padding-left: 60px; }
+.board-qna .depth4 { padding-left: 75px; }
+.board-qna .depth5 { padding-left: 90px; }
+.board-qna .depth6 { padding-left: 105px; }
+.board-qna .depth7 { padding-left: 120px; }
+.board-qna .depth8 { padding-left: 135px; }
+.board-qna .depth9 { padding-left: 150px; }
+.board-qna .depth10 { padding-left: 165px; }
+.board-qna .depth11 { padding-left: 180px; }
+
+.board-qna .viewing .icon_view { font-weight: bold; color: #ff0000;  }
+.board-qna .data_list .icon_list { vertical-align: middle; }
+.board-qna .data_list .icon_notice { height: 20px; }
+.board-qna .data_list .list_item.notice a { font-weight: bold; }
+.board-qna .data_list li i.icon { vertical-align: middle; font-size: 12px; }
+.board-qna .data_list li .icon.new { color: #ff0000; }
+.board-qna .icon_answered { background: #596b99; color: #fff; font-size: 11px; padding: 5px 10px; border-radius: 5px; }
+
+
+/** default 스킨 - 댓글 */
+.board-qna #frmComment .comment_box { margin-bottom: 10px; }
+.board-qna #frmComment .comment { display: flex; justify-content: space-between; }
+.board-qna #frmComment .comment button { width: 120px; background: #fff; border: 1px solid #000; cursor: pointer; font-size: 14px; transition: all 1s; }
+.board-qna #frmComment .comment button:hover { background: #000; color: #fff; transition: all 1s; }
+.board-qna #frmComment .comment .comment_form { width: calc(100% - 125px); }
+.board-qna #frmComment .comment textarea { height: 100px; width: 100%; padding: 10px; resize: none; border: 1px solid #000;  }
+.board-qna #frmComment .comment_info { margin-bottom: 5px; display: flex; justify-content: space-between; align-items: end;  }
+.board-qna #frmComment .comment_info input[type='text'],
+.board-qna #frmComment .comment_info input[type='password'] { width: 120px; }
+.board-qna #frmComment .comment_box .attach_box {  border-bottom: 1px solid #d5d5d5; padding: 10px 0;  }
+
+.board-qna #frmComment .editor_size i { font-size: 30px; cursor: pointer; }
+.board-qna #comments_list li { display: flex; }
+.board-qna #comments_list li i.reply { display: inline-block;  font-size: 15px; }
+.board-qna #comments_list li > .inner { border: 1px solid #d5d5d5; padding: 10px; border-radius: 3px; margin-bottom: 10px; width: calc(100% - 20px); }
+.board-qna #comments_list li .comment_content { font-size: 12px; }
+.board-qna #comments_list li .comment_content img { max-width: 500px; cursor: pointer; }
+.board-qna #comments_list .comment_info { display: flex; justify-content: space-between; align-items: end; }
+.board-qna #comments_list .comment_info { padding-top: 10px; border-top: 1px solid #d5d5d5; }
+
+.board-qna #comments_list .download_files .download { border-top: 1px solid #d5d5d5;  padding: 10px; background: #f8f8f8; }
+.board-qna #comments_list .download_files .download i { margin-right: 3px; vertical-align: middle; }
+.board-qna #comments_list .download_files .download a:hover { text-decoration: underline; }
+.board-qna #comments_list .cbtn { border: 1px solid #000; padding: 5px 10px; font-size: 12px; cursor: pointer; display: inline-block; }
+.board-qna #comments_list .cbtn i { vertical-align: middle; margin-right: 3px; }
+.board-qna #comments_list .cbtn.black { background: #000; color: #fff; }
+.board-qna #comments_list .cbtn.black i { color: #fff; position: relative; top: -1px; }

@@ -1,0 +1,242 @@
+<form id='frmRegist' method='post' action="/order/config/delivery_policy{{ '/' + id if mode == 'update' }}"  target='ifrmProcess' autocomplete='off'>
+    {% if mode == 'update' and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 %}
+    <input type='hidden' id='rangeDeliveryCharge' value='{{ rangeDeliveryChargeJson }}'>
+    {% endif %}
+    <table class='table-cols'>
+        <tr>
+            <th>배송비조건명</th>
+            <td>
+               <input type='text' name='policyNm' value='{{ policyNm }}'> 
+            </td>
+        </tr>
+        <tr>
+            <th>배송비조건 설명</th>
+            <td>
+               <input type='text' name='description' value='{{ description }}'> 
+            </td>
+        </tr>
+        <tr>
+            <th>배송방식</th>
+            <td>
+                <div class="mb20">
+                    {% for item in deliveryTypes %}
+                    <input type="checkbox" name="deliveryType" value="{{ item.type }}" id="deliveryType_{{ item.type }}"{{ ' checked' if deliveryType and deliveryType.indexOf(item.type) != -1 }}>
+                    <label for="deliveryType_{{ item.type }}">{{ item.name }}</label>
+                    {% endfor %}
+                </div>
+                <dl class="mb5">
+                    <dt>화물배송 추가배송비</dt>
+                    <dd>
+                        <input type="number" name="addPriceCargo" value="{{ addPriceCargo }}" class="w100 right">원
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>퀵배송 추가배송비</dt>
+                    <dd>
+                        <input type="number" name="addPriceQuick" value="{{ addPriceQuick }}" class="w100 right">원
+                    </dd>
+                </dl>
+            </td>
+        </tr>
+        <tr>
+            <th>배송비 유형</th>
+            <td>
+                <select name='deliveryChargeType' id='deliveryChargeType'>
+                {% for item in deliveryChargeTypes %}
+                    <option value='{{ item.type }}'{{ ' selected' if deliveryChargeType == item.type }}>{{ item.name }}</option>
+                {% endfor %}  
+                </select>
+            </td>
+        </tr>
+        <tr id='deliveryChargeConf'>
+           
+        </tr>
+        <tr>
+            <th>배송비 결제방법</th>
+            <td>
+                <input type='radio' name='deliveryCollectType' value='pre' id='deliveryCollectType_pre'{{ ' checked' if not deliveryCollectType or deliveryCollectType == 'pre'}}>
+                <label for='deliveryCollectType_pre'>선불</label> 
+
+                <input type='radio' name='deliveryCollectType' value='post' id='deliveryCollectType_post'{{ ' checked' if deliveryCollectType == 'post' }}>
+                <label for='deliveryCollectType_post'>착불</label>
+            </td>
+        </tr>
+        <tr>
+            <th>지역별<br>추가배송비</th>
+            <td>
+               <input type='radio' name='useDeliveryAreaPolicy' value='1' id='useDeliveryAreaPolicy_1'{{ ' checked' if useDeliveryAreaPolicy == 1 }}>
+               <label for='useDeliveryAreaPolicy_1'>사용</label> 
+
+               <input type='radio' name='useDeliveryAreaPolicy' value='0' id='useDeliveryAreaPolicy_0'{{ ' checked' if not useDeliveryAreaPolicy or useDeliveryAreaPolicy == 0 }}>
+               <label for='useDeliveryAreaPolicy_0'>미사용</label>
+               {% if deliveryAreaPolicies.length > 0 %}
+               <div class='mt5'>
+                    <select name='idDeliveryAreaPolicy'>
+                        <option value=''>- 지역별 추가배송 조건 선택 -</option>
+                    {% for item in deliveryAreaPolicies %}
+                        <option value='{{ item.id }}'{{ ' selected' if idDeliveryAreaPolicy == item.id }}>{{ item.policyNm }}</option>
+                    {% endfor %}
+                    </select>
+                </div>
+               {% endif %}
+            </td>
+        </tr>
+    </table>
+    <div class='btns'>
+        <button class='btn' type='submit'>{{ '수정' if mode == 'update' else '등록' }}하기</button>
+        <button class='btn cancel_back white' type='button'>취소하기</button>
+    </div>
+</form>
+
+<script type='text/html' id='template_fixed'>
+    <th>배송비 설정</th>
+    <td>
+        구매금액 및 구매건수에 상관없이
+        <input type='number' name='deliveryCharge' value='{{ deliveryCharge }}' class='w100 right'>원
+    </td>
+</script>
+
+<script type='text/html' id='template_price'>
+    <th>배송비 설정<br>(금액별)</th>
+    <td>
+        <input type="checkbox" name="useRangeRepeat" value="1" id="useRangeRepeat"{{ ' checked' if useRangeRepeat }}>
+        <label for="useRangeRepeat">범위 반복 설정 사용</label>
+        <table>
+            <thead>
+                <tr>
+                    <td>구매금액 범위</td>
+                    <td colspan='2'>배송비</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type='text' name='unitStart' class='w100 right' value='0' readonly>원 이상 ~ 
+                        <input type='text' name='unitEnd' class='w100 right' value='{{ rangeDeliveryCharge[0].unitEnd if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'>원 미만일 때 
+                    </td>
+                    <td>
+                        <input type='text' name='price' class='w100 right' value='{{ rangeDeliveryCharge[0].price if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'>원
+                    </td>
+                    <td width='100'>
+                        <span class='add_rows sbtn' onclick="codefty.deliveryPolicy.add('price')" data-tpl-type='price'>
+                            <i class='xi-plus-square'></i>
+                            추가
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <input type='number' name='unitStart' class='w100 right' value='{{ rangeDeliveryCharge[rangeDeliveryCharge.length - 1].unitStart if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'{{ ' readonly' if useRangeRepeat }}>원 이상 ~ 
+                        {% if useRangeRepeat %}
+                        <input type='text' name='unitEnd' class="w100 right" value='{{ rangeDeliveryCharge[rangeDeliveryCharge.length - 1].unitEnd if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'>
+                        {% else %}
+                        <input type='hidden' name='unitEnd' value='0' class="w100 right">
+                        {% endif %}
+                        <span id="rangeRepeatText" data-type="price"></span>
+                    </td>
+                    <td>
+                        <input type='text' name='price' class='w100 right' value='{{ rangeDeliveryCharge[rangeDeliveryCharge.length - 1].price if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'>원
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </td>
+</script>
+
+<script type='text/html' id='template_count'>
+    <th>배송비 설정<br>(수량별)</th>
+    <td>
+        <input type="checkbox" name="useRangeRepeat" value="1" id="useRangeRepeat"{{ ' checked' if useRangeRepeat }}>
+        <label for="useRangeRepeat">범위 반복 설정 사용</label>
+        <table>
+            <thead>
+                <tr>
+                    <td>구매수량 범위</td>
+                    <td colspan='2'>배송비</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type='text' name='unitStart' class='w100 right' value='0' readonly>개 이상 ~ 
+                        <input type='text' name='unitEnd' class='w100 right' value='{{ rangeDeliveryCharge[0].unitEnd if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'>개 미만일 때 
+                    </td>
+                    <td>
+                        <input type='text' name='price' class='w100 right' value='{{ rangeDeliveryCharge[0].price if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'>원
+                    </td>
+                    <td width='100'>
+                        <span class='add_rows sbtn' onclick="codefty.deliveryPolicy.add('count')" data-tpl-type='price'>
+                            <i class='xi-plus-square'></i>
+                            추가
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <input type='number' name='unitStart' class='w100 right' value='{{ rangeDeliveryCharge[rangeDeliveryCharge.length - 1].unitStart if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'{{ ' readonly' if useRangeRepeat }}>개 이상 ~ 
+                        {% if useRangeRepeat %}
+                        <input type='text' name='unitEnd' class="w100 right" value='{{ rangeDeliveryCharge[rangeDeliveryCharge.length - 1].unitEnd if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'>
+                        {% else %}
+                        <input type='hidden' name='unitEnd' value='0' class="w100 right">
+                        {% endif %}
+                        <span id="rangeRepeatText" data-type="count"></span>
+                    </td> 
+                    <td>
+                        <input type='text' name='price' class='w100 right' value='{{ rangeDeliveryCharge[rangeDeliveryCharge.length - 1].price if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'>원
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </td>
+</script>
+
+<script type='text/html' id='template_weight'>
+   <th>배송비 설정<br>(무게별)</th>
+    <td>
+        <table>
+            <thead>
+                <tr>
+                    <td>구매무게 범위</th>
+                    <td colspan='2'>배송비</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type='text' name='unitStart' class='w100 right' value='0' readonly>g 이상 ~ 
+                        <input type='text' name='unitEnd' class='w100 right' value='{{ rangeDeliveryCharge[0].unitEnd if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'>g 미만일 때 
+                    </td>
+                    <td>
+                        <input type='text' name='price' class='w100 right' value='{{ rangeDeliveryCharge[0].price if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'>원
+                    </td>
+                    <td width='100'>
+                        <span class='add_rows sbtn' onclick="codefty.deliveryPolicy.add('price')" data-tpl-type='price'>
+                            <i class='xi-plus-square'></i>
+                            추가
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <input type='number' name='unitStart' class='w100 right' value='{{ rangeDeliveryCharge[rangeDeliveryCharge.length - 1].unitStart if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'>g 이상 ~ 
+                        <input type='hidden' name='unitEnd' value='0' class="w100 right">
+                        <span id="rangeRepeatText"></span>
+                    </td> 
+                    <td>
+                        <input type='text' name='price' class='w100 right' value='{{ rangeDeliveryCharge[rangeDeliveryCharge.length - 1].price if mode == "update" and rangeDeliveryCharge and rangeDeliveryCharge.length > 0 }}'>원
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </td>
+</script>
+

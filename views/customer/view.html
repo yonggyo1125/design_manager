@@ -1,0 +1,62 @@
+<table class='table-cols'>
+    <tr>
+        <th>상담구분</th>
+        <td>
+            {{ category }}
+        </td>
+    </tr>
+    <tr>
+        <th>처리자</th>
+        <td>{{ manager.managerNm }}({{ manager.managerId }})</td>
+    </tr>
+    <tr>
+        <th>상담상품</th>
+        <td>{{ productNm }}</td>
+    </tr>
+    <tr>
+        <th>상담메모</th>
+        <td>
+            {{ nl2br(memo) | safe }}
+        </td>
+    </tr>
+    {% if attachFiles and attachFiles.length > 0 %}
+    <tr>
+        <th>첨부된파일</th>
+        <td>
+            <ul class='vlist'>
+            {% for file in attachFiles %}
+                <li class='file_item'>
+                    {{ loop.index }}.
+                    <a href='/file/download/{{ file.id }}'>{{ file.fileName }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    {% endif %}
+    <tr>    
+        <th>주문번호</th>
+        <td>
+            <a href='/order/{{ orderNo }}' target='_blank' class='underline'>{{ orderNo }}</a>
+        </td>
+    </tr>
+    <tr>
+        <th>고객명</th>
+        <td>{{ customerNm }}</td>
+    </tr>
+    <tr>
+        <th>연락처</th>
+        <td>{{ cellPhone }}</td>
+    </tr>
+    <tr>
+        <th>이메일</th>
+        <td>{{ email }}</td>
+    </tr>
+    <tr>
+        <th>주소</th>
+        <td>
+                {{ "[" + zonecode + "]" if zonecode }}
+                 {{ address }} {{ addressSub }}
+        </td>
+    </tr>
+</table>

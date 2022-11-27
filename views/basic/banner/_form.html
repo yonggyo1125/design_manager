@@ -1,0 +1,65 @@
+<form method='post' action='/basic/banner/{{ mode }}{{ '/' + id if id }}' target='ifrmProcess' autocomplete='off'>
+    {% if id %}
+    <input type='hidden' name='id' value='{{ id }}'>
+    {% endif %}
+    <input type='hidden' name='gid' value='{{ gid }}'>
+    <table class='table-cols'>
+        <tr>
+            <th>배너 그룹</th>
+            <td>
+            <select name='idBannerGroups'>
+                <option value=''>- 배너 그룹 선택 -</option>
+            {% for item in bannerGroups %}
+                <option value='{{ item.id }}'{{ ' selected' if item.id == idBannerGroups }}>{{ item.groupNm }}</option>
+            {% endfor %}
+            </select>
+            </td>
+        </tr>
+        <tr>
+            <th>배너 링크 주소</th>
+            <td>
+                <input type='text' name='bannerLink' class='w400' value='{{ bannerLink }}'>
+                <select name='bannerTarget' class='wauto'>
+                    <option value='self'{{ ' selected' if bannerTarget == 'self' }}>현재창</option>
+                    <option value='_blank'{{ ' selected' if bannerTarget == '_blank' }}>새창</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>배너 이미지 설명</th>
+            <td>
+                <input type='text' name='bannerAlt' value='{{ bannerAlt }}'>
+            </td>
+        </tr>
+        <tr>
+            <th>배너 이미지</th>
+            <td>
+                <input type='file' name='file' class='uploadFile' data-file-type='image' data-is-single='1' data-gid='{{ gid }}'>
+
+                {% if file.uploadUrl %}
+                <div class='bannerImages' style='margin-top: 10px;'>
+                    <span class='images' style="display: inline-block; border: 2px solid #000000; position: relative;">
+                        <img src='{{ file.uploadUrl }}' style='max-height: 200px; display: block'>
+                        <i class='xi-close deleteFile' style='position: absolute; top: 0; right: 0; font-size:1rem; color: #ffffff; background-color:#000000; cursor:pointer; padding: 5px;' data-id='{{ file.id }}'></i> 
+                    </span>
+                    <br>
+                    <a href='/file/download/{{ file.id }}' class='sbtn'>다운로드</a>
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>노출 여부</th>
+            <td>
+                <input type='radio' name='isShow' value='1' id='isShow_1'{{ ' checked' if isShow == '1' }}>
+                <label for='isShow_1'>노출</label>
+                <input type='radio' name='isShow' value='0' id='isShow_0'{{ ' checked' if mode == 'add' or isShow == '0' }}>
+                <label for='isShow_0'>미노출</label>
+            </td>
+        </tr>
+    </table>
+    <div class='btns'>
+        <input type="reset" class="btn white" value="다시 입력하기">
+        <input type='submit' class="btn" value="{{ '수정하기' if id else '등록하기'}}">
+    </div>
+</form>

@@ -1,0 +1,157 @@
+<div class="top_box">
+    <div class="mtitle top flex_between">
+        운송장 관리
+        <div class="tit_btns">
+            <span class="btn4" onclick="codefty.popup.open('/order/do_many/invoice', '운송장 엑셀 업로드', 500,250);">
+                <i class="xi-plus"></i>
+                업로드하기
+            </span>
+        </div>
+    </div>
+
+    <form id="frmSearch" method="get" autocomplete="off">
+        <input type="hidden" name="limit" value="{{ limit }}">
+        <table class="table-cols style2">
+            <tr>
+                <th class="w100">검색구분</th>
+                <td width="400">
+                    <div class="form_grp w350">
+                    <select name="sopt">
+                        <option value="all"{{ ' selected' if not search.sopt or search.sopt == 'all' }}>통합검색</option>
+                        <option value="orderNo"{{ ' selected' if search.sopt == 'orderNo' }}>주문번호</option>
+                        <option value="fileName"{{ ' selected' if search.sopt == 'fileName' }}>파일명</option>
+                        <option value="invoiceNo"{{ ' selected' if search.sopt == 'invoiceNo' }}>운송장번호</option>
+                    </select>
+                    <input type="text" name="skey" value="{{ search.skey }}">
+                    </div>
+                </td>
+                <th class="w100">처리상태</th>
+                <td>
+                    <input type="checkbox" name="isDoneStatus" value="notDone" id="isDoneStatus_notDone"{{ ' checked' if search.isDoneStatus and search.isDoneStatus.indexOf('notDone') != -1 }}>
+                    <label for="isDoneStatus_notDone">미처리</label>
+
+                    <input type="checkbox" name="isDoneStatus" value="done" id="isDoneStatus_done"{{ ' checked' if search.isDoneStatus and search.isDoneStatus.indexOf('done') != -1 }}>
+                    <label for="isDoneStatus_done">처리완료</label>
+                </td>
+            </tr>
+            <tr>
+                <th>업로드날짜</th>
+                <td colspan='3'>
+                    <div class="'form_grp">
+                        <input type='date' name='createdSdate'  value='{{ search.createdSdate }}' class='wauto'> ~ 
+                        <input type='date' name='createdEdate' value='{{ search.createdEdate }}' class='wauto'>
+                        <span class='quick_date' data-target-name='createdSdate,createdEdate'>
+                            <span class='date_span' data-span='1_week'>1주</span>
+                            <span class='date_span' data-span='2_week'>2주</span>
+                            <span class='date_span' data-span='3_week'>3주</span>
+                            <span class='date_span' data-span='4_week'>4주</span>
+                            <span class='date_span' data-span='1_month'>1개월</span>
+                            <span class='date_span' data-span='2_month'>2개월</span>
+                            <span class='date_span' data-span='3_month'>3개월</span>
+                            <span class='date_span' data-span='6_month'>6개월</span>
+                            <span class='date_span' data-span='1_year'>1년</span>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>처리자</th>
+                <td colspan="3">
+                    {% if csAgents and csAgents.length > 0 %}
+                    {% for cs in csAgents %}
+                    <input type="checkbox" name="idManager" value="{{ cs.id }}" id="idManager_{{ cs.id }}"{{ ' checked' if search.idManager and search.idManager.indexOf("" + cs.id) != -1 }}>
+                    <label for="idManager_{{ cs.id }}">{{ cs.managerNm }}({{ cs.managerId }})</label>
+                    {% endfor %}
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+        <div class="table-btn">
+            <button type="submit" class="btn">검색하기</button>
+        </div>
+    </form>
+</div>
+
+<div class="content_box">
+    <div class="mtitle">업로드 목록</div>
+    {% if limits and limits.length > 0 %}
+    <div class="limits_tab" data-target-id="frmSearch">
+    {% for num in limits %}
+        <span class="sbtn tab{{ ' on' if num == limit }}" data-limit="{{ num }}">{{ num }}개씩 보기</span>
+    {% endfor %}
+    </div>
+    {% endif %}
+    <form id="frmList" method="post" action="/order/do_many" target="ifrmProcess" autocomplete="off">
+        <input type="hidden" name="mode" value="invoice">
+        <div class="scroll_x">
+            <table class="table-rows">
+                <thead>
+                    <tr>
+                        <th width="40">
+                            <input type="checkbox" class="js-checkall" data-target-name="id" id="js_checkall">
+                            <label for="js_checkall" class="standalone"></label>
+                        </th>
+                        <th width="120">주문번호</th>
+                        <th width="100">업로드일시</th>
+                        <th width="100">처리자</th>
+                        <th width="75">처리상태</th>
+                        <th width="200">업로드파일명</th>
+                        <th width="150">운송장번호</th>
+                        <th>엑셀데이터</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if list.length > 0 %}
+                {% for item in list %}
+                    <tr>
+                        <td align="center">
+                            {% if not item.isDone %}
+                            <input type="checkbox" name="id" value="{{ item.id }}" id="id_{{ item.id }}">
+                            <label for="id_{{ item.id }}" class="standalone"></label>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="/order/{{ item.orderNo }}" target="_blank" class="hover_underline" >{{ item.orderNo }}</a>
+                        </td>
+                        <td align="center">{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i:%s') }}</td>
+                        <td align="center">{{ item['Manager.managerNm'] }}<br>({{ item['Manager.managerId'] }})</td>
+                        <td align="center">
+                            {{ '처리완료' if item.isDone else '미처리' }}
+                        </td>
+                        <td align="center">{{ item.fileName }}</td>
+                        <td align="center">{{ item.invoiceNo }}</td>
+                        <td>
+                        {% if item.excelData and item.excelData.length > 0 %}
+                        <textarea readonly>
+                            {{ item.excelData.join("\r\n").trim() }}
+                        </textarea>
+                    
+                        {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                {% else %}
+                    <tr class="no-list">
+                        <td colspan="8">조회된 운송장 업로드 기록이 없습니다.</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <!--// scroll_x -->
+        <div class="table-action">
+            <div>
+                <span class="form_update sbtn black" data-id="frmList">
+                    <i class='xi-check-min'></i>
+                    운송장 반영 처리하기
+                </span>
+                <span class="form_delete sbtn" data-id="frmList">
+                    <i class='xi-trash-o'></i>
+                    선택 항목 삭제 하기
+                </span>
+            </div>
+        </div>
+    </form>
+    {{ pagination | safe }}
+</div>
+<!--// content_box -->

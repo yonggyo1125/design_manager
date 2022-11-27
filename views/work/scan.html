@@ -1,0 +1,160 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+<form id="frmSearch" name="frmSearch" method="get" autocomplete="off">
+<table class="table-cols style2">
+    <tr>
+        <th>주문번호</th>
+        <td>
+            <input type="text" name="orderNo" value="{{ orderNo }}" class="w350 mr5" id="barcode">
+            <button type="submit" class="btn2 blue">검색하기</button>
+            <button type="button" class="btn2 ready_scan">스캔 다시하기</button>
+        </td>
+    </tr>
+</table>
+</form>
+</div>
+<!--// top_box -->
+
+{% if order %}
+<button type="submit" class="scan_again">스캔 다시하기</button>
+<div class="content_box focus_area">
+<div class="order_tit">주문번호 : {{ order.orderNo }}</div>
+
+<table class="table-cols style3 mb10">
+    <tr>
+        <th>주문일</th>
+        <td>{{ getLocalDate(order.createdAt, '%Y.%m.%d %H:%i') }}</td>
+        <th>접수상담원</th>
+        <td>{{ order['Manager.managerNm'] }}({{ order['Manager.managerId'] }})</td>
+    </tr>
+    <tr>    
+        <th>발주자</th>
+        <td>{{ order.orderNm }}</td>
+        <th>업체명</th>
+        <td>{{ order.companyNm }}</td>
+    </tr>
+</table>
+
+{% if order.items and order.items.length > 0 %}
+<ul class="order_items">
+    {% for item in order.items %}
+    <li class="mb10">
+        <div class="item_id"><div>품<br>주<br>번<br>호<br>{{ item.id }}</div></div>
+        {% if item.designDraft and item.designDraft.draftChoiced %}
+        <div class="design_draft">
+            <a href='/file/view_image/{{ item.designDraft.draftChoiced.id }}' target="_blank" class="image"><img src="{{ item.designDraft.draftChoiced.thumbImageUrl }}"></a>
+            <div class="center">
+                <a href="/file/view_image/{{ item.designDraft.draftChoiced.id }}" class="btn3 black" target="_blank"> 이미지 확대보기</a>
+                <a href="/file/download/{{ item.designDraft.draftChoiced.id }}" class="btn3">이미지 다운로드</a>
+            </div>
+        </div>
+        {% endif %}
+        <div class="item_info">
+            <table class="table-cols style2">
+                <tr>
+                    <th>분류/품목명</th>
+                    <td>{{ item.productItemInfo['ProductCategory.cateNm'] }}</td>
+                </tr>
+                <tr>
+                    <th>담당디자이너</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>파일명</th>
+                    <td>{{ item.workFileName }}</td>
+                </tr>
+                <tr>
+                    <th>전달사항</th>
+                    <td><span class='highlight2'>{{ item.workMemo }}</span></td>
+                </tr>
+                <tr>
+                    <th>상품</th>
+                    <td class="pItems">
+                        {% if item.options and item.options.length > 0 %}
+                        <dl>
+                            <dt>기본옵션</dt>
+                            <dd>
+                                {% for opt in it.options %}
+                                <div>
+                                    [{{ opt.optionCd }}]{{ opt.optionNm }}
+                                    {{ "(" + opt.addPrice.toLocaleString() + "원)" if opt.addPrice }}
+                                </div>
+                                {% endfor %}
+                            </dd>
+                        </dl>
+                        {% endif %}
+                        {% if item.textOptionTexts and item.textOptionTexts.length > 0 %}
+                        <dl>
+                            <dt>입력옵션</dt>
+                            <dd>
+                                {% for opt in item.textOptionTexts %}
+                                <div>
+                                    [{{ opt.optionCd }}]{{ opt.optionNm }} : {{ opt.text }}
+                                    {{ "(" + opt.addPrice.toLocaleString() + "원)" if opt.addPrice }}
+                                </div>
+                                {% endfor %}
+                            </dd>
+                        </dl>
+                        {% endif %}
+                        <dl>
+                            <dt>수량</dt>
+                            <dd>{{ item.itemCnt.toLocaleString() }}개</dd>
+                        </dl>
+                        {% if item.subOptions and item.subOptions.length > 0 %}
+                        <dl>
+                            <dt>추가옵션</dt>
+                            <dd>
+                                {% for opt in item.subOptions %}
+                                <div>
+                                    [{{ opt.optionCd }}]{{ opt.optionNm }}
+                                    {{ "(" + opt.addPrice.toLocaleString() + "원)" if opt.addPrice }}
+                                </div>
+                                {% endfor %}
+                                
+                            </dd>
+                        </dl>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>묶음배송</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>출고일</th>
+                    <td>
+                        {% if item.deliveryReleasedDate %}
+                        {{ getLocalDate(item.deliveryReleasedDate, '%Y.%m.%d') }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>배송방법</th>
+                    <td>
+                        {{ item.deliveryPolicy.policyNm if item.deliveryPolicy }}
+                        {{ '(' + item.deliveryPolicy.description + ')' if item.deliveryPolicy and item.deliveryPolicy.description }}
+                        {{ ' / ' + item.deliveryTypeStr if item.deliveryPolicy.policyNm and item.deliveryTypeStr }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>주소</th>
+                    <td>
+                        {{ '(' + item.receiverZonecode  + ')' if item.receiverZonecode }}
+                        {{ item.receiverAddress }} {{ item.receiverAddressSub }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!--// item_info -->
+    </li>
+    {% endfor %}
+</ul>
+
+{% endif %}
+
+</div>
+<!-- scan_result -->
+{% endif %}
+
+{% endblock %}

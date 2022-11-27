@@ -1,0 +1,24 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+    <div class="mtitle flex_between">
+        사용방법안내 등록
+        <div class="tit_btns">
+            <a href="/product/guide" class="sbtn">
+                <i class='xi-list'></i> 사용방법안내 목록
+            </a>
+        </div>
+    </div>
+    <!--// mtitle -->
+
+    <form method="post" action="/product/guide/add" target="ifrmProcess" autocomplete="off">
+        <input type="hidden" name="gid" value="{{ gid }}">
+        {% include './_form.html' %}
+        <div class="btns">
+            <button type="submit" class="btn">등록하기</button>
+            <button type="button" class="btn white cancel_back">취소하기</button>
+        </div>
+    </form>
+</div>
+<!--// content_box -->
+{% endblock %}

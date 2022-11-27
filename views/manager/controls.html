@@ -1,0 +1,38 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<form method="post" action="/manager/controls/{{ id }}" target="ifrmProcess" autocomplete="off">
+    <table class="table-cols">
+        <tr>
+            <th>아아디</th>
+            <td>{{ managerId }}</td>
+        </tr>
+        <tr>
+            <th>관리자명</th>
+            <td>{{ managerNm }}</td>
+        </tr>
+        <tr>
+            <th>회원탈퇴</th>
+            <td>
+                {% if withdrawalAt %}
+                탈퇴일시 : {{ getLocalDate(withdrawalAt, '%Y.%m%d %H:%i:%s') }}  / 
+                <input type="checkbox" name="cancelWithdrawal" value="1" id="cancelWithdrawal">
+                <label for="cancelWithdrawal">취소하기</label>
+                {% else %}
+                <input type="checkbox" name="withdrawal" value="1" id="withdrawal">
+                <label for="withdrawal">탈퇴처리</label>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>이용제한 기간</th>
+            <td>
+                <input type="date" name="stopUntil" value="{{ getLocalDate(stopUntil, '%Y-%m-%d') if stopUntil }}" class="wauto">까지 
+            </td>
+        </tr>
+    </table>
+    <div class="mbtns">
+        <button type="submit" class="btn">처리하기</button>
+        <button type="button" class="btn" onclick="parent.codefty.popup.close();">취소하기</button>
+    </div>
+</form>
+{% endblock %}

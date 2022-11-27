@@ -1,0 +1,23 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<div class="mtitle top flex_between">
+     메뉴 관리
+    <div class="tit_btns">
+        <a href="/basic/menu/add" class="sbtn">
+            <i class="xi-plus"></i>
+            메뉴 추가
+        </a>    
+    </div>
+</div>
+<div class="tabs  mb10">
+    <a href="/basic/menu" class="sbtn{{ ' black' if not search.type  }}">전체메뉴</a>
+    {% for _type, _menu in types %}
+    <a href="/basic/menu?type={{ _type }}" class="sbtn{{ ' black' if search.type == _type }}">{{ _menu }}</a>
+    {% endfor %}
+</div>
+<form id='frmList' method="post" action="/basic/menu" target="ifrmProcess" autocomplete="off">
+{% include './_list.html' %}
+</form>
+</div>
+{% endblock %}

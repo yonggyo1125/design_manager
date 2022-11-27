@@ -1,0 +1,46 @@
+{
+  "name": "design_manager",
+  "version": "0.0.1",
+  "description": "markers design manager",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server",
+    "start": "cross-env NODE_ENV=production PORT=3001 TZ=Asia/Seoul pm2 start server.js -i 2",
+    "test": "cross-env NODE_ENV=test jest",
+    "coverage": "jest --coverage"
+  },
+  "author": "코드팩토리",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "bcrypt": "^5.0.1",
+    "connect-redis": "^6.0.0",
+    "cookie-parser": "^1.4.6",
+    "cross-env": "^7.0.3",
+    "csurf": "^1.11.0",
+    "dotenv": "^10.0.0",
+    "exceljs": "^4.3.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "install": "^0.13.0",
+    "ioredis": "^4.28.3",
+    "method-override": "^3.0.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.4",
+    "mysql2": "^2.3.3",
+    "node-schedule": "^2.1.0",
+    "nunjucks": "^3.2.3",
+    "pm2": "^5.1.2",
+    "sequelize": "^6.12.0-beta.2",
+    "sequelize-cli": "^6.3.0",
+    "sharp": "^0.29.3",
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "artillery": "^2.0.0-10",
+    "jest": "^27.4.5",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.1"
+  }
+}

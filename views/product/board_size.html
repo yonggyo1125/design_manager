@@ -1,0 +1,86 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<div class="mtitle top flex_between">
+    보드형 사이즈 관리
+    <div class="tit_btns">
+        <a href="/product/board_size/add" class="sbtn">
+            <i class="xi-plus"></i>
+            사이즈 등록
+        </a>
+    </div> 
+</div>
+
+{% if sizeNms and sizeNms.length > 0 %}
+<div class="mb10">
+    <a href='?' class="sbtn{{ ' on' if not search.sizeNm }}">전체보기</a>
+{% for sizeNm in sizeNms %}
+    <a href="?sizeNm={{ sizeNm }}" class="sbtn{{ ' on' if search.sizeNm == sizeNm }}">{{ sizeNm }}</a>
+{% endfor %}
+</div>
+{% endif %}
+
+<form id="frmList" method="post" action="/product/board_size" target="ifrmProcess" autocomplete="off"> 
+    <table class="table-rows">
+        <thead>
+            <tr>
+                <th width="30" nowrap>
+                    <input type="checkbox" class="js-checkall" data-target-name="id" id="js_checkall">
+                    <label for="js_checkall" class="standalone"></label>
+                </th>
+                <th>설정이름</th>
+                <th>사이즈방향</th>
+                <th>사이즈종류</th>
+                <th>사이즈</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list.length > 0 %}
+        {% for item in list %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="id" value="{{ item.id }}" id="id_{{ item.id }}">
+                    <label for="id_{{ item.id }}" class="standalone"></label>
+                </td>
+                <td>
+                    <input type="text" name="sizeNm_{{ item.id }}" value="{{ item.sizeNm }}">
+                </td>
+                <td>
+                    <select name="sizeDirection_{{ item.id }}">
+                        <option value='portrait'{{ ' selected' if item.sizeDirection == 'portrait' }}>세로형</option>
+                        <option value='landscape'{{ ' selected' if item.sizeDirection == 'landscape' }}>가로형</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" name="sizeType_{{ item.id }}" value="{{ item.sizeType }}">
+                </td>
+                <td>
+                    <input type="number" name="width_{{ item.id }}" value="{{ item.width }}" class="w70">Cm X 
+                    <input type="number" name="height_{{ item.id }}" value="{{ item.height }}" class="w70">Cm 
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %}
+            <tr class="no-list">
+                <td colspan="5">등록된 사이즈가 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    {% if list and list.length > 0 %}
+    <div class="table-action">
+        <div>
+            <span class="sbtn black form_update" data-id="frmList">
+                <i class="xi-check-min"></i>
+                선택 사이즈 수정하기
+            </span>
+            <span class="sbtn form_delete" data-id="frmList">
+                <i class="xi-trash-o"></i>
+                선택 사이즈 삭제하기
+            </span>
+        </div>
+    </div>
+    {% endif %}
+</form>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<div class="mtitle top">현금영수증 발급하기</div>
+<form id='frmRegist' method='post' action="/payment/cash_receipt/issue" target="ifrmProcess" autocomplete="off">
+{% include './_form.html' %}
+<div class="btns">
+    <input type="submit" class='btn' value="발급하기" onclick="return confirm('정말 발급하시겠습니까?');">
+</div>
+</form>
+</div>
+{% endblock %}

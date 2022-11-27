@@ -1,0 +1,258 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<section class="top_box">
+<form id="frmSearch" method="get" autocomplete="off">
+<table class="table-cols style2">
+    <tr>
+        <th>검색구분</th>
+        <td>
+            <div class="form_grp w350">
+                <select name="sopt">
+                    <option value="all"{{ ' selected' if search.sopt == 'all' }}>통합검색</option>
+                    <option value="orderNo"{{ ' selected' if search.sopt == 'orderNo' }}>주문번호</option>
+                    <option value="orderNm"{{ ' selected' if search.sopt == 'orderNm' }}>주문자명</option>
+                    <option value="orderCellPhone" {{ ' selected' if search.sopt == 'orderCellPhone' }}>주문자 휴대전화번호</option>
+                </select>
+                <input type="text" name="skey" value="{{ search.skey }}">
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <th>날짜</th>
+        <td>
+            <div class="'form_grp">
+                <select name="dateType">
+                    <option value="createdAt"{{ ' selected' if not search.dateType or search.dateType == 'createdAt' }}>접수일</option>
+                    <option value="deliveryReleasedDate"{{ ' selected' if search.dateType == 'deliveryReleasedDate' }}>출고일</option>
+                </select>
+                <input type='date' name='sdate'  value='{{ search.sdate }}' class='wauto'> ~ 
+                <input type='date' name='edate' value='{{ search.edate }}' class='wauto'>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <th>품목분류</th>
+        <td>
+            <select name="idProductCategory">
+                <option value="">품목분류 선택</option>
+            {% if itemCategories and itemCategories.length > 0 %}
+            {% for item in itemCategories %}
+                <option value="{{ item.id }}"{{ ' selected' if search.idProductCategory == "" + item.id }}>[{{ item.cateCd }}]{{ item.cateNm }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>배송조건</th>
+        <td>
+            <select name="idDeliveryPolicy">
+                <option value="">배송조건 선택</option>
+            {% if deliveyPolicies and deliveyPolicies.length %}
+            {% for item in deliveyPolicies %}
+                <option value="{{ item.id }}"{{ ' selected' if search.idDeliveryPolicy == "" + item.id }}>{{ item.policyNm }}{{ '(' + item.description + ')' if item.description }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>배송방법</th>
+        <td>
+            <select name="deliveryType">
+                <option value="">배송방법 선택</option>
+            {% if deliveryTypes and deliveryTypes.length > 0 %}
+            {% for item in deliveryTypes %}
+                <option value="{{ item.type }}"{{ ' selected' if search.deliveryType == item.type }}>{{ item.name }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>디자이너</th>
+        <td>
+            <select name="idDesigner">
+                <option value="">디자이너 선택</option>
+            {% if designers and designers.length %}
+            {% for designer in designers %}
+                <option value="{{ designer.id }}"{{ ' selected' if search.idDesigner and search.idDesigner.indexOf("" + designer.id) != -1 }}>{{ designer.managerNm }}({{ designer.managerId }})</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>접수상담원</th>
+        <td>
+            <select name="idManager">
+                <option value="">상담원 선택</option>
+            {% if csAgents and csAgents.length %}
+            {% for cs in csAgents %}
+                <option value="{{ cs.id }}"{{ ' selected' if search.idManager and search.idManager.indexOf("" + cs.id) != -1 }}>{{ cs.managerNm }}({{ cs.managerId }})</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+</table>
+<div class='table-btn'>
+    <input type='submit' value='검색하기'>
+</div>
+</form>
+</section>
+
+<section class="content_box">
+<div class='mtitle'>주문목록</div>
+<form id="frmList" method="post" action="/work" target="ifrmProcess" autocomplete="off">
+<ul class="work_list">
+{% if list.length > 0 %}
+{% for item in list %}
+<li>
+    <table class="table-cols mb20">
+        <tr>
+            <th>주문번호</th>
+            <td width="w400"><a href="/work/scan?orderNo={{ item.orderNo }}" class='highlight' target="_blank">{{ item.orderNo }}</a></td>
+            <th>주문일</th>
+            <td>{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i') }}</td>
+        </tr>
+        <tr>
+            <th>발주자</th>
+            <td>{{ item.orderNm }}</td>
+            <th>업체명</th>
+            <td>{{ item.companyNm }}</td>
+        </tr>
+    </table>
+    {% if item.items and item.items.length > 0 %}
+    {% for it in item.items %}
+    <dl class="item">
+        <dt><div>품<br>주<br>번<br>호<br> {{ it.id }}</div></dt>
+        <dd>
+            <table class="table-cols style2">
+                <tr>
+                    <th>분류/품목명</th>
+                    <td class="w250">
+                        {{ it.productItemInfo['ProductCategory.cateNm'] }}
+                        / 
+                        [{{ it.itemCode }}]
+                        {{ it.itemNm }}{{ " / " + it.itemNmSub if it.itemNmSub }}
+                    </td>
+                    <th>담당디자이너</th>
+                    <td>
+                        {{ it.designerInfo.managerNm + "(" + it.designerInfo.managerId + ")" if it.designerInfo }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>파일명</th>
+                    <td colspan="3">{{ it.workFileName }}</td>
+                </tr>
+                <tr>
+                    <th rowspan="4">디자인</th>
+                    <td rowspan="4" class="center">
+                        {% if it.designDraft and it.designDraft.draftChoiced %}
+                        <a href='/file/view_image/{{ it.designDraft.draftChoiced.id }}' target="_blank"><img src="{{ it.designDraft.draftChoiced.thumbImageUrl }}"></a>
+                       <div class="mt10">
+                            <a href="/file/view_image/{{ it.designDraft.draftChoiced.id }}" class="btn1" target="_blank">이미지 확대보기</a>
+                       </div>
+                        {% endif %}
+                    </td>
+                    <th>상품</th>
+                    <td class="pItems">
+                        {% if it.itemSizeWidth or it.itemSizeHeight %}
+                        <dl>
+                            <dt>사이즈</dt>
+                            <dd>
+                                {{ it.itemSizeWidth.toLocaleString() + "Cm" if it.itemSizeWidth }}{{ ' X ' if it.itemSizeWidth and it.itemSizeHeight }}{{ it.itemSizeHeight.toLocaleString() + "Cm" if it.itemSizeHeight }}
+                            </dd>
+                        </dl>
+                        {% endif %}
+                        {% if it.optionInfo and it.optionInfo.length > 0 %}
+                        <dl>
+                            <dt>기본옵션</dt>
+                            <dd>
+                                {% for opt in it.optionInfo %}
+                                <div>
+                                    [{{ opt.optionCd }}]{{ opt.optionNm }}
+                                    {{ "(" + opt.addPrice.toLocaleString() + "원)" if opt.addPrice }}
+                                </div>
+                                {% endfor %}
+                            </dd>
+                        </dl>
+                        {% endif %}
+                        {% if it.textOptionTexts and it.textOptionTexts.length > 0 %}
+                        <dl>
+                            <dt>입력옵션</dt>
+                            <dd>
+                                {% for opt in it.textOptionTexts %}
+                                <div>
+                                    [{{ opt.optionCd }}]{{ opt.optionNm }} : {{ opt.text }}
+                                    {{ "(" + opt.addPrice.toLocaleString() + "원)" if opt.addPrice }}
+                                </div>
+                                {% endfor %}
+                            </dd>
+                        </dl>
+                        {% endif %}
+                        {% if it.subOptionInfo and it.subOptionInfo.length > 0 %}
+                        <dl>
+                            <dt>추가옵션</dt>
+                            <dd>                                
+                                {% for opt in it.subOptionInfo %}
+                                <div>
+                                    [{{ opt.optionCd }}]{{ opt.optionNm }}
+                                    {{ "(" + opt.addPrice.toLocaleString() + "원)" if opt.addPrice }} X {{ opt.optionCnt }}개
+                                </div>
+                                {% endfor %}
+                            </dd>
+                        </dl>
+                        {% endif %}
+                        <dl>
+                            <dt>수량</dt>
+                            <dd>{{ it.itemCnt.toLocaleString() }}개</dd>
+                        </dl>
+                    </td>
+                </tr>
+                <tr>
+                    <th>출고일</th>
+                    <td>
+                        {% if it.deliveryReleasedDate %}
+                        {{ getLocalDate(it.deliveryReleasedDate, '%Y.%m.%d') }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>배송방법</th>
+                    <td>
+                        {{ it.deliveryPolicy.policyNm if it.deliveryPolicy  }}
+                        {{ '(' + it.deliveryPolicy.description + ')' if it.deliveryPolicy and it.deliveryPolicy.description }}
+                        {{ ' / ' + it.deliveryTypeStr if it.deliveryPolicy.policyNm and it.deliveryTypeStr }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>전달사항</th>
+                    <td><span class='highlight2'>{{ it.workMemo }}</span></td>
+                </tr>
+            </table>
+        </dd>
+    </dl>
+    {% endfor %}
+    {% endif %}
+</li>
+{% endfor %}
+{% else %}
+<li class="no-list">조회된 주문이 없습니다</li>
+{% endif %}
+</ul>
+<!--// work_list -->
+</form>
+
+{{ pagination | safe }}
+</section>
+
+<script type="text/html" id="fileTpl">
+<li>
+    <a href="/file/download/#[id]">#[fileName]</a>
+    <span class="remove_files xi-minus-square" data-id="#[id]"></span>
+</li>
+</script>
+
+{% endblock %}

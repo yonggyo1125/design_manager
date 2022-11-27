@@ -1,0 +1,246 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+
+<div class="top_box">
+<form id='frmSearch' method='get' autocopmplete='off'>
+    <input type='hidden' name="limit" value="{{ limit }}">
+    <table class='table-cols style2'>
+        <tr>
+            <th width="w100">업체구분</th>
+            <td class="w250">
+            {% for key in itemTypeKeys %}
+                <input type='checkbox' name='itemType' id='itemType_{{ key }}' value='{{ key }}'{{ ' checked' if search.itemType and search.itemType.includes(key) }}>
+                <label for='itemType_{{ key }}'>{{ itemTypes[key] }}</label>
+            {% endfor %}
+            </td>
+            <th>품목구분</th>
+            <td class="w250">
+            {% for key in cateTypeKeys %}
+                <input type='checkbox' name='cateType' id='cateType_{{ key }}' value='{{ key }}'{{ ' checked' if search.cateType and search.cateType.includes(key) }}>
+                <label for='cateType_{{ key }}'>{{ cateTypes[key] }}</label>
+            {% endfor %}
+            </td>
+            <th>품목분류</th>
+            <td>
+                <select name='cateCd'>
+                    <option value=''>- 품목분류 선택 -</option>
+                {% for category in categories %}
+                    <option value='{{ category.cateCd }}'{{ ' selected' if search.cateCd == category.cateCd }}>{{ category.cateNm }}</option>
+                {% endfor %}
+
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>거래처명</th>
+            <td>
+                <input type='text' name='companyNm' value='{{ search.companyNm }}'>
+            </td>
+            <th>품목코드</th>
+            <td>
+                <input type='text' name='itemCode' value='{{ search.itemCode }}'>
+            </td>
+            <th>품목명</th>
+            <td>
+                <input type='text' name='itemNm' value='{{ search.itemNm }}'>
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='검색하기'>
+    </div>
+</form>
+</div>
+
+<div class="content_box">
+<div class='mtitle'>품목 리스트</div>
+{% if limits and limits.length > 0 %}
+<div class="limits_tab" data-target-id="frmSearch">
+{% for num in limits %}
+    <span class="sbtn tab{{ ' on' if num == limit }}" data-limit="{{ num }}">{{ num }}개씩 보기</span>
+{% endfor %}
+</div>
+{% endif %}
+<div class="scroll_x">
+<form id='frmList' method="post" action="/product" target="ifrmProcess" autocomplete='off'>
+    <input type='hidden' name='search' value=''>
+    <table class='table-rows'>
+        <thead>
+            <tr>
+                <th width='30' nowrap>
+                    <input type='checkbox' class='js-checkall' data-target-name='id' id='js_checkall'>
+                    <label for='js_checkall' class='standalone'></label>
+                </th>
+                <th width='80' nowrap>품목구분</th>
+                <th width='150' nowrap>품목코드</th>
+                <th width='180' nowrap>품목분류</th>
+                <th width='350' nowrap>품목명</th>
+                <th width='100' nowrap>구입가</th>
+                <th width='120' nowrap>재고</th>
+                <th width='100' nowrap>재고액</th>
+                <th width='100' nowrap>판매원가</th>
+                <th width='100' nowrap>진열가중치</th>
+                <th width="130" nowrap>사이즈계산기</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list.length > 0 %}
+        {% for item in list %}
+            <tr>
+                <td align='center'>
+                    <input type='checkbox' name='id' value='{{ item.id }}' id='id_{{ item.id }}'>
+                    <label for='id_{{ item.id }}' class='standalone'></label>
+                </td>
+                <td align='center' nowrap>
+                    {{ itemTypes[item.itemType] }}
+                    {% if item.itemType == 'company' and item['Company.companyNm'] %}
+                    <div class='layer_popup' data-id='{{ item.idCompany }}' 
+                    data-width='700' 
+                    data-height='400' 
+                    data-title='거래처 확인/수정하기'
+                    data-url='/product/company/{{ item.idCompany }}'>({{ item['Company.companyNm'] }})</div>
+                    {% endif %} 
+                </td>
+                <td align='center' nowrap>
+                    <a href="/product/{{ item.id }}" target="_blank" class="hover_underline">{{ item.itemCode }}</a>
+                </td>
+                <td align='center' nowrap>
+                        [{{ cateTypes[item['ProductCategory.cateType']] }}]<br>
+                        {{ item['ProductCategory.cateNm'] }}
+                </td>
+                <td>
+                    {{ item.itemNm }}
+                    {% if item.provider or item.texture or item.itemSize %} 
+                    <div class='w250'>
+                        {{ '[구입처]' if item.provider  }} {{ item.provider }}<br>
+                        {{ '[재질]' if item.texture  }} {{ item.texture }}<br>
+                        {{ '[사이즈]' if item.itemSize  }} {{ item.itemSize }}<br>
+                        [재고단위] {{ '길이(yd)' if item.stockType == 'yard' else '수량(매/본)' }}
+                        <div class='stitle'>특이사항</div>
+                        <textarea class='memo' readonly>{{ item.memo }}</textarea>
+                    </div>
+                    {% endif %}
+                </td>
+                <td align='center' nowrap>
+                    {{ item.providerPrice.toLocaleString() + "원" if item.providerPrice > 0 }}
+                </td>
+                <td align='center' nowrap>
+                    {% if item.useStock %}
+                    {{ item.stock.toLocaleString() if item.stock and item.stock > 0 else '품절' }}
+                    {% if item.stock and item.stock > 0 %}
+                        {{ 'yd' if item.stockType == 'yard' else 'ea' }}
+                    {% endif %}
+                    {% else %}
+                    무제한 
+                    {% endif %}
+                </td>
+                <td align='center' nowrap>
+                    {% if item.stock  %}
+                    {% if item.stockType == 'yard' %} 
+                    {{ (item.providerPrice * item.stock * 0.914).toLocaleString() + "원" }}
+                    {% else %}
+                    {{ (item.providerPrice * item.stock).toLocaleString() + "원" }}
+                    {% endif %}
+                    {% endif %}
+                </td>
+                <td align='center' nowrap>{{ item.itemPrice.toLocaleString() + "원" if item.itemPrice > 0 }}</td>
+               <td>
+                   <input type='number' name='listOrder_{{ item.id }}' value='{{ item.listOrder }}' class="w70">
+               </td>
+               <td>
+                    <select name="idSizeConfig_{{ item.id }}">
+                        <option value="">- 선택하세요 -</option>
+                    {% if sizeConfigs and sizeConfigs.length > 0 %}
+                    {% for conf in sizeConfigs %}
+                        <option value="{{ conf.id }}"{{ ' selected' if item.idSizeConfig == conf.id }}>{{ conf.configNm }}</option>
+                    {% endfor %}
+                    {% endif %}
+                    </select>
+               </td>
+                <td nowrap>
+                    <a href='/product/{{ item.id }}' class='sbtn'>
+                        <i class='xi-check-min'></i> 품목 수정
+                    </a>
+                    <span class='sbtn option_config' data-id='{{ item.id }}'>
+                        <i class='xi-cog'></i> 옵션설정
+                    </span>
+                    <a href='/product/stock/{{ item.id }}' class='sbtn black' target='_blank'>
+                        <i class='xi-list-number'></i> 재고관리
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %}
+            <tr  class='no-list'>
+                <td colspan='12'>조회된 품목이 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    {% if list.length > 0 %}
+    <div class='table-action'>
+        <div>
+        <span class='sbtn black form_update' data-id='frmList'>
+            <i class='xi-check-min'></i>
+            품목 수정하기
+        </span>
+        <span class='sbtn form_delete' data-id='frmList'>
+            <i class='xi-trash-o'></i>
+            품목 삭제하기
+        </span>
+        <span class='sbtn form_excel' data-id='frmList'><i class='xi-download'></i>엑셀 다운로드</span>
+        </div>
+    </div>
+    {% endif %}
+</form>
+</div>
+{{ pagination | safe }}
+</div>
+<script>
+/** 옵션 설정 콜백 처리 S */
+function callbackOptionConfig(data) {
+    if (!data || !data.id) {
+        return;
+    }
+    var params = ['id=' + data.id];
+    if (data.options && data.options.length > 0) {
+        for (var i = 0; i < data.options.length; i++) {
+            params.push("idOptions=" + data.options[i]);
+        }
+    }
+
+    if (data.subOptions && data.subOptions.length > 0) {
+        for (var i = 0; i < data.subOptions.length; i++) {
+            params.push("idSubOptions=" + data.subOptions[i]);
+        }
+    }
+
+    if (data.textOptions && data.textOptions.length > 0) {
+        for (var i = 0; i < data.textOptions.length; i++) {
+            params.push("idTextOptions=" + data.textOptions[i]);
+        }
+    }
+
+    params = params.join("&");
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/product/option_config");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+            var result = JSON.parse(xhr.responseText);
+            if (result.message) {
+                alert(result.message);
+            }
+
+            if (result.isSuccess) {
+                alert("옵션이 변경되었습니다.");
+                codefty.popup.close();
+            }
+        }
+    };
+    xhr.send(params);
+}
+/** 옵션 설정 콜백 처리 E */
+</script>
+{% endblock %}

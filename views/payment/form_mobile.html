@@ -1,0 +1,92 @@
+{% extends '../layout/popup.html' %}
+{% block meta %}
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr"/> 
+<meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+{% endblock %}
+{% block content %}
+<div class='popup_tit'>
+    <span class='big'>결제하기</span>
+    <div class='xi-close' id='close_popup' onclick="self.close();"></div>
+</div>
+<div class="popup_box payment_box">
+<form id='mobileweb' name="mobileweb" method="post" accept-charset="euc-kr"> 
+    <input type="hidden" name="idPaymentItem" value="{{ id }}">
+    <input type="hidden" name="P_NEXT_URL" value="{{ host }}/payment/mobile/callback?idPaymentItem={{ id }}">  
+    <input type="hidden" name="P_RESERVED" value="twotrs_isp=Y&block_isp=Y&twotrs_isp_noti=N">
+    <input type="hidden" name="P_MID" value="{{ config.mid }}"> 
+    <input type="hidden" name="P_OID" value="{{ gid }}_{{ id }}">  
+    <input type="hidden" name="P_GOODS" value="{{ title }}"> 
+    <input type="hidden" name="P_AMT" value="{{ amount }}">     
+    <input type="hidden" name="P_NOTI_URL" value="">  
+    <input type="hidden" name="P_HPP_METHOD" value="1">  
+    <input type="hidden" name="P_NOTI" value="">
+
+
+    <table class="table-cols">
+        <tr>
+            <th>결제품목</th> 
+            <td>{{ title }}</td>
+        </tr>
+        <tr>
+            <th>결제내용</th>
+            <td>{{ nl2br(description) }}</td>
+        </tr>
+        <tr>
+            <th>입금자명</th>
+            <td>
+                <input type="text"    name="P_UNAME" value="{{ name }}" >
+            </td>
+        </tr>
+        <tr>
+            <th>휴대전화</th>
+            <td><input type="text"    name="buyertel" value="{{ cellPhone }}" ></td>
+        </tr>
+        <tr>
+            <th>이메일</th>
+            <td><input type="email"   name="buyeremail" value="{{ email if email else 'test@inicis.com' }}" ></td>
+        </tr>
+        <tr>
+            <th>결제금액</th>
+            <td>{{ amount.toLocaleString() }}원</td>
+        </tr>
+        <tr>
+            <th>결제방법</th>
+            <td>
+                {% if config.payMethod.indexOf('Card') != -1 %}
+                <input type="radio"  name="P_INI_PAYMENT" value="CARD"  id="P_INI_PAYMENT_CARD">
+                <label for="P_INI_PAYMENT_CARD">신용카드</label><br>
+                {% endif %}
+                {% if config.payMethod.indexOf('Bank') != -1 %}
+                <input type="radio"  name="P_INI_PAYMENT" value="BANK"  id="P_INI_PAYMENT_BANK">
+                <label for="P_INI_PAYMENT_BANK">실시간계좌이체</label><br>
+                {% endif %}
+                {% if config.payMethod.indexOf('VBank') != -1 %}
+                <input type="radio"  name="P_INI_PAYMENT" value="VBANK"  id="P_INI_PAYMENT_VBANK">
+                <label for="P_INI_PAYMENT_VBANK">가상계좌(무통장입금)</label>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    <ul class="terms_box">
+        <li>
+            <input type="checkbox" id="agreeAll">
+            <label for="agreeAll">전체 동의합니다.</label>
+        </li>
+        <li>
+            <input type="checkbox" name='agreePayment' id="agreePayment" value="1">
+            <label for="agreePayment">(필수) 결제내용에 동의</label>
+            <span class="sbtn view_terms" data-type="payment"><i class='xi-list-dot'></i> 자세히</span>
+        </li>
+        <li>
+            <input type="checkbox" name="agreePrivate" id="agreePrivate" value="1">
+            <label for="agreePrivate">(필수) 개인정보 제3자 제공 및 위탁동의</label>
+            <span class="sbtn view_terms" data-type="private"><i class='xi-list-dot'></i> 자세히</span>
+        </li>
+    </ul>
+    <div class="mbtns">
+        <button class='btn' id='pay_process' type='button'>결제하기</button>
+        <button class="btn cancel_pay" type="button" onclick="self.close();">취소하기</button>
+    </div>    
+</form> 
+</div>
+{% endblock %}

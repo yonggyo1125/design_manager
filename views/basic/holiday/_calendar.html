@@ -1,0 +1,30 @@
+<div class='calendar'>
+    <div class='navi'>
+        <a href='?year={{ prevYear }}&month={{ prevMonth }}' class='btn'><i class='xi-angle-left'></i>이전달</a>
+        <span class='current'>{{ year }}.{{ 0 if month < 10 }}{{ month }}</span>
+        <a href='?year={{ nextYear }}&month={{ nextMonth }}' class='btn'>다음달<i class='xi-angle-right'></i></a>
+    </div>
+    <!--// navi -->
+    <ul class='yoils'>
+    {% for yoil in yoils %}
+        <li>{{ yoil }}</li>
+    {% endfor %}
+    </ul>
+    <ul class='days'>
+    {% for item in days %}
+        <li>
+            <div class='day'>{{ item.day }}</div>
+            <input type='hidden' name='stamp' value='{{ item.stamp }}'>
+            <div class='mb5'>
+                <input type='checkbox' name='isHoliday_{{ item.stamp }}' value='{{ item.stamp }}' value='1' id='isHoliday_{{ item.stamp }}'{{ ' checked' if item.schedules and item.schedules.isHoliday }}>
+                <label for='isHoliday_{{ item.stamp }}'>배송 휴무일</label>
+            </div>
+            <input type='checkbox' name='isCsHoliday_{{ item.stamp }}' id='isCsHoliday_{{ item.stamp }}' value='1'{{ ' checked' if item.schedules and item.schedules.isCsHoliday }}>
+            <label for='isCsHoliday_{{ item.stamp }}'>상담 휴무일</label>
+            <div class='tit'>메모</div>
+            <input type='text' name='memo_{{ item.stamp }}' value='{{ item.schedules.memo }}'>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+<!--// calendar -->

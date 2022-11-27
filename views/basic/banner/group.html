@@ -1,0 +1,65 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+<div class="content_box">
+<div class='mtitle top flex_between'>
+    배너 그룹 목록
+    <div class='tit_btns'>
+        <a href='/basic/banner' class='sbtn'><i class='xi-view-list'></i>배너목록</a>
+        <a href='/basic/banner/add' class='sbtn'><i class='xi-plus'></i>배너등록</a>
+        <span class='sbtn black layer_popup' data-width='400' data-height='220' data-url='/basic/banner/add_group' data-title='배너 그룹 등록'>
+            <i class='xi-plus'></i>그룹 등록
+        </span>
+    </div>
+</div>
+
+<form id='frmList' method="post" action="/basic/banner/group" target="ifrmProcess" autocomplete="off">
+    <table class='table-rows'>
+        <thead>
+            <tr>
+                <th width='30'>
+                    <input type='checkbox' class='js-checkall' data-target-name='id' id='js-checkall'>
+                    <label for='js-checkall' class='standalone'></label>
+                </th>
+                <th width='150'>그룹코드</th>
+                <th width='200'>그룹명</th>
+                <th width='150'>이미지 갯수</th>
+                <th width='120'>연동코드</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list.length > 0 %}
+        {% for item in list %}
+            <tr>
+                <td align='center'>
+                    {% if item.imageCnt == 0 %}
+                    <input type='checkbox' name='id' value='{{ item.id }}' id='id_{{ item.id }}'>
+                    <label for='id_{{ item.id }}' class='standalone'></label>
+                    {% endif %}
+                </td>
+                <td align='center'>{{ item.groupCd }}</td>
+                <td align='center'>{{ item.groupNm }}</td>
+                <td align='center'>{{ item.imageCnt.toLocaleString() }}개</td>
+                <td align='center'>
+                    <span class='sbtn'>코드 복사</span>
+                </td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        {% else %}
+            <tr class='no-list'>
+                <td colspan='6'>등록된 배너그룹이 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    {% if list.length > 0 %}
+    <div class='table-action'>
+        <span class='sbtn form_delete' data-id='frmList'>
+            <i class='xi-trash-o'></i> 선택배너그룹 삭제하기
+        </span>
+    </div>
+    {% endif %}
+</form>
+</div>
+{%  endblock %}

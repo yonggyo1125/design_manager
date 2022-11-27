@@ -1,0 +1,117 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+<div class="mtitle top flex_between">
+    현금영수증발급 검색
+    <div class="tit_btns">
+        <a href="/payment/cash_receipt/issue" class="sbtn">
+            <i class="xi-plus"></i>
+            발급하기
+        </a>
+    </div>
+</div>
+<form method="get" autocomplete="off">
+    <table class="table-cols style2">
+        <tr>
+            <th>구매자명</th>
+            <td width="200">
+                <input type="text" name="buyerName" value="{{ search.buyerName }}">
+            </td>
+            <th>구매자 이메일</th>
+            <td width='250'>
+                <input type="email" name="buyerEmail" value="{{ search.buyerEmail }}">
+            </td>
+            <th>주문번호</th>
+            <td>
+                <input type="text" name="orderNo" value="{{ search.orderNo }}">
+            </td>
+        </tr>
+        <tr>
+            <th>발행구분</th>
+            <td colspan="3">
+                <input type="checkbox" name="pgApproveUseOpt" value="0" id="pgApproveUseOpt_0"{{ ' checked' if search.pgApproveUseOpt and search.pgApproveUseOpt.indexOf('0')  != -1 }}>
+                <label for="pgApproveUseOpt_0">소득공제</label>
+                <input type="checkbox" name="pgApproveUseOpt" value="1" id="pgApproveUseOpt_1"{{ ' checked' if search.pgApproveUseOpt and search.pgApproveUseOpt.indexOf('1') != -1  }}>
+                <label for="pgApproveUseOpt_1">지출증빙</label>
+            </td>
+            <th>상품명</th>
+            <td>
+                <input type="text" name="goodName" value="{{ search.goodName }}">
+            </td>
+        </tr>
+    </table>
+    <div class="table-btn">
+        <input type="submit" value="검색하기">
+    </div>
+</form>
+</div>
+
+<div class="content_box">
+<div class="mtitle">현금영수증 발급 목록</div>
+<div class="scroll_x">
+<table class="table-rows">
+    <thead>
+        <tr>
+            <th width='100' nowrap>발급결과/승인번호</th>
+            <th width="150" nowrap>처리자</th>
+            <th width="150" nowrap>구매자명</th>
+            <th width="200" nowrap>구매자 이메일</th>
+            <th width="200" nowrap>상품명</th>
+            <th width="120" nowrap>발급금액</th>
+            <th width="120" nowrap>공급가액</th>
+            <th width="120" nowrap>부가세</th>
+            <th width="120" nowrap>봉사료</th>
+            <th width="80" nowrap>발행구분</th>
+            <th width="120" nowrap>주문번호</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if list.length > 0 %}
+    {% for item in list %}
+    <tr>
+        <td align="center" nowrap>
+            {{ '성공' if item.pgResultCode == '00' else '실패' }}
+            {% if item.pgApproveNo %}
+            <br>
+            {{ '(' + item.pgApproveNo + ')'  }}
+            {% endif %}
+        </td>
+        <td align="center" nowrap>
+            {% if item.idManager %}
+                {{ item['Manager.managerNm'] }}<br>
+                ({{ item['Manager.managerId'] }})
+            {% endif %}
+        </td>
+        <td align="center" nowrap>{{ item.buyerName }}</td>
+        <td align="center" nowrap>{{ item.buyerEmail }}</td>
+        <td align="center" nowrap>{{ item.goodName }}</td>
+        <td align="center" nowrap>{{ item.pgApprovePrice.toLocaleString() }}원</td>
+        <td align="center" nowrap>{{ item.pgApproveSupplyPrice.toLocaleString() }}원</td>
+        <td align="center" nowrap>{{ item.pgApproveTax.toLocaleString() }}원</td>
+        <td align="center" nowrap>{{ item.pgApproveSrvcPrice.toLocaleString() }}원</td>
+        <td align="center" nowrap>{{ '지출증빙' if item.pgApproveUseOpt == '1' else '소득공제' }}</td>
+        <td align="center" nowrap>
+            {% if item.orderNo %}
+                <a href='/order/{{ item.orderNo }}' target="_blank">{{ item.orderNo }}</a>
+            {% endif %}
+        </td>
+        <td nowrap>
+            <span class='sbtn view_issued' data-id="{{ item.id }}">
+                <i class="xi-check-min"></i>
+                자세히
+            </span>
+        </td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr class="no-list">
+        <td colspan="12">발급내역이 없습니다.</td>
+    </tr>
+    {% endif %}
+    </tbodty>
+</table>
+{{ pagination | safe }}
+</div>
+</div>
+{% endblock %}

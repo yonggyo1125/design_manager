@@ -1,0 +1,25 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+
+<div class="content_box mt50">
+    <div class="mtitle flex_between">
+        예약설정 등록
+        <div class="tit_btns">
+            <a href="/kakao_alimtalk/reservation" class="sbtn">
+                <i class="xi-list"></i> 전송예약설정
+            </a>
+        </div>
+    </div>
+    <!--// title -->
+
+    <form id="frmSave" method="post" action="/kakao_alimtalk/reservation/add_config" target="ifrmProcess" autocomplete="off">
+        {% include "./_form.html" %}
+        <div class="btns">
+            <button type="submit" class="btn">등록하기</button>
+            <button type="button" class="btn white cancel_back">취소하기</button>
+        </div>
+    </form>
+
+</div>
+<!--// content_box -->
+{% endblock %}

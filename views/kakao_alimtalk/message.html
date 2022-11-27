@@ -1,0 +1,28 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<form method="get" action="/kakao_alimtalk/send_popup" autocomplete="off">
+    {% if name %}
+    <input type="hidden" name="name" value="{{ name }}">
+    {% endif %}
+    {% if cellPhone %}
+    <input type="hidden" name="cellPhone" value="{{ cellPhone }}">
+    {% endif %}
+    {% if list.length > 0 %}
+    <ul class="templates">
+        {% for item in list %}
+        <li class="template">
+            <div class="inner">
+                <input type="radio" name="tmpltCode" value="{{ item.tmpltCode }}" id="tmpltCode_{{ loop.index }}">
+                <label for="tmpltCode_{{ loop.index }}">[{{ item.tmpltCode }}] {{ item.tmpltNm }}</label>
+                <textarea class="message">{{ item.message }}</textarea>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <div class="mbtns">
+        <button class="btn" type="submit">선택하기</button>
+        <button class="btn" type="button" onclick="parent.codefty.popup.close();">취소하기</button>
+    </div>
+</form>
+{% endblock %}

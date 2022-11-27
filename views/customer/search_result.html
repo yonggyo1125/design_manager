@@ -1,0 +1,71 @@
+<table class='table-rows mt10'>
+    <thead>
+        <tr>
+            <th width='80'>구분</th>
+            <th width='80'>등록일시</th>
+            <th width='150'>처리자</th>
+            <th width='200'>주문번호</th>
+            <th>고객명정보</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if list.length > 0 %}
+    {% for item in list %}
+        <tr>
+            <td align="'center'"> {{ item.category }}</td>
+            <td align="center">{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i:%s') }}</td>
+            <td align="center">
+                {{ item['Manager.managerNm']}}
+                <div>({{ item['Manager.managerId']}})</div>
+            </td>
+            <td align="center">
+                <a href='/order/{{ item.orderNo }}' target='_blank' class='underline'>{{ item.orderNo }}</a>
+                <a href='/order/add?copy_orderNo={{ item.orderNo }}' class='sbtn' target='_blank'>
+                    <i class='xi-pen'></i>
+                    주문복사
+                </a>
+            </td>
+            <td align="center">
+                {{ item.customerNm }}
+                {% if item.cellPhone %}
+                    {{ item.cellPhone }}
+                {% endif %}
+                {% if item.email %}
+                <div>{{ item.email }}</div>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <div class="mb10">
+                    {{ nl2br(item.memo) | safe }}
+                </div>
+                <div class="right">
+                    <span class="update_cs_info sbtn"
+                        data-customer-nm="{{ item.customerNm }}"
+                        data-cell-phone="{{ item.cellPhone }}"
+                        data-email="{{ item.email }}"
+                        data-order-no="{{ item.orderNo }}"
+                        data-email="{{ item.email }}"
+                        data-zonecode="{{ item.zonecode }}"
+                        data-address="{{ item.address }}" 
+                        data-address-sub="{{ item.addressSub }}"
+                    >
+                        <i class="xi-check-min"></i>
+                        상담정보로 사용
+                    </span>
+                    <span class="view_cs sbtn black" data-id="{{ item.id }}">
+                        <i class="xi-external-link"></i>
+                        자세히보기
+                    </span>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    {% else %}
+    <tr class="'no-list">
+         <td colspan="5">검색된 상담 기록이 없습니다.</td>
+    </tr>
+    {% endif %}
+    </tbody>
+</table>

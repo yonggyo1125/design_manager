@@ -1,0 +1,20 @@
+{% if subMenus and subMenus.length > 0 %}
+<section id='sub-menu'>
+{% for item in subMenus %}
+    {% if isSuper or availableMenus.indexOf(item.id) != -1 %}
+    <a href='{{ item.url }}' class='menu{{ " on" if requestURI == item.url or subMenuUrl == item.url }}'>{{ item.title }}</a>
+    {% endif %}
+{% endfor %}
+{% for item in subMenus %}
+{% if item.subs %} 
+    <div class='sub_drop{{ " dn" if requestURI != item.url and subMenuUrl != item.url }}'>
+    {% for sub in item.subs %}
+    {% if isSuper or availableMenus.indexOf(subs.id) != -1 %}
+        <a href='{{ sub.url }}'>{{ sub.title }}</a>
+    {% endif %}
+    {% endfor %}
+    </div>
+{% endif %}
+{% endfor %}
+</section>
+{% endif %}

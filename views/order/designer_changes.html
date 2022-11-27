@@ -1,0 +1,68 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+    <form id="frmSearch" method="get" autocomplete="off">
+    <table class="table-cols style2">
+    <tr>
+        <th class="w150">주문번호</th>
+        <td>
+            <input type="text" name="orderNo" value="{{ search.orderNo }}" class="mr10 w200">
+            <input type="checkbox" name="notProcessedOnly" value="1" id="notProcessedOnly"{{ ' checked' if search.notProcessedOnly }}>
+            <label for="notProcessedOnly">미처리건만 보기</label>
+        </td>
+    </tr>
+    </table>
+    <div class="table-btn">
+        <button type="submit">검색하기</button>
+    </div>
+    </form>
+</div>
+<!--// top_box -->
+
+<div class="content_box">
+    <div class="mtitle">디자이너 변경요청 목록 </div>
+    <table class="table-rows">
+        <thead>
+            <tr>
+                <th width="100">신청일시</th>
+                <th width="150">주문번호</th>
+                <th width="150">품주번호</th>
+                <th width="200">변경전</th>
+                <th width="200">변경후</th>
+                <th width='100'>처리일시</th>
+                <th>처리자</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list and list.length > 0 %}
+        {% for item in list %}
+            <tr>
+                <td align="center">{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i:%s') }}</td>
+                <td align="center">
+                    <a href="/order/{{ orderNo }}" class="highlight" target="_blank">{{ item.orderNo }}</a>
+                </td>
+                <td align="center">{{ item.idOrderItem }}</td>
+                <td align="center">{{ item.prevDesigner.managerNm + '(' + item.prevDesigner.managerId + ')' if item.prevDesigner }}</td>
+                <td align="center">
+                    {{ item.nextDesigner.managerNm + '(' + item.nextDesigner.managerId + ')' if item.nextDesigner }}
+                    {% if not item.nextDesigner %}
+                    <span class='change_designer sbtn black' data-id-order-item="{{ item.idOrderItem }}">변경하기</span>
+                    {% endif %}
+                </td>
+                <td align="center">{{ getLocalDate(item.updatedAt, '%Y.%m.%d %H:%i:%s') if item.updatedAt }}</td>
+                <td align="center">{{ item['Manager.managerNm'] + '(' + item['Manager.managerId'] + ')' if item['Manager.managerId'] }}</td>
+            </tr>
+        {% endfor %}
+        {% else %}
+            <tr class="no-list">
+                <td colspan="7">조회된 변경 요청건이 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    {{ pagination | safe }}
+</div>
+<!--// content_box -->
+
+{% endblock %}

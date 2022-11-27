@@ -1,0 +1,23 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<div class="mtitle top flex_between">
+    보드형 사이즈 추가설정 등록
+    <div class="tit_btns">
+        <a href='/product/board_size_config' class="sbtn">
+            <i class="xi-check-min"></i>
+            보드형 사이즈 추가설정 관리
+        </a>
+    </div>
+</div>
+
+<form id="frmRegist" method="post" action="/product/board_size_config/add" target="ifrmProcess" autocomplete="off">
+    {% include './_form_board_size_config.html' %}
+    <div class="btns">
+        <input type="submit" value="등록하기" class="btn">
+        <button type="button" class="btn cancel_back white">취소하기</button>
+    </div>
+</form>
+</div>
+
+{% endblock %}

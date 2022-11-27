@@ -1,0 +1,207 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+   
+    <form id="frmSearch" method="get" autocomplete="off">
+        <input type="hidden" name="limit" value="{{ limit }}">
+        <table class="table-cols style2">
+            <tr>
+                <th class="w150">날짜</th>
+                <td colspan="3">
+                    <div class="'form_grp">
+                        <select name="dateType">
+                            <option value="createdAt"{{ ' selected' if not search.dateType or search.dateType == 'createdAt' }}>작성일</option>
+                            <option value="deletedAt"{{ ' selected' if search.dateType == 'deletedAt' }}>삭제일</option>
+                        </select>
+                        <input type='date' name='sdate'  value='{{ search.sdate }}' class='wauto'> ~ 
+                        <input type='date' name='edate' value='{{ search.edate }}' class='wauto'>
+                        <span class='quick_date' data-target-name='sdate,edate'>
+                            <span class='date_span' data-span='1_week'>1주</span>
+                            <span class='date_span' data-span='2_week'>2주</span>
+                            <span class='date_span' data-span='3_week'>3주</span>
+                            <span class='date_span' data-span='4_week'>4주</span>
+                            <span class='date_span' data-span='1_month'>1개월</span>
+                            <span class='date_span' data-span='2_month'>2개월</span>
+                            <span class='date_span' data-span='3_month'>3개월</span>
+                            <span class='date_span' data-span='6_month'>6개월</span>
+                            <span class='date_span' data-span='1_year'>1년</span>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>검색구분</th>
+                <td width="350">
+                    <div class="form_grp">
+                        <select name="sopt">
+                            <option value="all"{{ ' selected' if not search.sopt and search.sopt == 'all' }}>통합검색</option>
+                            <option value="poster"{{ ' selected' if search.sopt == 'poster' }}>작성자명</option> 
+                            <option value="managerId"{{ ' selected' if search.sopt == 'managerId' }}>아이디</option>
+                            <option value="subject"{{ ' selected' if search.sopt == 'subject' }}>제목</option>
+                            <option value="content"{{ ' selected' if search.sopt == 'content' }}>본문</option>
+                            <option value="subject_content"{{ ' selected' if search.sopt == 'subject_content' }}>제목+본문</option>        
+                        </select>
+                        <input type="text" name="skey" value="{{ search.skey }}">
+                    </div>
+                </td>
+                <th class="w150">기타</th>
+                <td>
+                    <input type="checkbox" name="isDeleted" value="1" id="isDeleted"{{ ' checked' if search.isDeleted }}>
+                    <label for="isDeleted">삭제된 게시글</label>
+
+                    <input type="checkbox" name="isHavingComments" value="1" id="isHavingComments"{{ ' checked' if search.isHavingComments }}>
+                    <label for="isHavingComments">댓글 포함 게시글</label>
+                </td>
+            </tr>
+            <tr>
+                <th>휴대전화</th>
+                <td>
+                    <input type="text" name="mobile" value="{{ search.mnobile }}">
+                </td>
+                <th>이메일</th>
+                <td>
+                    <input type="text" name="email" value="{{ search.email }}">
+                </td>
+            </tr>
+        </table>
+        <div class="table-btn">
+            <button type="submit">조회하기</button>
+        </div>
+    </form>
+</div>
+
+<div class="content_box">
+    <div class="mtitle">{{ board.title }}</div>
+    <div class="flex_between">
+        {% if limits and limits.length > 0 %}
+        <div class="limits_tab" data-target-id="frmSearch">
+        {% for num in limits %}
+            <span class="sbtn tab{{ ' on' if num == limit }}" data-limit="{{ num }}">{{ num }}개씩 보기</span>
+        {% endfor %}
+        </div>
+        {% endif %}
+        <div>
+            Total : {{ total.toLocaleString() }}
+        </div>
+    </div>
+    <form id="frmList" method="post" action="/board/admin/list" target="ifrmProcess" autocomplete="off">
+        <input type="hidden" name="idBoard" value="{{ board.id }}">
+        <div class="scroll_x">
+            <table class="table-rows">
+                <thead>
+                    <tr>
+                        <th width="30">
+                            <input type="checkbox" class="js-checkall" id="js_checkall" data-target-name="id">
+                            <label for="js_checkall" class="standalone"></label>
+                        </th>
+                        <th>제목</th>
+                        <th nowrap width="120">작성자</th>
+                        <th nowrap width="120">작성일시</th>
+                        <th nowrap width="80">조회수</th>
+                        <th nowrap width="130">작성자IP</th>
+                        <th nowrap width="80">에디터</th>
+                        <th nowrap width="80">댓글수</th>
+                        <th nowrap width="170">첨부파일</th>
+                        <th nowrap width="120"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if list and list.length > 0 %}
+                {% for item in list %}
+                    <tr>
+                        <td align="center">
+                            {% if not item.totalComments %}
+                            <input type="checkbox" name="id" id="id_{{ item.id }}" value="{{ item.id }}">
+                            <label for="id_{{ item.id }}" class="standalone"></label>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="w350 wb-all">
+                                {% if not item.deletedAt and item.text1 and board.skinType  == 'qna' %}
+                                <span class="sbtn red wauto">답변완료</span>
+                                {% endif %}
+                                {% if item.idParent %}
+                                <span class="sbtn on wauto">답글</span>
+                                {% endif %}
+                                {% if item.deletedAt %}<del>{% endif %}
+                                <a href="/board/view/{{ item.id }}" target="_blank">
+                                    {{ '[' + item.category + ']' if item.category }}
+                                    {{ '[공지]' if item.isNotice }}
+                                    {{ item.subject }}
+                                </a>
+                                {% if item.deletedAt %}
+                                </del>
+                                
+                                <a href="/board/admin/restore/{{ item.id }}" class="sbtn" onclick="return confirm('정말 복구하시겠습니까?');" target="ifrmProcess">
+                                    <i class="xi-undo"></i>복구하기
+                                </a>
+                                {% endif %}
+                                {% if not item.deletedAt and not item.text1 and board.skinType  == 'qna' %}
+                                <a href="/board/admin/view/{{ item.id }}#answer" class="sbtn" target="_blank">
+                                    <i class="xi-pen-o"></i>답변
+                                </a>
+                                {% endif %}
+                                
+                            </div>
+                        </td>
+                        <td align="center" nowrap>
+                            {{ item.poster }}<div>{{ '(' + item.managerId + ')'  if item.managerId }}</div>
+                        </td>
+                        <td align="center">{{ getLocalDate(item.createdAt, '%Y.%m-%d %H:%i:%s') }}</td>
+                        <td align="center" nowrap>{{ item.hit.toLocaleString() }}</td>
+                        <td align="center" nowrap>{{ item.ipAddr }}</td>
+                        <td align="center" nowrap>{{ '적용' if item.useEditor else '미적용' }}</td>
+                        <td align="center" nowrap>
+                            {% if item.totalComments > 0 %}
+                            <a href='/board/admin/view/{{ item.id }}#comment' target="_blank">
+                                {{ item.totalComments.toLocaleString() }}
+                            </a>
+                            {% endif %}
+                        </td>
+                        <td align="center" nowrap>
+                            {% if item.attachImages.length > 0 %}
+                            <div>
+                                <a href="/board/admin/view/{{ item.id }}#attachImages" target="_blank">
+                                    이미지 : {{ item.attachImages.length.toLocaleString() }}
+                                </a>
+                            </div>
+                            {% endif %}
+                            {% if item.attachFiles.length > 0 %}
+                            <div>
+                                <a href="/board/admin/view/{{ item.id }}#attachFiles">
+                                    첨부파일 : {{ item.attachFiles.length.toLocaleString() }}
+                                </a>
+                            </div>
+                            {% endif %}
+                        </td>
+                        <td nowarp align="center">
+                            <a href="/board/admin/view/{{ item.id }}" target="_blank" class="sbtn">
+                                <i class="xi-check"></i>관리
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                {% else %}
+                    <tr class="no-list">
+                        <td colspan="10">조회된 게시글이 없습니다.</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+            {% if list and list.length > 0 %}
+            <div class="table-action">
+                <div>
+                    <span data-id="frmList" class="sbtn form_soft_delete">
+                        <i class="xi-trash-o"></i>삭제하기
+                    </span>
+                    <span data-id="frmList" class="sbtn red form_delete">
+                        <i class="xi-check"></i>완전삭제하기
+                    </span>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </form>
+    {{ pagination | safe }}
+</div>
+{% endblock %}

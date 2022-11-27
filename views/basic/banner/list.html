@@ -1,0 +1,110 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+
+<div class="top_box">
+<div class='mtitle top flex_between'>
+    배너검색
+    <div class='tit_btns'>
+        <a href='/basic/banner/group' class='sbtn'><i class='xi-view-module'></i>배너 그룹 관리</a>
+        <a href='/basic/banner/add' class='sbtn black'><i class='xi-plus'></i>배너 등록</a>
+    </div>
+</div>
+
+<form id='searchFrm' method='get' autocomplete='off'>
+    <table class='table-cols style2'>
+        <tr>
+            <th>배너그룹</th>
+            <td width='200'>
+                <select name='idBannerGroups'>
+                    <option value=''>- 배너 그룹 선택 -</option>
+                {% if bannerGroups.length > 0 %}
+                {% for item in bannerGroups %}
+                    <option value='{{ item.id }}'{{ ' selected' if search.idBannerGroups == item.id }}>{{ item.groupNm }}</option>
+                {% endfor %}
+                {% endif %}
+                </select>
+            </td>
+            <th>배너그룹코드</th>
+            <td width='250'>
+                <input type='text' name='groupCd' value='{{ search.groupCd }}'>
+            </td>
+            <th>노출여부</th>
+            <td>
+                <input type='checkbox' name='isShow' value='1' id='isShow_1'{{ ' checked' if search.isShow and (search.isShow == '1' or search.isShow.indexOf('1') != -1)}}>
+                <label for='isShow_1'>노출</label>
+                <input type='checkbox' name='isShow' value='0' id='isShow_0'{{ ' checked' if search.isShow and (search.isShow == '0' or search.isShow.indexOf('0') != -1)}}>
+                <label for='isShow_0'>미노출</label>
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='검색하기'>
+    </div>
+</form>
+</div>
+<div class="content_box">
+<div class='mtitle'>배너목록</div>
+<form id='frmList' method="post" action="/basic/banner" target='ifrmProcess' autocomplete='off'>
+<table class='table-rows'>
+    <thead>
+        <tr>
+            <th width='30'>
+                <input type='checkbox' class='js-checkall' data-target-name='id' id='js-checkall'>
+                <label for='js-checkall' class='standalone'></label>
+            </th>
+            <th width='150'>배너그룹</th>
+            <th width='120'>배너그룹코드</th>
+            <th width='100'>배너</th>
+            <th width='170'>노출여부</th>
+            <th width='150'>등록일시</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if list.length > 0 %}
+    {% for item in list %}
+        <tr>
+            <td align='center'>
+                <input type='checkbox' name='id' value='{{ item.id }}' id='id_{{ item.id }}'>
+                <label for='id_{{ item.id }}' class='standalone'></label>
+            </td>
+            <td align='center'>{{ item['BannerGroup.groupNm'] }}</td>
+            <td>{{ item['BannerGroup.groupCd'] }}</td>
+            <td align='center'>
+            {% if item.file.thumbImageUrl %}
+                <img src='{{ item.file.thumbImageUrl }}' style='max-height: 80px'>
+            {% endif %}
+            </td>
+            <td align='center'>
+                <input type='radio' name='isShow_{{ item.id }}' value='1' id='isShow_{{ item.id }}_1'{{ ' checked' if item.isShow == 1 }}>
+                <label for='isShow_{{ item.id }}_1'>노출</label>
+                <input type='radio' name='isShow_{{ item.id }}' value='0' id='isShow_{{ item.id }}_0'{{ ' checked' if item.isShow == 0 }}>
+                <label for='isShow_{{ item.id }}_0'>미노출</label>
+            </td>
+            <td align='center'>{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i')}}</td>
+            <td>
+                <a href='/basic/banner/update/{{ item.id }}' class='sbtn'>배너수정</a>
+            </td>
+        </tr>
+    {% endfor %}
+    {% else %}
+        <tr class='no-list'>
+            <td colspan='7'>등록된 배너가 없습니다.</td>
+        </tr> 
+    {% endif %}
+    </tbody>
+</table>
+{% if list.length > 0 %}
+<div class='table-action'>
+    <div>
+        <span class='sbtn form_update black' data-id='frmList'><i class='xi-check'></i> 선택배너 수정하기</span>
+        <span class='sbtn form_delete' data-id='frmList'><i class='xi-trash-o'></i> 선택배너 삭제하기</span>
+    </div>
+</div>
+{% endif %}
+</form>
+
+{{ pagination | safe }}
+</div>
+
+{% endblock %}

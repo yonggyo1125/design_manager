@@ -1,0 +1,71 @@
+{% extends '../layout/main.html' %}
+{% block content %} 
+<div class='mtitle'>재고관리({{ item.itemNm }})</div>
+<form id='frmStock' method="post" action="/product/stock/{{ id }}" target='ifrmProcess' autocomplete='off'>
+    <table class='table-cols'>
+        <tr>
+            <th>구분</th>
+            <td width='160'>
+                <input type='radio' name='type' value='add' id='type_add' checked>
+                <label for='type_add'>입고</label>
+                <input type='radio' name='type' value='deduct' id='type_debug'>
+                <label for='type_debug'>출고</label>
+            </td>
+            <th>재고량</th>
+            <td width='250'>
+                <input type='number' name='amount' min='0' class='w100'>
+                {{ 'yard(길이)' if item.stockType == 'yard' else '매/본(수량)' }}
+            </td>
+            <th>메모</th>
+            <td>
+                <input type='text' name='memo'>
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='등록하기'>
+    </div>
+</form>
+
+{% if item.stock %}
+<div class='mtitle'>총 재고 : {{ item.stock.toLocaleString() }}</div>
+{% endif %}
+<form id="frmList" method="post" action="/product/stock/{{ id }}" target="ifrmProcess" autocomplete="off">
+    <table class='table-rows'>
+        <thead>
+            <tr>
+                <th width='30'>
+                    <input type='checkbox' class='js-checkall' data-target-name='id' id='js_checkall'>
+                    <label for='js_checkall' class='standalone'></label>
+                </th>
+                <th width='150'>재고량</th>
+                <th>메모</th>
+                <th width='130'>등록일시</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list.length > 0 %}
+        {% for item in list %}
+            <tr>
+                <td align='center'>
+                    <input type='checkbox' name='id' value='{{ item.id }}' id='id_{{ item.id }}'>
+                    <label for='id_{{ item.id }}' class='standalone'></label>
+                </td>
+                <td align='center'>{{ item.amount.toLocaleString() }}</td>
+                <td>{{ item.memo }}</td>
+                <td>{{ getLocalDate(item.createdAt, "%Y.%m.%d %H:%i") }}</td>
+            </tr>
+        {% endfor %}
+        {% else %} 
+            <tr class='no-list'>
+                <td colspan='4'>등록된 재고가 없습니다.</td>    
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <div class='table-action'>
+        <span class='sbtn form_delete' data-id='frmList'>재고등록 취소하기</span>
+    </div>
+</form>
+
+{% endblock %}

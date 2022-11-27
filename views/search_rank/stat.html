@@ -1,0 +1,76 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+<div class="mtitle top">통계 검색</div>
+<form id='frmSearch' method="get" autocomplete="off">
+    <table class="table-cols style2">
+        <tr>
+            <th>작업일</th>
+            <td>
+                <input type="date" name="sdate" value="{{ search.sdate }}" class="wauto">
+                ~ 
+                <input type="date" name="edate" value="{{ search.edate }}" class="wauto">
+                <span class='quick_date' data-target-name='sdate,edate'>
+                    <span class='date_span' data-span='1_week'>1주</span>
+                    <span class='date_span' data-span='2_week'>2주</span>
+                    <span class='date_span' data-span='3_week'>3주</span>
+                    <span class='date_span' data-span='4_week'>4주</span>
+                    <span class='date_span' data-span='1_month'>1개월</span>
+                    <span class='date_span' data-span='2_month'>2개월</span>
+                    <span class='date_span' data-span='3_month'>3개월</span>
+                    <span class='date_span' data-span='6_month'>6개월</span>
+                    <span class='date_span' data-span='1_year'>1년</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <th>키워드</th>
+            <td>
+                <input type="text" name="keyword" value="{{ search.keyword }}">
+            </td>
+        </tr>
+    </table>
+    <div class="table-btn">
+        <input type="submit" value="검색하기">
+    </div>
+</form>
+</div>
+<div class="content_box">
+<div class="mtitle">통계 목록</div>
+<table class="table-rows">
+    <thead>
+    <tr>
+        <th width="100">작업일</th>
+        <th width="300">키워드</th>
+        <th width="150">작업횟수</th>
+        <th>키워드 랭킹</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if list.length > 0 %}
+    {% for item in list %}
+        <tr>
+            <td align='center'>{{ item.date }}</td>
+            <td align='center'>{{ item.keyword }}</td>
+            <td align='center'>{{ item.jobCount }}</td>
+            <td>
+                {% if item.rankingJson.length > 0 %} 
+                {% for rank in item.rankingJson %}
+                <span class="rank">{{ loop.index }}. {{ rank }}</span>
+                {% endfor %}
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    {% else %}
+    <tr class="no-list">
+        <td colspan="4">
+            등록된 작업기록이 없습니다.
+        </td>
+    </tr>
+    {% endif %}
+    </tbody>
+</table>
+{{ pagination | safe }}
+</div>
+{% endblock %}

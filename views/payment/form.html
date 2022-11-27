@@ -1,0 +1,93 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<script language="javascript" type="text/javascript" src="https://stdpay.inicis.com/stdjs/INIStdPay.js" charset="UTF-8"></script>
+<div class='popup_tit'>
+    <span class='big'>결제하기</span>
+    <div class='xi-close' id='close_popup' onclick="self.close();"></div>
+</div>
+<div class="popup_box payment_box">
+<form id="SendPayForm_id" method="POST"  autocomplete="off">
+    <input type="hidden" name="pg" value="inicis">
+    <input type="hidden" name="idPaymentItem" value="{{ id }}">
+    <input type="hidden"  name="price" value="{{ amount }}" >
+    <input type="hidden"  name="mid" value="{{ config.mid }}" >
+    <input type="hidden"  name="mKey" value="{{ config.mKey }}" >
+    <input type="hidden"  name="signature" value="{{ config.signature }}" >
+    <input type="hidden"  name="oid" value="{{ gid }}_{{ id }}" >
+    <input type="hidden"  name="timestamp" value="{{ config.timestamp }}" >
+    <input type="hidden"  name="version" value="1.0" >
+    <input type="hidden"  name="currency" value="WON" >
+    <input type="hidden"  name="acceptmethod" value="below1000" ><!-- 에스크로옵션 : useescrow, 빌링(정기과금)옵션 : BILLAUTH(Card) -->
+    <input type="hidden"  name="returnUrl" value="{{ host }}/payment/callback" >
+    <input type="hidden"  name="closeUrl" value="{{ host }}/payment/close" >
+    <input type="hidden"  name="goodname" value="{{ title }}" >
+    <input type="hidden" name="merchantData" value="">
+    <table class="table-cols">
+        <tr>
+            <th>결제품목</th> 
+            <td>{{ title }}</td>
+        </tr>
+        <tr>
+            <th>결제내용</th>
+            <td>{{ nl2br(description) }}</td>
+        </tr>
+        <tr>
+            <th>입금자명</th>
+            <td>
+                <input type="text"    name="buyername" value="{{ name }}" >
+            </td>
+        </tr>
+        <tr>
+            <th>휴대전화</th>
+            <td><input type="text"    name="buyertel" value="{{ cellPhone }}" ></td>
+        </tr>
+        <tr>
+            <th>이메일</th>
+            <td><input type="text"   name="buyeremail" value="{{ email if email else 'test@inicis.com' }}" ></td>
+        </tr>
+        <tr>
+            <th>결제금액</th>
+            <td>{{ amount.toLocaleString() }}원</td>
+        </tr>
+        <tr>
+            <th>결제방법</th>
+            <td>
+                {% if config.payMethod.indexOf('Card') != -1 %}
+                <input type="radio"  name="gopaymethod" value="Card"  id="gopaymethod_Card">
+                <label for="gopaymethod_Card">신용카드</label><br>
+                {% endif %}
+                {% if config.payMethod.indexOf('Bank') != -1 %}
+                <input type="radio"  name="gopaymethod" value="DirectBank"  id="gopaymethod_DirectBank">
+                <label for="gopaymethod_DirectBank">실시간계좌이체</label><br>
+                {% endif %}
+                {% if config.payMethod.indexOf('VBank') != -1 %}
+                <input type="radio"  name="gopaymethod" value="VBank"  id="gopaymethod_VBank">
+                <label for="gopaymethod_VBank">가상계좌(무통장입금)</label>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    <ul class="terms_box">
+        <li>
+            <input type="checkbox" id="agreeAll">
+            <label for="agreeAll">전체 동의합니다.</label>
+        </li>
+        <li>
+            <input type="checkbox" name='agreePayment' id="agreePayment" value="1">
+            <label for="agreePayment">(필수) 결제내용에 동의</label>
+            <span class="sbtn view_terms" data-type="payment"><i class='xi-list-dot'></i> 자세히</span>
+        </li>
+        <li>
+            <input type="checkbox" name="agreePrivate" id="agreePrivate" value="1">
+            <label for="agreePrivate">(필수) 결제대행 서비스 이용을 위한 개인정보 제3자 제공 및 위탁동의</label>
+            <span class="sbtn view_terms" data-type="private"><i class='xi-list-dot'></i> 자세히</span>
+        </li>
+    </ul>
+    <div class="mbtns">
+        <button class='btn' id='pay_process' type='button'>결제하기</button>
+        <button class="btn cancel_pay" type="button" onclick="self.close();">취소하기</button>
+    </div>
+</form>
+</div>
+
+{% endblock %}

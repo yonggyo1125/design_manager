@@ -1,0 +1,183 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+<form id='frmSearch' method='get' autocomplete='off'>
+<input type="hidden" name="limit" value="{{ limit }}">
+<table class='table-cols style2 mb25'>
+    <tr>
+        <th class="w150">검색구분</th>
+        <td width="400">
+            <div class="form_grp w350">
+                <select name="sopt">
+                    <option value="all"{{ ' selected' if search.sopt == 'all' }}>통합검색</option>
+                    <option value="orderNo"{{ ' selected' if search.sopt == 'orderNo' }}>주문번호</option>
+                    <option value="orderNm"{{ ' selected' if search.sopt == 'orderNm' }}>주문자명</option>
+                    <option value="orderCellPhone" {{ ' selected' if search.sopt == 'orderCellPhone' }}>주문자 휴대전화번호</option>
+                    <option value="shopName"{{ ' selected' if search.sopt == 'shopName' }}>주문반영 쇼핑몰</option>
+                </select>
+                <input type="text" name="skey" value="{{ search.skey }}">
+            </div>
+        </td>
+        <th>품목분류</th>
+        <td>
+            <select name="idProductCategory">
+                <option value="">품목분류 선택</option>
+            {% if itemCategories and itemCategories.length > 0 %}
+            {% for item in itemCategories %}
+                <option value="{{ item.id }}"{{ ' selected' if search.idProductCategory == "" + item.id }}>[{{ item.cateCd }}]{{ item.cateNm }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>날짜</th>
+        <td colspan='3'>
+            <div class="'form_grp">
+                <select name="dateType">
+                    <option value="createdAt"{{ ' selected' if not search.dateType or search.dateType == 'createdAt' }}>접수일</option>
+                    <option value="deliveryReleasedDate"{{ ' selected' if search.dateType == 'deliveryReleasedDate' }}>출고일</option>
+                </select>
+                <input type='date' name='sdate'  value='{{ search.sdate }}' class='wauto'> ~ 
+                <input type='date' name='edate' value='{{ search.edate }}' class='wauto'>
+                <span class='quick_date' data-target-name='sdate,edate'>
+                    <span class="date_span" data-span="-1_day">내일</span>
+                    <span class="date_span" data-span="0_day">오늘</span>
+                    <span class="date_span" data-span="1_day">하루전</span>
+                    <span class="date_span" data-span="2_day">이틀전</span>
+                    <span class='date_span' data-span='1_week'>1주</span>
+                    <span class='date_span' data-span='2_week'>2주</span>
+                    <span class='date_span' data-span='1_month'>1개월</span>
+                    <span class='date_span' data-span='2_month'>2개월</span>
+                    <span class='date_span' data-span='1_year'>1년</span>
+                </span>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <th>처리상태</th>
+        <td colspan='3'>
+            {% for item in orderStatuses %}
+            <input type='checkbox' name='orderStatus' id='orderStatus_{{ loop.index }}' value='{{ item.statusCd }}'{{ ' checked' if search.orderStatus and search.orderStatus.indexOf(item.statusCd) != -1 }}>
+            <label for='orderStatus_{{ loop.index }}'>{{ item.statusNm }}</label> 
+            {% endfor %}
+        </td>
+    </tr>
+    {% if not isDesigner %}
+    <tr>
+        <th>배송조건</th>
+        <td colspan="3">
+        {% if deliveyPolicies and deliveyPolicies.length %}
+        {% for item in deliveyPolicies %}
+            <input type="checkbox" name="idDeliveryPolicy" id="idDeliveryPolicy_{{ item.id }}" value="{{ item.id }}"{{ ' checked' if search.idDeliveryPolicy and search.idDeliveryPolicy.indexOf("" + item.id) != -1 }}>
+            <label for="idDeliveryPolicy_{{ item.id }}">{{ item.policyNm }}{{ '(' + item.description + ')' if item.description }}</label>    
+        {% endfor %}
+        {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>배송방법</th>
+        <td colspan="3">
+        {% if deliveryTypes and deliveryTypes.length > 0 %}
+        {% for item in deliveryTypes %}
+        <input type="checkbox" name="deliveryType" id="deliveryType_{{ loop.index }}" value="{{ item.type }}"{{ ' checked' if search.deliveryType and search.deliveryType.indexOf(item.type) != -1 }}>
+        <label for="deliveryType_{{ loop.index }}">{{ item.name }}</label>
+        {% endfor %}
+        {% endif %}
+        </td>
+    </tr>
+    {% endif %}
+    <tr>
+    {% if not isDesigner %}
+        <th>디자이너</th>
+        <td width="35%">
+            {% if designers and designers.length %}
+            {% for designer in designers %}
+            <input type="checkbox" name="idDesigner" value="{{ designer.id }}" id="idDesigner_{{ designer.id }}"{{ ' checked' if search.idDesigner and search.idDesigner.indexOf("" + designer.id) != -1 }}>
+            <label for="idDesigner_{{ designer.id }}">{{ designer.managerNm }}({{ designer.managerId }})</label>
+            {% endfor %}
+            {% endif %}
+        </td>
+    {% endif %}
+        <th class="w150">접수상담원</th>
+        <td{{ " colspan=3" if isDesigner }}>
+        {% if csAgents and csAgents.length > 0 %}
+        {% for csAgent in csAgents %}
+            <input type="checkbox" name="idManager" value="{{ csAgent.id }}" id="idCsAgent_{{ csAgent.id }}"{{ ' checked' if search.idManager and search.idManager.indexOf("" + csAgent.id) != -1 }}>
+            <label for="idCsAgent_{{ csAgent.id }}">{{ csAgent.managerNm }}({{ csAgent.managerId }})</label>
+        {% endfor %}
+        {% endif %}
+        </td>
+    </tr>
+</table>
+<div class='table-btn'>
+    <input type='submit' value='검색하기'>
+</div>
+</form>
+</div>
+
+<div class="content_box">
+<div class='mtitle'>주문목록</div>
+{% if limits and limits.length > 0 %}
+<div class="limits_tab" data-target-id="frmSearch">
+{% for num in limits %}
+    <span class="sbtn tab{{ ' on' if num == limit }}" data-limit="{{ num }}">{{ num }}개씩 보기</span>
+{% endfor %}
+</div>
+{% endif %}
+<form id='frmList' method='post' action='/order' target='ifrmProcess' autocomplete='off'>
+    <input type="hidden" name="search" value="">
+    <input type="hidden" name="type" value="orders">
+{% include "./_list.html" %}
+{% if not isDesigner %}
+<div class='table-action both-side'>
+    <div>
+        <input type="checkbox" class="js-checkall" data-target-name="orderNo" data-target-id='id_' id="js_checkall_all">
+        <label for="js_checkall_all" class="standalone"></label>
+
+        <select class="orderStatusAll mr5">
+            <option value="">처리상태 선택</option>
+            {% for it in orderStatuses %}
+            <option value='{{ it.statusCd }}'>{{ it.statusNm }}</option>
+            {% endfor %}
+        </select>
+
+        <span class='btn4 black form_update' data-id='frmList'>
+            <i class='xi-check'></i>
+            수정하기
+        </span>
+        <span class='btn4 form_delete' data-id='frmList'>
+            <i class='xi-trash'></i>
+            삭제하기
+        </span>
+        <span class="btn4 form_excel" data-id='frmList' data-type="orders">
+            <i class="xi-download"></i>주문 목록
+        </span>
+        <span class="btn4 form_excel" data-id='frmList' data-type="items">
+            <i class="xi-download"></i>주문 품목 목록
+        </span>
+        {% if search.deliveryType and search.deliveryType.indexOf('parcel') == -1 %}
+        <span class="btn4 red print_delivery_receipt">
+            <i class="xi-print"></i>인수증 출력       
+        </span>
+        {% endif %}
+    </div>
+    <div>
+        <span class="btn4 form_excel" data-id='frmList' data-type="lotte">
+            <i class="xi-download"></i>롯데 택배
+        </span>
+        <span class="btn4 form_excel" data-id='frmList' data-type="logen">
+            <i class="xi-download"></i>로젠 택배
+        </span>
+        <span class="btn4 form_excel" data-id='frmList' data-type="daesin">
+            <i class="xi-download"></i>대신화물
+        </span>
+    </div>
+</div>
+{% endif %}
+</form>
+
+{{ pagination | safe }}
+</div>
+<button type="button" class="btn_circle bottom_fixed form_update" data-id='frmList'>수정</button>
+{% endblock %}

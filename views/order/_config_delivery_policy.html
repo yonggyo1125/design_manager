@@ -1,0 +1,63 @@
+<div class="content_box mt50">
+<div class='mtitle top flex_between'>
+    배송조건 관리
+    <div class='tit_btns'>
+        <a href='/order/config/delivery_policy' class='sbtn'>
+            <i class='xi-plus'></i>배송조건 등록
+        </a>
+    </div>
+</div>
+
+<form id='frmList' method='post' action='/order/config' target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='mode' value='deliveryPolicy'>
+    <table class='table-rows'>
+        <thead>
+            <tr>
+                <th width='30'>
+                    <input type='checkbox' class='js-checkall' data-target-name='id' id='js-checkall'>
+                    <label for='js-checkall' class='standalone'></label>
+                </th>
+                <th width='100'>등록번호</th>
+                <th width='250'>배송비조건명</th>
+                <th width='250'>배송방식</th>
+                <th width='110'>배송비유형</th>
+                <th width='130'>지역별추가배송비</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list.length > 0 %}
+        {% for item in list %}
+            <tr>
+                <td align='center'>
+                    <input type='checkbox' name='id' value='{{ item.id }}' id='id_{{ item.id }}'>
+                    <label for='id_{{ item.id }}' class='standalone'></label>
+                </td>
+                <td align='center'>{{ item.id }}</td>
+                <td align='center'>{{ item.policyNm }}</td>
+                <td align='center' nowrap>{{ item.deliveryTypeStr }}</td>
+                <td align='center'>{{ item.deliveryChargeTypeStr }}</td>
+                <td align='center'>{{ '있음' if item.useDeliveryAreaPolicy else '없음' }}</td>
+                <td>
+                    <a href='/order/config/delivery_policy/{{ item.id }}' class='sbtn'>
+                        <i class='xi-check'></i>
+                        수정하기
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %}
+            <tr class='no-list'>
+                <td colspan='7'>등록된 배송조건이 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <div class='table-action'>
+        <span class='sbtn form_delete' data-id='frmList'>
+            <i class='xi-trash-o'></i>
+            선택 배송조건 삭제하기
+        </span>
+    </div>
+</form>
+</div>

@@ -1,0 +1,108 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+    <form id="frmSearch" method="get" autocomplete="off">
+        <table class="table-cols style2">
+            <tr>
+                <th>구분</th>
+                <td colspan="3">
+                    <select name="sopt">
+                        <option value="all"{{ ' selected' if not search.sopt or search.sopt == 'all' }}>통합검색</option>
+                        <option value="id"{{ ' selected' if search.sopt == 'id' }}>게시판 ID</option>
+                        <option value="title"{{ ' selected' if search.sopt == 'title' }}>게시판명</option>
+                    </select>
+                    <input type="text" name="skey" value="{{ search.skey }}">
+                </td>
+            </tr>
+            <tr>
+                <th>사용여부</th>
+                <td class="w350">
+                    <input type="checkbox" name="isUse" value="n" id="isUse_n"{{ ' checked' if search.isUse and search.isUse.indexOf("n") != -1 }}>
+                    <label for="isUse_n">미사용</label>
+                    <input type="checkbox" name="isUse" value="y" id="isUse_y"{{ ' checked' if search.isUse and search.isUse.indexOf("y") != -1 }}>
+                    <label for="isUse_y">사용</label>
+                </td>
+                <th>스킨</th>
+                <td>
+                    {% if skins and skins.length %}
+                    {% for item in skins %}
+                        <input type="checkbox" name="skin" value="{{ item.id }}" id="skin_{{ item.id }}"{{ ' checked' if search.skin and search.skin.indexOf(item.id) != -1 }}>
+                        <label for="skin_{{ item.id }}">{{ item.skinNm }}({{ item.id }})</label>
+                    {% endfor %}
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+        <div class="table-btn">
+            <button type="submit">검색하기</button>
+        </div>
+    </form>
+</div>
+<!--// top_box -->
+<div class="content_box">
+    <div class="mtitle">게시판 목록</div>
+    <div class="scroll_X">
+        <form id="frmList" method="post" action="/board/admin" target="ifrmProcess" autocomplete="off">
+            <table class="table-rows">
+                <thead>
+                    <tr>
+                        <th width="40">
+                            <input type="checkbox" class="js-checkall" id="js_checkall" data-target-name="id">
+                            <label for="js_checkall" class="standalone"></label>
+                        </th>
+                        <th width='150'>게시판ID</th>
+                        <th width='200'>게시판명</th>
+                        <th width='120'>처리일시</th>
+                        <th width="120">처리자</th>
+                        <th width="150">사용여부</th>
+                        <th width="200">스킨</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if list and list.length > 0 %}
+                {% for item in list %}
+                    <tr>
+                        <td width="40" align="center">
+                            {% if not item.postCnt %}
+                            <input type="checkbox" name="id" value="{{ item.id }}" id="id_{{ item.id }}">
+                            <label for="id_{{ item.id }}" class="standalone"></label>
+                            {% endif %}
+                        </td>
+                        <td align="center">
+                            <a href='/board/admin/edit/{{ item.id }}' class="hover_underline">{{ item.id }}</a>
+                        </td>
+                        <td align="center">
+                            <a href='/board/admin/edit/{{ item.id }}' class="hover_underline">{{ item.title }}</a>
+                        </td>
+                        <td align="center">{{ getLocalDate(item.createdAt, '%Y.%m.%d<br>%H:%i:%s') | safe }}</td>
+                        <td align="center">{{ item['Manager.managerNm'] }}<br>({{ item['Manager.managerId'] }})</td>
+                        <td align="center">{{ '사용' if item.isUse else '미사용' }}</td>
+                        <td align="center">{{ item['Skin.skinNm'] }}<br>({{ item.skin }})</td>
+                        <td>
+                            <a href="/board/admin/list/{{ item.id }}" class="sbtn black">게시글 관리</a>
+                            <a href="/board/list/{{ item.id }}" class="sbtn">미리보기</a>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                {% else %}
+                    <tr class="no-list">
+                        <td colspan="8">조회된 게시판이 없습니다.</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+            <div class="table-action">
+                <span class="btn4 form_delete" data-id="frmList">
+                    <i class="xi-trash"></i>
+                    선택 게시판 삭제하기
+                </span>
+            </div>
+        </form>
+    </div>
+    {{ pagination | safe }}
+</div>
+<!--// content_box -->
+
+{% endblock %}

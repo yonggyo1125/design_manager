@@ -1,0 +1,15 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<div class='mtitle top flex_between'>
+    기본옵션(수량별 적용) 수정
+    <div class='tit_btns'>
+        <a href='/product/options' class='sbtn'>
+            <i class='xi-list'></i>
+            기본옵션관리
+        </a>
+    </div>
+</div>
+{% include "./_form_options.html" %}
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<form id="frmCancel" method="post" action="/payment/cancel/{{ id }}" target="ifrmProcess" autocomplete="off">
+    <table class="table-cols">
+        <tr>
+            <th>처리ID</th>
+            <td>{{ id }}</td>
+        </tr>
+        <tr>
+            <th>결제방식</th>
+            <td>{{ payMethodStr }}</td>
+        </tr>
+        <tr>
+            <th>환불/취소금액</th>
+            <td>{{ amount.toLocaleString() }}원</td>
+        </tr>
+    {% if payMethod == 'VBank' %}
+        <tr>
+            <th>환불계좌은행</th>
+            <td>
+                <select name="refundBankCode">
+                {% for code, bankNm  in banks %}
+                    <option value="{{ code }}"{{ ' selected' if code == refundBankCode }}>{{ bankNm }}</option>
+                {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>환불계좌번호</th>
+            <td>
+                <input type="text" name="refundAcctNum" value="{{ refundAcctNum }}">
+            </td>
+        </tr>
+        <tr>
+            <th>환불계좌 예금주명</th>
+            <td>
+                <input type="text" name="refundAcctName" value="{{ refundAcctName }}">
+            </td>
+        </tr>
+    {% endif %}
+    </table>
+    <div class='table-btn'>
+        <input type="submit" value="환불/취소하기">
+    </div>
+</form>
+{% endblock %}

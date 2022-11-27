@@ -1,0 +1,77 @@
+<table class="table-cols">
+    <tr>
+        <th>사용여부</th>
+        <td>
+            <input type="radio" name="isUse" value="1" id="isUse_1"{{ ' checked' if isUse }}>
+            <label for="isUse_1">사용</label>
+            <input type="radio" name="isUse" value="0" id="isUse_0"{{ ' checked' if not isUse }}>
+            <label for="isUse_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>설정명</th>
+        <td>
+            <input type="text" name="title" value="{{ title }}" class="wFull">
+        </td>
+    </tr>
+    <tr>
+        <th>휴무일 구분</th>
+        <td>
+            <input type="radio" name="holidayType" value="cs" id="holidayType_cs"{{ ' checked' if holidayType != 'delivery' }}>
+            <label for="holidayType_cs">상담</label>
+
+            <input type="radio" name="holidayType" value="delivery" id="holidayType_delivery"{{ ' checked' if holidayType == 'delivery' }}>
+            <label for="holidayType_delivery">배송</label>
+        </td>
+    </tr>
+    <tr>
+        <th>전송가능시간대</th>
+        <td>
+            <dl>
+                <dd>
+                    {% if availableTimes and availableTimes.length > 0 %}
+                    <select id="stime">
+                    {% for item in availableTimes %}
+                        <option value="{{ item.stamp }}">{{ item.str }}</option>
+                    {% endfor %}
+                    </select>
+                    ~ 
+                    <select id="etime">
+                    {% for item in availableTimes %}
+                        <option value="{{ item.stamp }}">{{ item.str }}</option>
+                    {% endfor %}
+                    </select>
+                    {% endif %}
+                    <span class="btn5 mr5" id="add_config">
+                        <i class="xi-plus"></i>시간대 추가
+                    </span>
+                </dd>
+            </dl>
+            <ul id="reservation_times">
+            {% if reservations and reservations.length > 0 %}
+            {% for item in reservations %}
+            <li id="time_{{ item.stime }}_{{ item.etime }}">
+                <span>
+                    <input type="hidden" name="stime" value="{{ item.stime }}">
+                    <input type="hidden" name="etime" value="{{ item.etime }}">
+                    {{ item.sStr }} ~ {{ item.eStr }}
+                </span>
+                <i class="xi-minus-square remove"></i>
+            </li>   
+            {% endfor %}
+            {% endif %}
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<script type="text/html" id="tpl">
+    <li id="time_<%=stime%>_<%=etime%>">
+        <span>
+            <input type="hidden" name="stime" value="<%=stime%>">
+            <input type="hidden" name="etime" value="<%=etime%>">
+            <%=sStr%> ~ <%=eStr%>
+        </span>
+        <i class="xi-minus-square remove"></i>
+    </li>   
+</script>

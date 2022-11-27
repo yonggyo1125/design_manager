@@ -1,0 +1,103 @@
+{% if search.isPopup %}
+{% extends '../layout/popup.html' %}
+{% else %}
+{% extends '../layout/main.html' %}
+{% endif %}
+{% block content %}
+{% if not search.isPopup %}
+<div class="top_box">
+<div class='mtitle top'>상담 검색</div>
+<form id='frmSearch' method='get' autocomplete='off'>
+<input type='hidden' name="limit" value="{{ limit }}">
+<table class='table-cols style2'>
+    <tr>
+        <th>등록일시</th>
+        <td width='350'>
+            <input type='date' name='sDate' value='{{ search.sDate }}' class='w120'> ~ 
+            <input type='date' name='eDate' value='{{ search.eDate }}' class='w120'>
+        </td>
+        <th>유입경로</th>
+        <td>
+            {% if channels.length > 0 %}
+            {% for channel in channels %}
+            <input type='checkbox' name='channel' value='{{ channel }}' id='channel_{{ loop.index }}'{{ ' checked' if search.channel and search.channel.indexOf(channel) != -1 }}>
+            <label for='channel_{{ loop.index }}'>{{ channel }}</label>
+            {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>상담구분</th>
+        <td>
+            {% if categories.length > 0 %}
+            {% for category in categories %}
+            <input type='checkbox' name='category' value='{{ category }}' id='category_{{ loop.index }}'{{ ' checked' if search.category and search.category.indexOf(category) != -1 }}>
+            <label for='category_{{ loop.index }}'>{{ category }}</label>
+            {% endfor %}
+            {% endif %}
+        </td>
+        <th>키워드 검색</th>
+        <td>
+            <select name='sopt' class='wauto'>
+                <option value='all'{{ ' selected' if not search.sopt or search.sopt == 'all' }}>통합검색</option>
+                <option value='orderNo'{{ ' selected' if search.sopt == 'orderNo' }}>주문번호</option>
+                <option value='customerNm'{{ ' selected' if search.sopt == 'customerNm' }}>고객명</option>
+                <option value='cellPhone'{{ ' selected' if search.sopt == 'cellPhone' }}>연락처</option>
+                <option value='email'{{ ' selected' if search.sopt == 'email' }}>이메일</option>
+                <option value='question'{{ ' selected' if search.sopt == 'question' }}>고객요청사항</option>
+                <option value='memo'{{ ' selected' if search.sopt == 'memo' }}>상담메모</option>
+            </select>
+            <input type='text' name='skey' value='{{ search.skey }}' class='w300'>
+        </td>
+    </tr>
+    <tr>
+        <th>처리상담원</th>
+        <td colspan='3'>
+            {% if csAgents and csAgents.length > 0 %}
+            {% for csAgent in csAgents %}
+                <input type="checkbox" name="idManager" value="{{ csAgent.id }}" id="idCsAgent_{{ csAgent.id }}"{{ ' checked' if search.idManager and search.idManager.indexOf("" + csAgent.id) != -1 }}>
+                <label for="idCsAgent_{{ csAgent.id }}">{{ csAgent.managerNm }}({{ csAgent.managerId }})</label>
+            {% endfor %}
+            {% endif %}
+        </td>
+    </tr> 
+</table>
+<div class='table-btn'>
+    <input type='submit' value='검색하기'>
+</div>
+</form>
+</div>
+<div class="content_box">
+<div class='mtitle'>상담 목록</div>
+{% if limits and limits.length > 0 %}
+<div class="limits_tab" data-target-id="frmSearch">
+{% for num in limits %}
+    <span class="sbtn tab{{ ' on' if num == limit }}" data-limit="{{ num }}">{{ num }}개씩 보기</span>
+{% endfor %}
+</div>
+{% endif %}
+<div class="scroll_x">
+<form id='frmList' method="post" action="/customer" target='ifrmProcess' autocomplete='off'>
+<input type='hidden' name='search' value=''>
+{% endif %}
+{% include './_list.html' %}
+{% if not search.isPopup %}
+<div class='table-action'>
+    <div>
+        <input type="checkbox" class="js-checkall" data-target-id='id_' id="js_checkall_all">
+        <label for="js_checkall_all" class="standalone"></label>
+        <span class='sbtn form_delete' data-id='frmList'>
+            <i class='xi-trash-o'></i>
+            선택 상담 삭제하기
+        </span>
+    </div>
+    <span class='sbtn form_excel' data-id='frmList'>
+        <i class='xi-download'></i>엑셀 다운로드
+    </span>
+</div>
+</form>
+{% endif %}
+</div>
+{{ pagination | safe }}
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<form method="post" action="/kakao_alimtalk/send_popup" target="ifrmProcess" autocomplete="off">
+<input type="hidden" name="tmpltCode" value="{{ tmpltCode }}">
+<table class="table-cols">
+    <tr>
+        <th>템플릿 코드</th>
+        <td>{{ tmpltCode }}</td>
+    </tr>
+    <tr>
+        <th>템플릿명</th>
+        <td>{{ tmpltNm }}</td>
+    </tr>
+{% if replaceCodes.length > 0 %}
+    <tr>
+        <th>치환코드</th>
+        <td>
+            {% for code in replaceCodes %}
+            <dl>
+                <dt>{{ code }}</dt>
+                <dd>
+                    <input type="text" name="replaceCode_{{ code }}" value='{{ name if code.indexOf('name') != -1 else replaced[code] }}'>
+                </dd>
+            </dl>
+            {% endfor %}
+        </td>
+    </tr>
+{% endif %}
+    <tr>
+        <th>휴대전화번호</th>
+        <td>
+            <input type="text" name="cellPhone" value="{{ cellPhone }}">
+        </td>
+    </tr>
+</table>
+<div class="table-btn">
+    <input type="submit" value="전송하기">
+</div>
+</form>
+{% endblock %}

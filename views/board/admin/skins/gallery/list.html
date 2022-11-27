@@ -1,0 +1,101 @@
+<div class="content_box{{ ' mt50' if not isViewList }} list_box">
+    {% if not isViewList %}
+    <div class="mtitle"><a href='/board/list/{{ board.id }}'>{{ board.title }}</a></div>
+    {% endif %}
+
+    {% if board.category and board.category.length > 0 %}
+    <div class="categories">
+        <a href="/board/list/{{ board.id }}" class="tab{{ ' on' if not search or not search.category }}">전체보기</a>
+    {% for item in board.category %}
+        <a href="/board/list/{{ board.id }}?category={{ item }}" class="tab{{ ' on' if search and item == search.category }}">{{ item }}</a>
+    {% endfor %}
+    </div>
+    <!--// categories -->
+    {% endif %}
+
+    <div class="list_top">
+        <div class="total">게시글 수 : <span class="no">{{ total.toLocaleString() }}</span></div>
+        <div class="controls">
+            {% if board.accessible.write %}
+            <a href="/board/write/{{ idBoard }}"><i class='xi-pen'></i>글쓰기</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!--// list_top -->
+    {% if list and list.length > 0 %}
+    <ul class="data_list">
+    {% for item in list %}
+        <li class='list_item{{ " viewing" if isViewList and id == item.id }}{{ " notice" if item.isNotice }}{{ " photo_item" if item.icons.image else " no_photo_item"}}'>
+            {% if item.icons.image and item.attachImages and item.attachImages.length > 0 %}
+            <a href="/board/view/{{ item.id }}" class="photo">
+                <img src="{{ item.attachImages[0].thumbImageUrl }}">
+            </a>
+            {% endif %}
+            <a href="/board/view/{{ item.id }}" class="subject{{ ' depth' + item.depth if item.depth }}">
+                {% if item.icons.image %}
+                <div class="subject_info">
+                {% endif %}
+                    {% if item.isNotice %}
+                    <img src="/images/icon/notice.png" class='icon_notice icon_list'>
+                    {% endif %}
+                    {% if isViewList and id == item.id %}
+                    <span class='icon_view'>[열람중]</span>
+                    {% endif %}
+                    {% if item.depth %}
+                    <i class="xi-subdirectory-arrow reply"></i>
+                    {% endif %}
+                    {{ '[' + item.category + ']' if item.category }}{{ item.subject }}
+                    {{ '(' + item.totalComments.toLocaleString() + ')' if item.totalComments }}
+                    {% if item.icons.image %}
+                    <i class="xi-image-o icon image"></i>
+                    {% endif %}
+                    {% if item.icons.attach %}
+                    <i class="xi-attachment icon attach"></i>
+                    {% endif %}
+                    {% if item.icons.new %}
+                    <i class="xi-new icon new"></i>
+                    {% endif %}
+                {% if item.icons.image %}
+                </div>
+                <div class="post_info">
+                    <div class="poster">작성자 : {{ item.poster }}{{ '(' + item.managerId + ')' if item.managerId }}</div>
+                    <div>
+                        <span class="date">{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i') }}</span>
+                        <span class="hit">조회수 : {{ item.hit.toLocaleString() }}</span>
+                    </div>
+                </div>
+                {% endif %}
+            </a>
+            {% if not item.icons.image %}
+            <div class="post_info">
+                <span class="poster">{{ item.poster }}{{ '(' + item.managerId + ')' if item.managerId }}</span>
+                <span class="date">{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i') }}</span>
+                <span class="hit">조회수 : {{ item.hit.toLocaleString() }}</span>
+            </div>
+            {% endif %}
+        </li>
+    {% endfor %}
+    {% else %}
+        <li class="no-list">검색된 게시글이 없습니다.</li>
+    {% endif %}
+    </ul>
+ 
+    <form id="frmSearch" method="get" autocomplete="off">
+        <div class="search_box">
+            <select name="sopt">
+                <option value="all"{{ ' selected' if not search or search.sopt == 'all' }}>통합검색</option>
+                <option value="subject"{{ ' selected' if search.sopt == 'subject' }}>제목</option>
+                <option value="subject_content"{{ ' selected' if search.sopt == 'subject_content' }}>제목+내용</option>
+                <option value="poster"{{ ' selected' if search.sopt == 'poster' }}>작성자</option>
+                <option value="managerId"{{ ' selected' if search.sopt == 'managerId' }}>아이디</option>
+            </select>
+            <input type="text" name="skey" value="{{ search.skey }}">
+            <button type="submit">검색하기</button>
+        </div>
+        <!--// search_box -->
+    </form>
+
+    {{ pagination | safe }}
+</div>
+<!--// list_box -->

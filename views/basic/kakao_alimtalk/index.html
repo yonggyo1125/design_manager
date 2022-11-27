@@ -1,0 +1,40 @@
+{% extends "../../layout/main.html" %}
+{% block content %}
+<div class="content_box mt50">
+<div class="mtitle top">카카오 알림톡 설정</div>
+<form method="post" action="/basic/kakao_alimtalk" target="ifrmProcess" autocomplete="off">
+    <table class="table-cols">
+        <tr>
+            <th>사용여부</th>
+            <td>
+                <input type="radio" name="isUse" value="1" id="isUse_1"{{ ' checked' if isUse == '1' }}>
+                <label for="isUse_1">사용</label>
+                <input type="radio" name="isUse" value="0" id="isUse_0"{{ ' checked' if isUse != '1' }}>
+                <label for="isUse_0">미사용</label>
+            </td>
+        </tr>
+        <tr>
+            <th>BS ID</th>
+            <td>
+                <input type="text" name="bsId" value="{{ bsId }}">
+            </td>
+        </tr>
+        <tr>
+            <th>BS PWD</th>
+            <td>
+                <input type="text" name="bsPwd" value="{{ bsPwd }}">
+            </td>
+        </tr>
+        <tr>
+            <th>SENDER KEY</th>
+            <td>
+                <input type="text" name="senderKey" value="{{ senderKey }}">
+            </td>
+        </tr>
+    </table>
+    <div class="btns">
+        <input type="submit" class='btn' value="저장하기">
+    </div>
+</form>
+</div>
+{% endblock %}

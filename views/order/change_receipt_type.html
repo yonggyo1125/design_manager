@@ -1,0 +1,83 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<form id='frmUpdate' method='post' action='/order/change_receipt_type/{{ orderNo }}' target='ifrmProcess'>
+    <table class='table-cols'>
+        <tr>
+            <th>증빙자료</th>
+            <td>
+                <input type='checkbox' name='receiptType' value='tax' id='receiptType_tax'{{ ' checked' if receiptType and receiptType.indexOf('tax')  != -1 }}>
+                <label for='receiptType_tax'>세금계산서</label>
+                <input type='checkbox' name='receiptType' value='cash' id='receiptType_cash'{{ ' checked' if receiptType and receiptType.indexOf('cash') != -1}}>
+                <label for='receiptType_cash'>현금영수증</label>
+                <input type='checkbox' name='receiptType' value='estimate' id='receiptType_estimate'{{ ' checked' if receiptType and receiptType.indexOf('estimate') != -1 }}>
+                <label for='receiptType_estimate'>견적서</label>    
+            </td>
+        </tr>
+        <tr class='receiptForm tax{{ " dn" if not receiptType or receiptType.indexOf("tax")  == -1 }}'>
+            <th>세금계산서</th>
+            <td>
+                <dl>
+                    <dt>사업자등록번호</dt>
+                    <dd>
+                        <input type='text' name='taxReceiptBusinessNo' value='{{ taxReceiptBusinessNo }}'>
+                    </dd>
+                </dl>                
+                <dl>
+                    <dt>업체명/대표자명</dt>
+                    <dd>
+                        <input type='text' name='taxReceiptCompanyNm' value='{{ taxReceiptCompanyNm }}'>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>담당자 이메일</dt>
+                    <dd>
+                        <input type='email' name='taxReceiptEmail' value='{{ taxReceiptEmail }}'>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>사업자등록증</dt>
+                    <dd>
+                        <input type='hidden' name='businessCertFileId' value='{{ businessCertFileId }}'>
+                        <div id='business_cert_file' class='mb10'>
+                        {% if businessCert %} 
+                            <span class='file_box'>
+                                <a href='/file/download/{{ businessCertFileId }}'>
+                                    {{ businessCert.fileName }}
+                                </a>
+                                <i class='xi-minus-square deleteFile' data-id='{{ businessCert.id }}'></i>
+                            </span> 
+                        {% endif %}
+                        </div>
+                        <input type='file' id='businessCertUpload' data-order-no='{{ orderNo }}'>
+                    </dd>
+                </dl>
+            </td>
+        </tr>
+        <tr class='receiptForm cash{{ " dn" if not receiptType or receiptType.indexOf("cash")  == -1 }}'>
+            <th>현금영수증</th>
+            <td>
+                <dl>
+                    <dt>발급유형</dt>
+                    <dd>
+                        <input type='radio' name='cashReceiptType' id='cacheReceiptType_jumin' value='jumin' checked>
+                        <label for='cacheReceiptType_jumin'>주민등록번호</label>
+                        <input type='radio' name='cashReceiptType' id='cacheReceiptType_cellPhone' value='cellPhone'>
+                        <label for='cacheReceiptType_cellPhone'>휴대전화번호</label>
+
+                        <input type='radio' name='cashReceiptType' id='cacheReceiptType_businessNo' value='businessNo'>
+                        <label for='cacheReceiptType_businessNo'>사업자번호</label>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt></dt>
+                    <dd><input type='text' name='cashReceiptNo' value='{{ cashReceiptNo }}' placeholder='-를 제외하고 숫자만 입력'></dd>
+                </dl>
+            </td>
+        </tr>
+        <!--// cash -->
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='변경하기'>
+    </div>
+</form>
+{% endblock %}

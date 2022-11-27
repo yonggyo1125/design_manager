@@ -1,0 +1,22 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+    <div class="mtitle flex_between">
+        게시판 수정
+        <div class="tit_btns">
+            <a href="/board/admin" class="sbtn">
+                <i class='xi-list'></i>게시판 목록
+            </a>
+        </div>
+    </div>
+    <form id="frmUpdate" method="post" action="/board/admin/edit/{{ id }}" autocomplete="off" target="ifrmProcess">
+        <input type="hidden" name="mode" value="edit">
+        <input type="hidden" name="id" value="{{ id }}">
+        {% include "./_form.html" %}
+        <div class="btns">
+            <button type="submit" class="btn">수정하기</button>
+            <button type="reset" class="btn white">다시작성</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

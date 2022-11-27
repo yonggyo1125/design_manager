@@ -1,0 +1,73 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+
+<div class="content_box">
+    <div class="mtitle flex_between">
+        전송예약설정 목록
+        <div class="tit_btns">
+            <a href="/kakao_alimtalk/reservation/add_config" class="sbtn">
+                <i class="xi-plus"></i> 등록하기
+            </a>
+        </div>
+    </div>
+    <!--// mtitle -->
+    <form id="frmList" method="POST" action="/kakao_alimtalk/reservation/config" autocomplete="off" target="ifrmProcess">
+        <table class="table-rows">
+            <thead>
+                <tr>
+                    <th width="30">
+                        <input type="checkbox" class="js-checkall" id="js_checkall" data-target-name="id">
+                        <label for="js_checkall" class="standalone"></label>
+                    </th>
+                    <th width="300">설정명</th>
+                    <th width="150">사용여부</th>
+                    <th width="350">예약시간</th>
+                    <th></th>
+
+                </tr>
+            </thead>
+            <tbody>
+            {% if list and list.length > 0 %}
+            {% for item in list %}
+            <tr>
+                <td align="center">
+                    <input type="checkbox" name="id" value="{{ item.id }}" id="id_{{ item.id }}">
+                    <label for="id_{{ item.id }}" class="standalone"></label>
+                </td>
+                <td align="center">{{ item.title }}</td>
+                <td align="center">{{ '사용' if item.isUse else '미사용' }}</td>
+                <td>
+                    {% if item.reservations and item.reservations.length > 0 %}
+                    {% for it in item.reservations %}
+                        <div>
+                            <span class='highlight4'>[{{ '배송' if item.holidayType == 'delivery' else '상담' }}]</span>
+                            {{ it.sStr }} ~ {{ it.eStr }}
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/kakao_alimtalk/reservation/edit_config/{{ item.id }}" class="sbtn"><i class='xi-check'></i> 수정하기</a>
+                </td>
+            </tr>
+
+            {% endfor %}
+            {% else %}
+            <tr class="no-list">
+                <td colspan="5">등록된 설정이 없습니다.</td>
+            </tr>
+            {% endif %}
+            </tbody>
+        </table>
+        {% if list and list.length > 0 %}
+        <div class="table-action">
+            <span class="sbtn form_delete" data-id="frmList">
+                <i class="xi-trash-o"></i>
+                설정 삭제하기
+            </span>
+        </div>
+        {% endif %}
+    </form>
+    {{ pagination | safe }}
+</div>
+{% endblock %}

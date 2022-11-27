@@ -1,0 +1,21 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="mtitle top">
+    사이즈별 추가배송비 수정
+    <div class="tit_btns">
+        <a href="/product/size_config/delivery" class="btn">
+            <i class="xi-check-min"></i>
+            사이브별 추가배송비 관리
+        </a>
+    </div>
+</div>
+
+<form id="frmUpdate" method="post" action="/product/size_config/delivery">
+    <input type="hidden" name="id" value="{{ id }}">
+    {% include './_form_size_config_delivery.html' %}
+    <div class="btns">
+        <input type="submit" value="수정하기" class="btn">
+        <button type="button" class="btn cancel_back">취소하기</button>
+    </div>
+</form>
+{% endblock %}

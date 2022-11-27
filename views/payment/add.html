@@ -1,0 +1,49 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<form id="frmRegist" method="post" action="{{ '/payment/update/' + id if mode == 'update' else '/payment/add' }}" target="ifrmProcess" autocomplete="off">
+{% if gid %}
+    <input type="hidden" name="gid" value="{{ gid }}">
+{% endif %}
+    <table class="table-cols">
+        <tr>
+            <th>결제항목</th>
+            <td>
+                <input type='text' name='title' value="{{ title }}">
+            </td>
+        </tr>
+        <tr>
+            <th>결제금액</th>
+            <td>
+                <input type="number" name="amount" value="{{ amount }}" class="wauto right" min="0">원
+            </td>
+        </tr>
+        <tr>
+            <th>입금자명</th>
+            <td>
+                <input type="text" name="name" value="{{ name }}">
+            </td>
+        </tr>
+        <tr>
+            <th>휴대전화</th>
+            <td>
+                <input type="text" name="cellPhone" value="{{ cellPhone }}">
+            </td>
+        </tr>
+        <tr>
+            <th>상세내용(고객노출용)</th>
+            <td>
+                <textarea name="description">{{ description }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>상담원메모</th>
+            <td>
+                <textarea name="csMemo">{{ csMemo }}</textarea>
+            </td>
+        </tr>
+    </table>
+    <div class="table-btn">
+        <input type="submit" value="결제{{ '수정' if mode == 'update' else '등록' }}">
+    </div>
+</form>
+{% endblock %}

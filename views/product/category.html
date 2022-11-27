@@ -1,0 +1,129 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+<div class='mtitle top'>분류 등록</div>
+<form method='post' action='/product/category' target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='mode' value='add'>
+    <table class='table-cols style2'>
+        <tr>
+            <th>구분</th>
+            <td colspan="3">
+                <input type='radio' name='cateType' value='sale' id='cateType_sale' checked>
+                <label for='cateType_sale'>판매</label>
+
+                <input type='radio' name='cateType' value='material' id='cateType_material'>
+                <label for='cateType_material'>자재</label>
+
+                <input type='radio' name='cateType' value='etc' id='cateType_etc'>
+                <label for='cateType_etc'>기타</label>
+            </td>
+        </tr>
+        <tr>
+            <th>분류코드</th>
+            <td width="300">
+                <input type='text' name='cateCd' class='w150'>
+                <span class='btn5 generate_uid'>자동생성</span>
+            </td>
+            <th>분류명</th>
+            <td>
+                <input type='text' name='cateNm'>
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='등록하기'>
+    </div>
+</form>
+</div>
+<div class="content_box">
+<div class='mtitle'>분류 목록</div>
+<form id='frmList' name='frmList' method='post' action='/product/category' target='ifrmProcess' autocomplete='off'>
+    <div class="scroll_x">
+        <table class='table-rows'>
+            <thead>
+                <tr>
+                    <th width='30'>
+                        <input type='checkbox' class='js-checkall' data-target-name='id' id='js_checkall'>
+                        <label for='js_checkall' class='standalone'></label>
+                    </th>
+                    <th width='150'>분류코드</th>
+                    <th width='200'>분류명</th>
+                    <th width='300'>분류구분</th>
+                    <th width='100'>진열가중치</th>
+                    <th width='150'>사이즈 계산기</th>
+                    <th width="300">출고예정일</th>
+                    <th nowrap>사용방법안내</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if list.length > 0 %} 
+            {% for item in list %}
+                <tr>
+                    <td>
+                        <input type='checkbox' name='id' value='{{ item.id }}' id='id_{{ item.id }}'>
+                        <label for='id_{{ item.id }}' class='standalone'></label>
+                    </td>
+                    <td>{{ item.cateCd }}</td>
+                    <td>
+                        <input type='text' name='cateNm_{{ item.id }}' value='{{ item.cateNm }}'>
+                    </td>
+                    <td>
+                        <input type='radio' name='cateType_{{ item.id }}' value='sale' id='cateType_sale_{{ item.id }}'{{ ' checked' if item.cateType == 'sale' }}>
+                        <label for='cateType_sale_{{ item.id }}'>판매</label>
+        
+                        <input type='radio' name='cateType_{{ item.id }}' value='material' id='cateType_material_{{ item.id }}'{{ ' checked' if item.cateType == 'material' }}>
+                        <label for='cateType_material_{{ item.id }}'>자재</label>
+        
+                        <input type='radio' name='cateType_{{ item.id }}' value='etc' id='cateType_etc_{{ item.id }}'{{ ' checked' if item.cateType == 'etc' }}>
+                        <label for='cateType_etc_{{ item.id }}'>기타</label>
+                    </td>
+                    <td>
+                        <input type='number' name='listOrder_{{ item.id }}' value='{{ item.listOrder }}'>
+                    </td>
+                    <td>
+                        <select name="idSizeConfig_{{ item.id }}">
+                            <option value="">- 선택하세요 -</option>
+                        {% if sizeConfigs and sizeConfigs.length > 0 %}
+                        {% for conf in sizeConfigs %}
+                            <option value="{{ conf.id }}"{{ ' selected' if item.idSizeConfig == conf.id }}>{{ conf.configNm }}</option>
+                        {% endfor %}
+                        {% endif %}
+                        </select>
+                    </td>
+                    <td norwap>
+                        {% if item.cateType == 'sale' %}
+                        <a href='/product/delivery_guide/{{ item.cateCd }}' class='sbtn black' target='_blank'><i class='xi-cog'></i> 설정하기</a>
+                        {% endif %}
+                        <a href='/popup/delivery_guide/{{ item.cateCd }}' target='_blank' class='sbtn'><i class='xi-share'></i>출고예정일 미리보기</a>
+                    </td>
+                    <td>
+                        <select name="idProductGuide_{{ item.id }}">
+                            <option value="">- 선택하세요 -</option>
+                        {% if guides and guides.length > 0 %}
+                        {% for guide in guides %}
+                            <option value="{{ guide.id }}"{{ ' selected' if item.idProductGuide == guide.id }}>{{ guide.title }}</option>    
+                        {% endfor %}
+                        {% endif %}
+                        </select>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% else %} 
+                <tr class='no-list'>
+                    <td colspan='8'>등록된 분류가 없습니다.</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {% if list.length > 0 %} 
+    <div class='table-action'>
+        <div>
+        <button type='button' class='sbtn black form_update' data-id='frmList'><i class='xi-check-min'></i>선택분류 수정하기</button>
+        <button type='button' class='sbtn form_delete' data-id='frmList'><i class='xi-trash-o'></i>선택분류 삭제하기</button>
+        </div>
+    </div>
+    {% endif %}
+</form>
+</div>
+{% endblock %}

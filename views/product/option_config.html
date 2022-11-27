@@ -1,0 +1,44 @@
+<form id='frmOptions' method='post' autocomplete='off'>
+    {% if id %}
+    <input type='hidden' name='id' value='{{ id }}'>
+    {% endif %}
+    <table class='table-cols'>
+        <tr>
+            <th>기본옵션</th>
+            <td>
+            {% if options %}
+            {% for item in options %}
+                <input type='checkbox' name='idOptions' value='{{ item.id }}' data-cate-nm='{{ item.cateNm }}' id='idOptions_{{ item.id }}'{{ ' checked' if idOptions.indexOf("" + item.id) != -1 }}>
+                <label for='idOptions_{{ item.id }}' class='mb5'>{{ item.cateNm }}</label> 
+            {% endfor %}
+            {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>추가옵션</th>
+            <td>
+            {% if subOptions %}
+            {% for item in subOptions %}
+                <input type='checkbox' name='idSubOptions' value='{{ item.id }}' data-cate-nm='{{ item.cateNm }}' id='idSubOptions_{{ item.id }}'{{ ' checked' if idSubOptions.indexOf("" + item.id) != -1 }}>
+                <label for='idSubOptions_{{ item.id }}' class='mb5'>{{ item.cateNm }}</label> 
+            {% endfor %}
+            {% endif %}
+            </td>
+        </tr>
+
+        <tr>
+            <th>텍스트옵션</th>
+            <td>
+            {% if textOptions %}
+            {% for item in textOptions %}
+                <input type='checkbox' name='idTextOptions' value='{{ item.id }}' data-cate-nm='{{ item.cateNm }}' id='idTextOptions_{{ item.id }}'{{ ' checked' if idTextOptions.indexOf("" + item.id) != -1 }}>
+                <label for='idTextOptions_{{ item.id }}' class='mb5'>{{ item.cateNm }}</label> 
+            {% endfor %}
+            {% endif %}
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='변경하기' id='change_option' data-id="{{ id }}">
+    </div>
+</form>

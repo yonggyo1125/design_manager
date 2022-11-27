@@ -1,0 +1,654 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class='mtitle top'>
+    주문정보({{ orderNo }})
+    <div class='tit_btns'>
+        {% if orderStatusInfo and orderStatusInfo.setting and orderStatusInfo.setting.orderUpdatePossible %}
+        <a href='/order/update/{{ orderNo }}' class='sbtn'>
+            <i class='xi-check-min'></i> 수정하기
+        </a>
+        {% endif %}
+        <a href='/order/add?copy_orderNo={{ orderNo }}' class='sbtn'>
+            <i class='xi-pen-o'></i>
+            주문서 복사등록
+        </a>
+        <a href='/order' class='sbtn'>
+            <i class='xi-list'></i> 주문목록
+        </a>
+    </div>
+</div>
+
+<table class='table-cols'>
+    <tr>
+        <th>주문번호</th>
+        <td>{{ orderNo }}</td>
+    </tr>
+    {% if shopOrderNo %}
+    <tr>
+        <th>쇼핑몰 주문번호</th>
+        <td>{{ shopOrderNo }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+        <th>접수일시</th>
+        <td>{{ getLocalDate(createdAt, '%Y.%m.%d %H:%i:%s')}}</td>
+    </tr>
+    <tr>
+        <th>처리상태</th>
+        <td>
+            <select name='orderStatus' class='wauto' data-order-no='{{ orderNo }}'>
+                {% if orderStatuses.length > 0 %}
+                {% for item in orderStatuses %}
+                    <option value='{{ item.statusCd }}'{{ ' selected' if orderStatus == item.statusCd }}>{{ item.statusNm }}</option>
+                {% endfor %}
+                {% endif %}
+            </select>
+            {% if orderStatusInfo.setting and orderStatusInfo.setting.sendAlimTalk %}
+                <span class="send_order_status_message sbtn medium black" data-order-no="{{ orderNo }}">
+                    <i class='xi-send'></i> 메세지 수동 전송
+                </span>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>접수상담원</th>
+        <td>
+            {% if managerInfo %}
+                {{ manager.managerNm }}({{ managerInfo.managerId }})
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>유입경로</th>
+        <td>
+           {{ channel if channel else '본사' }}
+        </td>
+    </tr>
+    <tr>
+        <th>주문자명</th>
+        <td>{{ orderNm }}</td>
+    </tr>
+    <tr>
+        <th>주문자구분</th>
+        <td>
+            {{ '사업자' if ordererType == 'company' else '일반' }}
+        </td>
+    </tr>
+    <tr>
+        <th>업체명</th>
+        <td>{{ companyNm }}</td>
+    </tr>
+    <tr>
+        <th>주문자 휴대전화</th>
+        <td>{{ orderCellPhone }}</td>
+    </tr>
+    <tr>
+        <th>상담기록</th>
+        <td>
+            <span class='sbtn cs_search' data-order-no='{{ orderNo }}' data-customer-nm='{{ orderNm }}' data-cell-phone='{{ orderCellPhone }}'>
+                <i class='xi-search'></i>상담기록조회
+            </span>
+            <a class='sbtn' href='/customer/add?orderNo={{ orderNo }}' target='_blank'>
+                <i class='xi-plus-square'></i>상담등록하기
+            </a>
+        </td>
+    </tr>
+</table>
+
+<div class='mtitle'>품목정보</div>
+{% if items and items.length > 0 %}
+<ul class='order_items'>
+    {% for item in items %}
+    <li class='order_item mb10'>
+        <table class='table-cols'>
+            <tr>
+                <th>품주번호</th>
+                <td>
+                    {{ item.id }}
+                </td>
+                <th>묶음배송코드</th>
+                <td>
+                    {% if item.deliveryBundleCode %}
+                    {{ item.deliveryBundleCode }}
+                    {% else %}
+                    공통배송
+                    {% endif %}
+                    {% if orderStatusInfo and orderStatusInfo.setting and orderStatusInfo.setting.orderDeliveryUpdate %}
+                    <span class='sbtn change_bundleCode medium' data-order-no='{{ orderNo }}' data-id-order-item='{{ item.id }}' data-bundle-code='{{ item.deliveryBundleCode }}'>
+                        <i class='xi-check-min'></i>
+                        변경하기
+                    </span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>구분</th>
+                <td width='350'>
+                    {% if item.productItemInfo.itemType == 'branch' %}
+                    지사
+                    {% elif item.productItemInfo.itemType == 'company' %}
+                    거래처{{ "(" + item.productItemInfo['Company.companyNm'] + ")" if item.productItemInfo['Company.companyNm'] }}
+                    {% else %} 
+                    본사
+                    {% endif %}
+                </td>
+                <th>분류</th>
+                <td>
+                    {{ item.productItemInfo['ProductCategory.cateNm'] }}
+                </td>
+            </tr>
+            <tr>
+                <th>품목코드</th>
+                <td>{{ item.itemCode }}</td>
+                <th>품목명</th>
+                <td>{{ item.itemNm }}{{ " / " + item.itemNmSub if item.itemNmSub }}</td>
+            </tr>
+            <tr>
+                <th>판매원가</th>
+                <td>{{ item.itemPrice.toLocaleString() }}원</td>
+                <th>수량</th>
+                <td>{{ item.itemCnt.toLocaleString() }}개</td>
+            </tr>
+            <tr>
+                <th>사이즈</th>
+                <td>
+                    {{ item.itemSizeWidth.toLocaleString() + "Cm" if item.itemSizeWidth }}{{ ' X ' if item.itemSizeWidth and item.itemSizeHeight }}{{ item.itemSizeHeight.toLocaleString() + "Cm" if item.itemSizeHeight }}
+                </td>
+                <th>문구</th>
+                <td>{{ item.itemText }}</td>
+            </tr>
+            <tr>
+                <th>폰트</th>
+                <td>{{ item.itemFont }}</td>
+                <th>기본옵션<br>(수량별 적용)</th>
+                <td>
+                {% if item.options and item.options.length > 0 %}
+                {% for opt in item.options %}
+                <div>
+                    [{{ opt.optionCd }}]{{ opt.optionNm }}
+                    {{ "(" + opt.addPrice.toLocaleString() + "원)" if opt.addPrice }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>추가옵션</th>
+                <td>
+                {% if item.subOptions and item.subOptions.length > 0 %}
+                {% for opt in item.subOptions %}
+                <div>
+                    [{{ opt.optionCd }}]{{ opt.optionNm }}
+                    {{ "(" + opt.addPrice.toLocaleString() + "원)" if opt.addPrice }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                </td>
+                <th>샘플이미지</th>
+                <td class='sample_images'>
+                {% if item.samples and item.samples.length > 0 %}
+                {% for sample in item.samples %}
+                    <div class='sample'>
+                        <dl>
+                            <dt>샘플번호</dt>
+                            <dd>{{ sample.itemCd }}</dd>
+                        </dl>
+                        <dl>
+                            <dt>샘플명</dt>
+                            <dd>{{ sample.itemNm }}</dd>
+                        </dl>
+                        <dl>
+                            <dt>다운로드</dt>
+                            <dd>
+                                <a href='{{ sample.downlooadLink }}' class='sbtn'>
+                                    <i class='xi-file-download-o'></i>
+                                    이미지
+                                </a>
+                                <a href='{{ sample.aiDownloadLink }}' class='sbtn'>
+                                    <i class='xi-file-download-o'></i>
+                                    ai파일
+                                </a>
+                            </dd>
+                        </dl>
+                    </div>
+                {% endfor %}
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>첨부파일</th>
+                <td>
+                {% if item.attachFiles %}
+                {% for file in item.attachFiles %}
+                    <a href='/file/download/{{ file.id }}' class='sbtn mb5'>
+                        <i class='xi-file-download-o'></i> {{ file.fileName }}
+                    </a>
+                {% endfor %}
+                {% endif %}
+                </td>
+                <th>품목별<br>결제정보</th>
+                <td>
+                    상품합계({{ item.itemTotalPrice.toLocaleString() }}원) - 
+                    할인합계({{ item.itemDiscount.toLocaleString() }}원) + 
+                    배송비({{ item.deliveryCharge.toLocaleString() }}원
+                    {% if item.deliveryChargePost > 0 %}
+                    / 착불 : {{ item.deliveryChargePost.toLocaleString() }}원 포함
+                    {% endif %}
+                    {% if item.deliveryAreaCharge > 0 %}
+                    / 지역별 배송비 : {{ item.deliveryAreaCharge.toLocaleString() }}원 추가
+                    {% endif %}
+                    ) = 
+                    총합({{ (item.itemTotalPrice - item.itemDiscount + item.deliveryCharge).toLocaleString() }}원)            
+
+                </td>
+            </tr>
+            <tr>
+                <th>디자인상태</th>
+                <td>
+                    {% if orderStatusInfo and orderStatusInfo.setting.orderDesignUpdate %}
+                    <select name='designStatus' class='wauto' data-order-no='{{ orderNo }}' data-id-order-item='{{ item.id }}'>
+                        {% if designStatuses.length > 0 %}
+                        {% for status in designStatuses %}
+                            <option value='{{ status.statusCd }}'{{ ' selected' if item.designStatus == status.statusCd }}>{{ status.statusNm }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                    {% if item.designStatusInfo and item.designStatusInfo.tmpltCode  %}
+                        <span class="send_design_status_message sbtn medium black" data-id="{{  item.id }}">
+                            <i class='xi-send'></i> 메세지 전송
+                        </span>
+                    {% endif %}
+                    {% else %} 
+                    {% if designStatuses.length > 0 %}
+                        {% for status in designStatuses %}
+                            {% if status.statusCd == item.designStatus %}
+                            {{ status.statusNm }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% endif %}
+                </td>
+                <th>시안관리</th>
+                <td>
+                    {% if orderStatusInfo and orderStatusInfo.setting.orderDesignUpdate %}
+                    <span class='sbtn black' onclick="codefty.order.showDraftPopup('{{ item.itemUid }}');">
+                        <i class='xi-file-upload-o'></i>
+                        등록/수정
+                    </span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>작업 파일명</th>
+                <td>
+                    <input type="text" class="workFileName" id="workFileName_{{ item.id }}" value="{{ item.workFileName }}" data-id-order-item='{{ item.id }}'>
+                <th>작업자 전달사항</th>
+                <td>
+                    <input type="text" class="workMemo" id="workMemo_{{ item.id }}" value="{{ item.workMemo }}" data-id-order-item='{{ item.id }}'>
+                </td>
+                </td>
+            </tr>
+        </table>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<div class='no-items'>주문된 품목이 없습니다.</div>
+{% endif %}
+
+
+<div class='mtitle'>
+    배송지 정보
+    {% if orderStatusInfo and orderStatusInfo.setting and orderStatusInfo.setting.orderDeliveryUpdate %}
+    <div class='tit_btns'>
+        <a class='sbtn'  href='/order/delivery/{{ orderNo }}'>
+            <i class='xi-pen-o'></i>
+            변경하기
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% if deliveryInfo %}
+<div class='delivery_items'>
+{% for item in deliveryInfo %}
+<li class='item'>
+<div class='stitle'>
+    {% if item.bundleCode %}
+    묶음배송코드 : {{ item.bundleCode }} / 배송조건 : {{ item.deliveryPolicy.policyNm }}
+    {% else %}
+    공통배송정보  / 배송조건 : {{ item.deliveryPolicy.policyNm }}
+    {% endif %}
+</div>
+<table class='table-cols'>
+    <tr>
+        <th>수령인/업체명</th>
+        <td>{{ item.receiverNm }}</td>
+    </tr>
+    <tr>
+        <th>수령인 휴대전화</th>
+        <td>{{ item.receiverCellPhone }}</td>
+    </tr>
+    <tr>
+        <th>배송지 주소</th>
+        <td>
+            {{ '(' + item.receiverZonecode  + ')' if item.receiverZonecode }}
+            {{ item.receiverAddress }} {{ item.receiverAddressSub }}
+        </td>
+    </tr>
+    <tr>
+        <th>배송메세지</th>
+        <td>{{ item.deliveryMemo }}</td>
+    </tr>
+    <tr>
+        <th>운송장</th>
+        <td>
+            {{ item.deliveryCompany }} {{ item.deliveryInvoice }}
+            {% if item.deliveryCompany and item.deliveryInvoice %}
+            <span class='sbtn delivery_trace' data-company-nm='{{ item.deliveryCompany }}' data-invoice='{{ item.deliveryInvoice }}'>
+                <i class='xi-search'></i>
+                배송조회
+            </span>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>출고일</th>
+        <td>
+            {% if item.deliveryReleasedDate %}
+                실제출고일: {{ getLocalDate(item.deliveryReleasedDate, '%Y.%m.%d') }}
+                (희망출고일:  {{ getLocalDate(item.preferredDeliveryReleasedDate, '%Y.%m.%d') }} )
+             {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>배송비</th>
+        <td>
+                {{ item.deliveryCharge.toLocaleString() }}원
+                {% if item.deliveryChargePost > 0 %}
+                (착불 : {{ item.deliveryChargePost.toLocaleString() }}원
+                    {% if item.deliveryChargePre > 0 %}
+                    / 선불 : {{ item.deliveryChargePre.toLocaleString() }}원
+                    {% endif %})
+                {% endif %}
+                {% if item.deliveryAreaCharge > 0 %}
+                (지역별 배송비 : {{ item.deliveryAreaCharge.toLocaleString() }}원 포함)
+                {% endif %}
+        </td>
+    </tr>
+</table>
+</li>
+{% endfor %}
+</div>
+{% endif %}
+
+<div class='mtitle'>
+    증빙자료
+    <div class='tit_btns'>
+        <span class='sbtn' id='change_receipt_type' data-order-no='{{ orderNo }}'>
+            <i class='xi-pen-o'></i>
+            변경하기
+        </span>
+    </div>
+</div>
+<table class='table-cols'>
+    {% if receiptType.indexOf('tax') != -1 or receiptType.indexOf('cash') != -1 %}
+    <tr>
+        <th>
+            {% if receiptType.indexOf('tax') != -1 %}
+            세금계산서
+            {% else %}
+            현금영수증
+            {% endif %}
+        </th>
+        <td>
+            {% if receiptType.indexOf('tax') != -1 %}
+            <dl>
+                <dt>사업자등록번호</dt>
+                <dd>{{ taxReceiptBusinessNo }}</dd>
+            </dl>
+            <dl>
+                <dt>업체명/대표자명</dt>
+                <dd>{{ taxReceiptCompanyNm }}</dd>
+            </dl>
+            <dl>
+                <dt>담당자 이메일</dt>
+                <dd>{{ taxReceiptEmail }}</dd>
+            </dl>
+            <dl>
+                <dt>사업자등록증</dt>
+                <dd>
+                    {% if businessCert %} 
+                    <span class='file_box'>
+                        <a href='/file/download/{{ businessCertFileId }}'>
+                            {{ businessCert.fileName }}
+                        </a>
+                    </span>
+                    {% endif %}
+                </dd>
+            </dl>
+            {% else %}
+            <dl>
+                <dt>
+                    {% if cashReceiptType == 'jumin' %}
+                        주민등록번호
+                    {% elif cashReceiptType == 'cellPhone' %}
+                        휴대전화번호
+                    {% elif cashReceiptType == 'businessNo' %}
+                        사업자번호
+                    {% endif %}
+                </dt>
+                <dd>
+                    {{ cashReceiptNo }}
+                    {% if payType == 'lbt' %}
+                    {% if cashReceiptIssued and cashReceiptIssued.pgResultCode == '00' and cashReceiptIssued.pgApproveNo %}
+                    <div class="mt5">발급완료(승인번호 : {{ cashReceiptIssued.pgApproveNo }})</div>
+                    {% else %}
+                    <a href="/payment/cash_receipt/issue?orderNo={{ orderNo }}" target="_blank" class="sbtn">
+                        <i class="xi-check-min"></i>
+                        발급하기
+                    </a>
+                    {% endif %}
+                    {% endif %}
+                </dd>
+            </dl>
+            {% endif %}
+        </td>
+    </tr>
+    {% endif %}
+    {% if receiptType.indexOf('estimate') != -1 %}
+    <tr>
+        <th>견적서</th>
+        <td>
+            <a class='sbtn' href='/order/estimate/{{ orderNo }}' target='_blank'>
+                <i class='xi-print'></i>
+                출력하기
+            </a>
+        </td>
+    </tr>
+    {% endif %}
+    </table>
+    <div class='mtitle'>
+        결제 정보
+        {% if orderStatusInfo and orderStatusInfo.setting and orderStatusInfo.setting.orderAddPayment %}
+        <div class="tit_btns">
+            <span class="sbtn" id="add_payment" data-order-no="{{ orderNo }}">
+                <i class="xi-plus-min"></i>
+                추가금액 등록
+            </span>
+        </div>
+        {% endif %}
+    </div>
+    <table class='table-cols'>
+    <tr>
+        <th>결제수단</th>
+        <td>
+           {% if payType == 'lbt' %}
+            무통장
+           {% else %}
+            카드결제
+           {% endif %}
+        </td>
+    </tr>
+    {% if payType == 'lbt' %}
+    <tr>
+        <th>입금자명</th>
+        <td>{{ depositor }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+        <th>상품합계</th>
+        <td>{{ itemsTotalPrice.toLocaleString() }}원</td>
+    </tr>
+    <tr>
+        <th>배송비합계</th>
+        <td>
+                {{ totalDeliveryCharge.toLocaleString() }}원
+                {% if totalDeliveryChargePost > 0 %}
+                (착불 {{ totalDeliveryChargePost.toLocaleString() }}원 포함)
+                {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>할인합계</th>
+        <td>{{ (totalDiscount * -1).toLocaleString() }}원</td>
+    </tr>
+    {% if addPayments and addPayments.length > 0 %}
+    <tr>
+        <th>추가금액</th>
+        <td>
+           <div class="mb10">{{ totalAddPayment.toLocaleString() }}원</div>
+            <table class="table-rows">
+                    <tr>
+                        <th class="w250">추가항목</th>
+                        <th class="w150">추가금액</th>
+                        <th class="w150">담당자</th>
+                        <th class="wauto"></th>
+                    </tr>
+                    {% for item in addPayments %}
+                    <tr>
+                        <td>{{ item.itemNm }}</td>
+                        <td align="center">{{ item.itemPrice.toLocaleString() }}원</td>
+                        <td align="center">{{ item['Manager.managerNm'] }}<br>({{ item['Manager.managerId'] }})</td>
+                        <td>
+                            <a href="/order/delete_payment/{{ item.id }}" class="sbtn"  target="ifrmProcess" onclick="return confirm('정말 취소하시겠습니까?');">
+                                <i class="xi-minus-square"></i>
+                                등록 취소하기
+                            </a>
+                            <span class="sbtn update_add_payment black" data-id="{{ item.id }}">
+                                <i class="xi-check-min"></i>
+                                관리하기
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+            </table>
+        </td>
+    </tr>
+    {% endif %}
+    <tr>
+        <th>총합계<br>(결제금액)</th>
+        <td>{{ totalPayPrice.toLocaleString() }}원</td>
+    </tr>
+    {% if orderStatusInfo and orderStatusInfo.setting and orderStatusInfo.setting.orderCreatePayment %}
+    <tr>
+        <th>결제하기</th>
+        <td>
+            {% if paymentItems and paymentItems.length > 0 %}
+            <table class="'table-rows mb10" width="100%">
+                <thead>
+                    <tr>
+                        <th class="w250">결제항목</th>
+                        <th class="w150">결제금액</th>
+                        <th class="w150">담당자</th>
+                        <th class="wauto"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in paymentItems %}
+                <tr>
+                    <td>{{ item.title }}</td>
+                    <td align="center">{{ item.amount.toLocaleString() }}원</td>
+                    <td align="center">{{ item['Manager.managerNm'] }}<br>({{ item['Manager.managerId'] }})</td>
+                    <td>
+                        {% if item.payDoneAt %} 
+                        {% if item.payments %}
+                        <table class="table-rows">
+                            <tr>
+                                <th class="w100" nowrap>처리ID</th>
+                                <th class="w120" nowrap>처리상태</th>
+                                <th class="w150" nowrap>결제방식</th>
+                                <th class="w150" nowrap>결제금액</th>
+                                <th class="wauto"></th>
+                            </tr>
+                            {% for payment in item.payments %}
+                            {% if payment.status != 'request' %}
+                            <tr>
+                                <td align="center">{{ payment.id }}</td>
+                                <td align="center">{{ payment.statusStr }}</td>
+                                <td align="center">{{ payment.payMethodStr }}</td>
+                                <td align="center">{{ payment.price.toLocaleString() }}원</td>
+                                <td nowrap>
+                                   
+                                    {% if payment.canceledAt %}
+                                    취소/환불 일시 : {{ payment.canceledAt }}
+                                    {% else %}
+                                    {% if payment.status == 'confirm' or payment.status == 'incash' %}
+                                    <span class="cancel_payment sbtn" data-id="{{ payment.id }}">
+                                        <i class="xi-undo"></i>
+                                        {{ '환불' if payment.status == 'incash' else '취소' }}
+                                    </span>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% if payment.receiptUrl %}
+                                    <a href="{{ payment.receiptUrl }}" class="sbtn" target="_blank">
+                                        <i class="xi-list"></i>
+                                        매출전표
+                                    </a>
+                                    {% endif %}
+                                    <span class="view_payment sbtn black" data-id="{{ payment.id }}">
+                                        <i class="xi-check-min"></i>
+                                         결제내역
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </table>
+                        {% endif %}
+                        {% else %}
+                        <a href="/payment/delete/{{ item.id }}" class="sbtn" target="ifrmProcess" onclick="return confirm('정말 삭제하시겠습니까?');">
+                            <i class="xi-minus-square"></i>
+                            삭제하기
+                        </a>
+                        <span class='sbtn update_created_payment' data-id="{{ item.id }}">
+                            <i class='xi-check-min'></i>
+                            관리하기
+                        </span>
+                        <a class="sbtn" href="{{ host }}{{ item.payUrl }}" target="_blank">
+                            <i class="xi-credit-card"></i>
+                            결제하기
+                        </a>
+                        <span class="sbtn black" onclick="codefty.common.copyToClipBoard('{{ host }}{{ item.payUrl }}')">
+                            <i class="xi-share"></i>
+                            결제 URL 복사
+                        </span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+            <span class="sbtn" id="create_payment" data-order-no="{{ orderNo }}">
+                <i class="xi-credit-card"></i>
+                결제 생성하기
+            </span>
+        </td>
+    </tr>
+    {% endif %}
+</table>
+<div class='btns'>
+    <a href='/order' class='btn'>주문목록</a>
+    <a href='/order/add?copy_orderNo={{ orderNo }}' class='btn'>주문서 복사등록</a>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+<table class="table-rows">
+    <thead>
+        <tr>
+            <th width='20'>
+                <input type="checkbox" class="js-checkall" id="js-checkall" data-target-name="id">
+                <label for="js-checkall" class="standalone"></label>
+            </th>
+            <th>메뉴유형</th>
+            <th>메뉴명</th>
+            <th>메뉴URL</th>
+            <th>진열순서</th>
+            <th>사용여부</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if list.length > 0 %}
+    {% for item in list %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="id" value="{{ item.id }}" id="id_{{ item.id }}">
+                    <label for="id_{{ item.id }}" class="standalone"></label>
+                </td>
+                <td width="150" align="center">{{ item.typeStr }}</td>
+                <td width="200" align="center">{{ item.title }}</td>
+                <td width="280" align="center">
+                    <a href="{{ item.url }}" target="_blank" class="underline">{{ item.url }}</a>
+                </td>
+                <td width="100">
+                    <input type="number" name="listOrder_{{ item.id }}" value="{{ item.listOrder }}">
+                </td>
+                <td width="180" align="center">
+                    <input type="radio" name="isUse_{{ item.id }}" value="1" id="isUse_{{ item.id }}_1"{{ ' checked' if item.isUse == '1' }}>
+                    <label for="isUse_{{ item.id }}_1">사용</label>
+                    <input type="radio" name="isUse_{{ item.id }}" value="0" id="isUse_{{ item.id }}_0"{{ ' checked' if item.isUse != '1' }}>
+                    <label for="isUse_{{ item.id }}_0">미사용</label>
+                </td>
+                <td nowrap>
+                    <a href="/basic/menu/{{ item.id }}" class="sbtn">
+                        <i class="xi-check-min"></i>
+                        메뉴 수정
+                    </a>
+                    {% if item.parentId == 0 %}
+                    <a href="/basic/menu/sub/{{ item.id }}" class="sbtn" target="_blank">
+                        <i class="xi-list"></i>
+                        서브 메뉴 관리
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+    {% endfor %}
+    {% else %}
+        <tr class="no-list">
+            <td colspan="7">등록된 메뉴가 없습니다.</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
+{% if list.length > 0 %}
+<div class="table-action">
+    <div>
+    <span class="sbtn black form_update" data-id="frmList">
+        <i class='xi-check-min'></i>
+        선택 메뉴 수정하기
+    </span>
+    <span class="sbtn form_delete" data-id="frmList">
+        <i class="xi-trash-o"></i>
+        선택 메뉴 삭제하기
+    </span>
+    </div>
+</div>
+{% endif %}

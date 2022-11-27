@@ -1,0 +1,88 @@
+<div class="content_box mt50 view_box maginfy_images">
+    <div class="mtitle"><a href='/board/list/{{ board.id }}'>{{ board.title }}</a></div>
+    <div class="subject">{{ '[' + category + ']' if category }}{{ subject }}</div>
+    <div class="post_info">
+        <div>
+            <span class="date">등록일시 : {{ getLocalDate(createdAt, '%Y.%m.%d %H:%i:%s')}}</span>
+            <span class="ip">IP : {{ ipAddr }}</span>
+        </div>
+        <div>
+            <span class="poster">작성자 : {{ poster }}{{ "(" + managerId + ")" if managerId }}</span>
+            <span class="hit">조회수 : {{ hit.toLocaleString() }}</span>
+        </div>
+    </div>
+    {% if attachFiles and attachFiles.length > 0 %}
+    <ul class="download_files">
+    {% for item in attachFiles %}
+        <li>
+            <a href="/file/download/{{ item.id }}">
+                다운로드 : <i class="xi-attachment"></i> {{ item.fileName }}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    <div class="content">
+        <div class="scroll_x">
+            {% if isSuper or isBoarder %}
+                {% if email %}
+                <div>이메일 : {{ email }}</div>
+                {% endif %}
+                {% if mobile %}
+                <div>휴대전화번호 : {{ mobile }}</div>
+                {% endif %}
+            {% endif %}
+            {% endif %}
+
+            {% if board.useEditor or useEditor %}
+            {{ content | safe }}
+            {% else %}
+            {{ nl2br(content) | safe }}
+            {% endif %}
+        </div>    
+    </div>
+    {% if prev or next %}
+    <ul class="near_post">
+        {% if prev %}
+        <li class="prev">
+            <a href="/board/view/{{ prev.id }}">
+                <span class="direction">
+                    <i class="xi-angle-up"></i>이전글
+                </span>
+                {{ prev.subject }}
+            </a>
+        </li>
+        {% endif %}
+        {% if next %}
+        <li class="next">
+            <a href="/board/view/{{ next.id }}">
+                <span class="direction">
+                    <i class="xi-angle-down"></i>다음글
+                </span>
+                {{ next.subject }}
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+    {% endif %}
+    <div class="controls">
+        {% if accessible.delete or requiredGuestPasswordChk %} 
+        <a href="/board/delete/{{ id }}" onclick="return confirm('정말 삭제하시겠습니까?');"><i class='xi-trash'></i>삭제</a>
+        {% endif %}
+        
+        {% if accessible.update or requiredGuestPasswordChk %}
+        <a href="/board/update/{{ id }}"><i class='xi-check'></i>수정</a>
+        {% endif %}
+        {% if accessible.reply %}
+        <a href="/board/reply/{{ id }}"><i class='xi-reply'></i>답글</a>
+        {% endif %}
+        {% if accessible.write %}
+        <a href="/board/write/{{ idBoard }}"><i class='xi-pen'></i>글쓰기</a>
+        {% endif %}
+        {% if accessible.list %}
+        <a href="/board/list/{{ idBoard }}"><i class='xi-list'></i>목록</a>
+        {% endif %}
+    </div>
+    <!--// controls -->
+</div>
+<!--// view_box -->

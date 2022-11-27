@@ -1,0 +1,116 @@
+<input type="hidden" name="gid" value="{{ gid }}">
+{% include "./_review_item.html" %}
+{% if (board.useEditor or useEditor) and board.useTemplate and templates and templates.length > 0 %}
+<dl>
+    <dt>템플릿</dt>
+    <dd>
+        <select class="selectBoardTemplate" data-target-name="content">
+            <option value="">템플릿 선택</option>
+            {% for item in templates %}
+            <option value="{{ item.id }}">{{ item.title }}</option>
+            {% endfor %}
+        </select>
+    </dd>
+</dl>
+{% endif %}
+
+<dl>
+    <dt>작성자</dt>
+    <dd>
+        {% if isLogin %}
+        <input type="text" name="poster" value="{{ poster if poster else manager.managerNm }}" class="w120">
+        {% else %}
+        <input type="text" name="poster" value="{{ poster if poster }}" class="w120">
+        <input type="password" name="guestPw" class="w120" placeholder="비밀번호">
+        {% endif %}
+        {% if isSuper or isBoarder %}
+        <span class="notice">
+            <input type="checkbox" name="isNotice" id="isNotice" value="1"{{ ' checked' if isNotice }}>
+            <label for="isNotice">공지사항</label>
+        </span>
+        {% endif %}
+    </dd>
+</dl>
+{% if board.useEmail %}
+<dl>
+    <dt>이메일</dt>
+    <dd>
+        <input type="email" name="email" value="{{ email }}" class="wFull">
+    </dd>
+</dl>
+{% endif %}
+{% if board.useMobile %}
+<dl>
+    <dt>휴대전화번호</dt>
+    <dd>
+        <input type="text" name="mobile" value="{{ mobile }}" class="wFull">
+    </dd>
+</dl>
+{% endif %}
+{% if board.category and board.category.length > 0 %}
+<dl>
+    <dt>분류</dt>
+    <dd>
+        {% for item in board.category %}
+        <input type="radio" name="category" value="{{ item }}" id="category_{{ loop.index }}"{{ ' checked' if (not id and loop.index == 1) or category ==  item }}>
+        <label for="category_{{ loop.index }}">{{ item }}</label>
+        {% endfor %}
+    </dd>
+</dl>
+{% endif %}
+<dl>
+    <dt>제목</dt> 
+    <dd>
+        <input type="text" name="subject" value="{{ subject }}" class="wFull">
+    </dd>
+</dl>
+<dl>
+    <dt>내용</dt>
+    <dd>
+        <textarea name="content" id="content">{{ content }}</textarea>
+        {% if board.useEditor and board.useImageAttach %}
+        <div class="attach_files_wrap">
+            <span class="sbtn attach_file image">
+                <input type="file" data-gid="{{ gid }}_images" data-file-type="image" data-is-single="1" class="uploadFile dn">
+                <i class="xi-image-o"></i>
+                이미지 추가
+            </span>
+            <ul class="attach_files" id="attach_image_files">
+            {% if attachImages and attachImages.length > 0 %}
+            {% for item in attachImages %}
+                <li>
+                  
+                    <a href="/file/download/{{ item.id }}">{{ item.fileName }}</a>
+                    <i class="insetImage xi-file-upload" data-id="{{ item.id }}"></i>
+                    <i class="deleteFile xi-file-remove" data-id="{{ item.id }}"></i>
+                </li>
+            {% endfor %}
+            {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+    </dd>
+</dl>
+{% if board.useFileAttach %}
+<dl>
+    <dt>파일첨부</dt>
+    <dd>
+        <span class="sbtn attach_file">
+            <input type="file" data-gid="{{ gid }}_files" data-is-single="1" class="uploadFile dn">
+            <i class="xi-attachment"></i>
+            파일 첨부
+        </span>
+        <ul class="attach_files" id="attach_files">
+        {% if attachFiles and attachFiles.length > 0 %}
+        {% for item in attachFiles %}
+            <li>
+                <a href="/file/download/{{ item.id }}">{{ item.fileName }}</a>
+                <i class="deleteFile xi-file-remove" data-id="{{ item.id }}"></i>
+            </li>
+        {% endfor %}
+        {% endif %}   
+        </ul>
+    </dd>
+</dl>
+{% endif %}
+{% include "./_fileTpl.html" %}

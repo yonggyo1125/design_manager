@@ -1,0 +1,105 @@
+<table class="table-cols">
+    <tr>
+        <th>설정이름</th>
+        <td>
+            <input type="text" name="configNm" value="{{ configNm }}">
+        </td>
+    </tr>
+    <tr>
+        <th>1헤베 단가</th>
+        <td>
+            <input type="number" name="sqmPrice" value="{{ sqmPrice }}">
+        </td>
+    </tr>
+    <tr>
+        <th>1헤베 단가(사업자)</th>
+        <td>
+            <input type="number" name="sqmPriceB2B" value="{{ sqmPriceB2B }}">
+        </td>
+    </tr>
+    <tr>
+        <th>최소 헤베</th>
+        <td>
+            <input type="number" nam="minSqm" value="{{ minSqm }}">
+        </td>
+    </tr>
+    <tr>
+        <th>최대 헤베</th>
+        <td>
+            <input type="number" name="maxSqm" value="{{ maxSqm }}">
+        </td>
+    </tr>
+    <tr>
+        <th>기본 사이즈</th>
+        <td>
+            <input type="text" name="basicSize" value="{{ basicSize }}" placeholder="예시 - 250|120">
+        </td>
+    </tr>
+    <tr>
+        <th>최대 사이즈</th>
+        <td>
+            <input type="text" name="maxSize" value="{{ maxSize }}" placeholder="예시 - 250|120">
+        </td>
+    </tr>
+    <tr>
+        <th>샘플 사이즈</th>
+        <td>
+            <input type="text" name="sampleSize" value="{{ sampleSize }}" placeholder="예시 - 250|120">
+        </td>
+    </tr>
+    <tr>
+        <th>보드형 사이즈</th>
+        <td>
+            <select name="boardSizeNm">
+                <option value=''>- 선택하세요 -</option>
+                {% if boardSizeNms and boardSizeNms.length > 0 %}
+                {% for sName in boardSizeNms %}
+                    <option value="{{ sName }}"{{ ' selected' if sName == boardSizeNm }}>{{ sName }}</option>
+                {% endfor %}
+                {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>보드형 추가설정</th>
+        <td>
+            <select name="idBoardSizeAdd">
+                <option value=''>- 선택하세요 -</option>
+                {% if boardSizeAdds and boardSizeAdds.length > 0 %}
+                    {% for add in boardSizeAdds %}
+                        <option value="{{ add.id }}"{{ ' selected' if idBoardSizeAdd == add.id }}>{{ add.configNm }}</option>
+                    {% endfor %}
+                    {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th nowrap>사이즈별 추가배송비</th>
+        <td>
+            <select name="idSizeDeliveryConfig">
+                <option value=''>- 선택하세요 -</option>
+                {% if sizeDeliveries and sizeDeliveries.length > 0 %}
+                    {% for sizeDelivery in sizeDeliveries %}
+                        <option value="{{ sizeDelivery.id }}"{{ ' selected' if idSizeDeliveryConfig == sizeDelivery.id }}>{{ sizeDelivery.configNm }}</option>
+                    {% endfor %}
+                    {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>절사/절상/반올림</th>
+        <td>
+            <select name="cutUnit" class="w70">
+                <option value='1'{{ ' selected' if cutUnit == '1' }}>1</option>
+                <option value='10'{{ ' selected' if cutUnit == '10' }}>10</option>
+                <option value='100'{{ ' selected' if cutUnit == '100' }}>100</option>
+                <option value='1000'{{ ' selected' if cutUnit == '1000' }}>1000</option>
+            </select>
+            <select name='cutType' class="w70">
+                <option value="floor"{{ ' selected' if cutType == 'floor' }}>절사</option>
+                <option value="ceil"{{ ' selected' if cutType == 'ceil' }}>절상</option>
+                <option value="round"{{ ' selected' if cutType == 'round' }}>반올림</option>
+            </select>
+        </td>
+    </tr>
+</table>

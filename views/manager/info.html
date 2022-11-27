@@ -1,0 +1,7 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<div class='mtitle top'>{{ '관리자' if managerInfo else '회원' }} 정보수정</div>
+{% include "./_form.html" %}
+</div>
+{% endblock %}

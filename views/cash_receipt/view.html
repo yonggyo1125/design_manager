@@ -1,0 +1,66 @@
+<table class="table-cols">
+    <tr>
+        <th>발급결과</th>
+        <td> {{ '성공' if pgResultCode == '00' else '실패' }}</td>
+    </tr>
+    <tr>
+        <th>승인번호</th>
+        <td>{{  pgApproveNo }}</td>
+    </tr>
+    <tr>
+        <th>PG 처리 ID</th>
+        <td>{{ pgTransactionId }}</td>
+    </tr>
+    <tr>
+        <th>승인일시</th>
+        <td>{{ pgApproveDate }} {{ pgApproveTime }}</td>
+    </tr>
+    <tr>
+        <th>처리자</th>
+        <td>
+            {% if idManager %}
+                {{  managerNm }}({{ managerId }})
+             {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>구매자명</th>
+        <td>{{ buyerName }}</td>
+    </tr>
+    <tr>
+        <th>구매자 이메일</th>
+        <td>{{ buyerEmail }}</td>
+    </tr>
+    <tr>
+        <th>상품명</th>
+        <td>{{ goodName }}</td>
+    </tr>
+    <tr>
+        <th>발급금액</th>
+        <td>{{ pgApprovePrice.toLocaleString() }}원</td>
+    </tr>
+    <tr>
+        <th>공급가액</th>
+        <td>{{ pgApproveSupplyPrice.toLocaleString() }}원</td>
+    </tr>
+    <tr>
+        <th>부가세</th>
+        <td>{{ pgApproveTax.toLocaleString() }}원</td>
+    </tr>
+    <tr>
+        <th>봉사료</th>
+        <td>{{ pgApproveSrvcPrice.toLocaleString() }}원</td>
+    </tr>
+    <tr>
+        <th>발행구분</th>
+        <td>{{ '지출증빙' if pgApproveUseOpt == '1' else '소득공제' }}</td>
+    </tr>
+    <tr>
+        <th>주문번호</th>
+        <td>
+            {% if orderNo %}
+                <a href='/order/{{ orderNo }}' target="_blank">{{ orderNo }}</a>
+            {% endif %}
+        </td>
+    </tr>
+</table>

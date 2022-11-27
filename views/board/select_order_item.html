@@ -1,0 +1,75 @@
+{% extends '../layout/mypage.html' %}
+{% block content %}
+<div id='m_mypage_view'>
+    <div class="top_box">
+        <div class="order_info">
+            <div class='txt1'><strong>구매 후기 작성하기</strong></div>
+        </div>
+    </div>
+    <div class="content_box">
+    {% if items and items.length > 0 %}
+    <div class='order_items'>
+        {% for item in items %}
+        <div class="order_item">
+            <div class="item_no_box">품주번호 {{ item.id }}</div>
+            <dl>
+                <dt>분류/품목명</dt>
+                <dd>
+                    {{ item.productItemInfo['ProductCategory.cateNm'] }}<br>
+                    {{ item.itemNm }}{{ " / " + item.itemNmSub if item.itemNmSub }}
+                </dd>
+            </dl>
+            <dl>
+                <dt>옵션</dt>
+                <dd>
+                    {% if item.itemSizeWidth or item.itemSizeHeight %}
+                        <div>
+                            {{ item.itemSizeWidth.toLocaleString() + "Cm" if item.itemSizeWidth }}{{ ' X ' if item.itemSizeWidth and item.itemSizeHeight }}{{ item.itemSizeHeight.toLocaleString() + "Cm" if item.itemSizeHeight }}
+                        </div>
+                    {% endif %}
+                    {% if item.options and item.options.length > 0 %}
+                        {% for opt in item.options %}
+                        <div>{{ opt.optionNm }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if item.itemFont %}
+                        <div>폰트 : {{ item.itemFont }}</div>
+                    {% endif %}
+                    {% if item.itemText  %}
+                        <div>문구 : {{ item.itemText }}</div>
+                    {% endif %}
+                    {% if item.itemMemo %}
+                        <div>요청사항 : {{ item.itemMemo }}</div>
+                    {% endif %}
+                    {% if item.subOptions and item.subOptions.length > 0 %}
+                    {% for opt in item.subOptions %}
+                        <div>
+                            <span class="badge">추가옵션</span>
+                            {{ opt.optionNm }} - 1개
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                </dd>
+            </dl>
+            <dl>
+                <dt>수량</dt>
+                <dd>{{ item.itemCnt.toLocaleString() }}개</dd>
+            </dl>
+            <dl>
+                <dt>가격</dt>
+                <dd>{{ item.itemTotalPrice.toLocaleString() }}원</dd>
+            </dl>
+            <dl>
+                <dt></dt>
+                <dd>
+                    <a href="/board/write/review?idOrderItem={{ item.id }}" class="review_btn"><i class="xi-pen-o"></i>후기 작성하기</a>
+                </dd>
+            </dl>
+        </div>
+        <!--// order_item -->
+        {% endfor %}
+    {% endif %}
+    </div>
+</div>
+<!--// select_order_item -->
+{% endblock %}      

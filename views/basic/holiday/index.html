@@ -1,0 +1,32 @@
+{% extends "../../layout/main.html" %}
+{% block content %}
+
+<div class="content_box mt50">
+<div class='mtitle top'>일자별 휴무일관리</div>
+<form method='post' action='/basic/holiday' target='ifrmProcess' autocomplete='off'>
+{% include './_calendar.html' %}
+
+<div class='mtitle'>요일별 휴무일관리</div>
+<div>
+    (배송)
+{% for yoil in yoils %}
+    <input type='checkbox' name='holiday_yoils' value='{{ loop.index - 1 }}' id='holiday_yoils_{{ loop.index }}'{{ ' checked' if holidayYoils and  holidayYoils.includes("" + (loop.index - 1)) }}>
+    <label for='holiday_yoils_{{ loop.index }}'>{{ yoil }}</label>
+{% endfor %}
+</div>
+<br>
+
+<div>
+    (상담)
+{% for yoil in yoils %}
+    <input type='checkbox' name='csHoliday_yoils' value='{{ loop.index - 1 }}' id='csHoliday_yoils_{{ loop.index }}'{{ ' checked' if csHolidayYoils and  csHolidayYoils.includes("" + (loop.index - 1)) }}>
+    <label for='csHoliday_yoils_{{ loop.index }}'>{{ yoil }}</label>
+{% endfor %}
+</div>
+<br>
+<div class='btns'>
+    <input type='submit' class='btn' value='설정 저장하기'>
+</div>
+</form>
+</div>
+{% endblock %}

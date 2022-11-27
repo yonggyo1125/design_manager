@@ -1,0 +1,60 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+
+<div class="content_box mt50">
+    <div class="mtitle flex_between">
+        게시글 양식 목록
+        <div class="tit_btns">
+            <a href="/board/admin/template/add" class="sbtn">
+                <i class="xi-plus"></i>양식 추가
+            </a>
+        </div>
+    </div>
+
+    <form id="frmList" method="post" action="/board/admin/template" target="ifrmProcess" autocomplete="off">
+        <table class="table-rows">
+            <thead>
+                <tr>
+                    <th width="30">
+                        <input type="checkbox" class="js-checkall" id="js_checkall">
+                        <label for="js_checkall" class="standalone"></label>
+                    </th>
+                    <th width="300">게시글 양식명</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if list and list.length > 0 %}
+            {% for item in list %}
+                <tr>
+                    <td align="center">
+                        <input type="checkbox" name="id" value="{{ item.id }}" id="id_{{ item.id }}">
+                        <label for="id_{{ item.id }}" class="standalone"></label>
+                    </td>
+                    <td>{{ item.title }}</td>
+                    <td>
+                        <a href="/board/admin/template/{{ item.id }}" class="sbtn">
+                            <i class='xi-pen-o'></i>수정하기
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% else %}
+            <tr class="no-list">
+                <td colspan="3">등록된 게시글 양식이 없습니다.</td>
+            </tr>
+            {% endif %}
+            </tbody>
+        </table>
+        {% if list and list.length > 0 %}
+        <div class="table-action">
+            <span class="sbtn form_delete" data-id="frmList">
+                <i class="xi-trash-o">선택 양식 삭제하기</i>
+            </span>
+        </div>
+        {% endif %}
+    </form>
+</div>
+<!--// content_box -->
+
+{% endblock %}

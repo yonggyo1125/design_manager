@@ -1,0 +1,83 @@
+<ul class='menus'>
+    {% if isSuper %}
+    <li>
+        <a href='/basic'{{ "class=on" if menuOn == 'basic' }}>
+           <div class='text'>기본설정</div>
+        </a>
+    </li>
+    {% endif %}
+    {% if isSuper %}
+    <li>
+        <a href='/manager/list'{{ "class=on" if menuOn == 'manager' }}>
+           <div class='text'>관리자</div>
+        </a>
+    </li>
+    {% endif %}
+    {% if isSuper or availableMainMenus.indexOf('product') != -1 %}
+    <li>
+        <a href='/product'{{ "class=on" if menuOn == 'product' }}>
+            <div class='text'>품목관리</div>
+        </a>
+    </li>
+    {% endif %}
+    {% if isSuper or availableMainMenus.indexOf('order') != -1 %}
+    <li>
+        <a href='/order'{{ "class=on" if menuOn == 'order' }}>
+           <div class='text'>{{ '디자인관리' if isDesigner else '주문관리' }}</div>
+        </a>
+    </li>
+    {% endif %}
+
+    {% if isSuper or availableMainMenus.indexOf('work') != -1 %}
+    <li>
+        <a href='/work'{{ "class=on" if menuOn == 'work' }}>
+           <div class='text'>작업관리</div>
+        </a>
+    </li>
+    {% endif %}
+    {% if isSuper or availableMainMenus.indexOf('customer') != -1 %}
+    <li>
+        <a href='/customer'{{ "class=on" if menuOn == 'customer' }}>
+            <div class='text'>상담관리</div>
+        </a>
+    </li>
+    {% endif %}
+    {% if isSuper or availableMainMenus.indexOf('board') != -1 %}
+    <li>
+        <a href="/board/admin"{{ "class=on" if menuOn == 'board' }}>
+            <div class='text'>게시판 관리</div>
+        </a>
+    </li>
+    {% endif %}
+
+    {% if isSuper or availableMainMenus.indexOf('associate') != -1 %}
+    <li>
+        <a href='/associate'{{ "class=on" if menuOn == 'associate' }}>
+            <div class='text'>제휴관리</div>
+        </a>
+    </li>
+    {% endif %}
+    
+    {% if isSuper or availableMainMenus.indexOf('payment') != -1 %}
+    <li>
+        <a href='/payment'{{ "class=on" if menuOn == 'payment' }}>
+            <div class="text">결제관리</div>
+        </a>
+    </li>
+    {% endif %}
+    
+    {% if isSuper or availableMainMenus.indexOf('kakao_alimtalk') != -1 %}
+    <li>
+        <a href='/kakao_alimtalk'{{ "class=on" if menuOn == 'kakao_alimtalk' }}>
+            <div class="text">알림톡</div>
+        </a>
+    </li>
+    {% endif %}
+    {% if isSuper or availableMainMenus.indexOf('search_rank') != -1 %}
+    <li>
+        <a href="/search_rank/v2"{{ "class=on" if menuOn == 'search_rank' }}>
+            <div class="text">검색순위</div>
+        </a>
+    </li>
+    {% endif %}
+</ul>

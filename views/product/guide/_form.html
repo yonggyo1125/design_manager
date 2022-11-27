@@ -1,0 +1,71 @@
+<table class="table-cols">
+    <tr>
+        <th>안내명</th>
+        <td>
+            <input type="text" name="title" value="{{ title }}" class="wFull">
+        </td>
+    </tr>
+    <tr>
+        <th>
+            동영상
+            <i class="xi-plus-square icon_btn" onclick="codefty.fileUpload.showPopup('{{gid}}_movie');"></i>
+        </th>
+        <td>
+            <ul class="uploaded_files movie">
+            {% if movies and movies.length > 0 %} 
+            {% for item in movies %}
+                <li class="fileItem" id="fileItem_{{ item.id }}">
+                    <a href="/file/download/{{ item.id }}">{{ item.fileName }}</a>
+                    <i class="xi-minus-square remove" data-id="{{ item.id }}"></i>
+                </li>
+            {% endfor %}
+            {% endif %}
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            안내배너
+            <i class="xi-plus-square icon_btn" onclick="codefty.fileUpload.showPopup('{{gid}}_image');"></i>
+        </th>
+        <td>
+            <ul class="uploaded_files image">
+            {% if images and images.length > 0 %} 
+            {% for item in images %}
+                <li class="fileItem" id="fileItem_{{ item.id }}">
+                    <a href="/file/download/{{ item.id }}">{{ item.fileName }}</a>
+                    <i class="xi-minus-square remove" data-id="{{ item.id }}"></i>
+                </li>
+            {% endfor %}
+            {% endif %}
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th>안내문구</th>
+        <td>
+            <textarea name="content" id="content">{{ content }}</textarea>
+            <div class="attach_files_wrap mt5">
+                <span class="sbtn attach_file image">
+                    <input type="file" data-gid="{{ gid }}_editor" data-file-type="image" data-is-single="1" class="uploadFile dn">
+                    <i class="xi-image-o"></i>
+                    이미지 추가
+                </span>
+                <ul class="attach_files" id="attach_image_files">
+                {% if editors and editors.length > 0 %}
+                {% for item in editors %}
+                    <li>
+                      
+                        <a href="/file/download/{{ item.id }}">{{ item.fileName }}</a>
+                        <i class="insetImage xi-file-upload" data-id="{{ item.id }}"></i>
+                        <i class="deleteFile xi-file-remove" data-id="{{ item.id }}"></i>
+                    </li>
+                {% endfor %}
+                {% endif %}
+                </ul>
+            </div>
+        </td>
+    </tr>
+</table>
+
+{% include "../../board/admin/skins/default/_fileTpl.html" %}

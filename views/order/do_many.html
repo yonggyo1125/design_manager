@@ -1,0 +1,9 @@
+{% extends '../layout/main.html' %}
+{% block content %} 
+{% if type == 'invoice' %}
+    {% include './_do_many_invoice.html' %}
+{% elif type == 'order' %}
+    {% include './_do_many_order.html' %}
+{% endif %}
+
+{% endblock %}

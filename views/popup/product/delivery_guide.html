@@ -1,0 +1,38 @@
+{% extends '../../layout/popup.html' %}
+{% block content %}
+<div class='wrap'>
+    <div class='banner'>{% include './_delivery_banner.html' %}</div>
+    <div class='delivery_info'>
+        <div class='top_tit'>
+            출고예정일
+            <i class='xi-close' id='close_popup'></i>
+        </div>
+        <!--// top_tit -->
+        <div class='inner'>
+            {% if categories.length > 0 %}
+            <ul class='tabs'>
+                {% for item in categories %}
+                <li class="tab{{ ' on' if cateCd == item.cateCd }}" data-cate-cd='{{ item.cateCd }}'>{{ item.cateNm }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <ul class='info'>
+            {% include "./_delivery_schedule.html" %}
+            </ul>
+            <!--// info -->
+            <div class='guide'>
+                <div class='text1'>
+                    출고일은 본사에서 택배사에 전해지는 날짜를 의미하며(수령일 X)<br>
+                    수령일는 택배사의 사정에 따라 달라질 수 있습니다.
+                </div>
+                <div class='text2'>
+                    출고예정일은 절대적이지 않으며 지연이 있을 수 있습니다. 이로 인한  배송지연은 본사에서 책임지지 않습니다.<br>
+                    급한건은 032-765-1884로 반드시 통화 후 출고일을 상담바랍니다.
+                </div>
+            </div>
+        </div>
+        <!--// inner -->
+    </div>
+    <!--// delivery_info -->
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+<div class='mtitle top'>거래처 등록</div>
+<form method='post' action='/product/company' target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='mode' value='add'>
+    <table class='table-cols style2'>
+        <tr>
+            <th>거래처명</th>
+            <td width='200'>
+                <input type='text' name='companyNm'>
+            </td>
+            <th>사업자번호</th>
+            <td width='200'>
+                <input type='text' name='businessNo'>
+            </td>
+            <th>대표자명</th>
+            <td>
+                <input type='text' name='ownerNm'>
+            </td>
+           
+        </tr>
+        <tr>
+            <th>연락처</th>
+            <td>
+                <input type='text' name='ownerPhone'>
+            </td>
+            <th>담당자명</th>
+            <td>
+                <input type='text' name='staffNm'>
+            </td>
+            <th>담당자연락처</th>
+            <td>
+                <input type='text' name='staffPhone'>
+            </td>
+        </tr>
+        <tr>
+            <th>회사주소</th>
+            <td colspan="5">
+                <input type='text' name='companyAddress'>
+            </td>
+        </tr>
+        <tr>
+            <th>메모</th>
+            <td colspan='5'>
+                <input type='text' name='memo'>
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='등록하기'>
+    </div>
+</form>
+</div>
+
+<div class="content_box">
+<div class='mtitle'>거래처 목록</div>
+<form method='post' action='/product/company' target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='mode' value='delete'>
+    <table class='table-rows'>
+        <thead>
+            <tr>
+                <th width='30'>
+                    <input type='checkbox' class='js-checkall' data-target-name='id' id='js_checkall'>
+                    <label for='js_checkall' class='standalone'></label>
+                </th>
+                <th width='250'>거래처명</th>
+                <th width='200'>사업자번호</th>
+                <th width='150'>대표자명</th>
+                <th width='150'>연락처</th>
+                <th width='150'>담당자명</th>
+                <th width='150'>담당자연락처</th>
+                <th width='150'>등록일시</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list.length > 0 %}
+        {% for item in list %}
+            <tr>
+                <td>
+                    <input type='checkbox' name='id' value='{{ item.id }}' id='id_{{ item.id }}'>
+                    <label for='id_{{ item.id }}' class='standalone'></label>
+                </td>
+                <td>{{ item.companyNm }}</td>
+                <td align='center'>{{ item.businessNo }}</td>
+                <td align='center'>{{ item.ownerNm }}</td>
+                <td align='center'>{{ item.ownerPhone }}</td>
+                <td align='center'>{{ item.staffNm }}</td>
+                <td align='center'>{{ item.staffPhone }}</td>
+                <td align='center'>{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i') }}</td>
+                <td>
+                    <span class='sbtn layer_popup' 
+                        data-id='{{ item.id }}' 
+                        data-width='700' 
+                        data-height='400' 
+                        data-title='거래처 확인/수정하기'
+                        data-url='../product/company/{{ item.id }}'>확인/수정</span>
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %} 
+            <tr class='no-list'>
+                <td colspan='9'>등록된 거래처가 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <div class='table-action'>
+        <input type='submit' class='sbtn' value='삭제하기' onclick="return confirm('정말 삭제하시겠습니까?');">
+    </div>
+    {{ pagination | safe }}
+</form>
+</div>
+{% endblock %}

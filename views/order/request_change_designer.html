@@ -1,0 +1,13 @@
+<form method="post" action="/order/request_change_designer/{{ id }}" target="ifrmProcess" autocomplete="off">
+    <select name="idDesigner" class="wFull">
+        <option value="">디자이너 선택</option>
+        {% if designers and designers.length > 0 %}
+        {% for designer in designers %}
+        <option value="{{ designer.id }}">{{ designer.managerNm }}({{ designer.managerId }})</option>
+        {% endfor %}
+        {% endif %}
+    </select>
+    <div class="btns">
+        <button type="submit" class="btn" onclick="return confirm('정말 변경하시겠습니까?');">변경하기</button>
+    </div>
+</form>

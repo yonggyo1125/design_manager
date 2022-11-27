@@ -1,0 +1,80 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+<div class="mtitle top">작업 관리</div>
+<form id='frmRegist' method="post" action="/search_rank/v2" autocomplete="off" target="ifrmProcess">
+    <table class="table-cols style2">
+        <tr>
+            <th>타겟 키워드</th>
+            <td>
+                <textarea name="keyword" placeholder="여러 키워드 엔터로 구분하여 입력"></textarea>
+            </td>
+        </tr>
+    </table>
+    <div class="table-btn">
+        <input type="submit" value="등록하기">
+    </div>
+</form>
+</div>
+<div class="content_box">
+<div class="mtitle">작업목록</div>
+<form id='frmList' method="post" action="/search_rank/v2" autocomplete="off" target="ifrmProcess">
+    <table class="table-rows">
+        <thead>
+            <tr>
+                <th width="20">
+                    <input type="checkbox" class="js-checkall" id='js-checkall' data-target-name="id">
+                    <label for="js-checkall" class="standalone"></label>
+                </th>
+                <th width="250">타겟키워드</th>
+                <th width="200">사용여부</th>
+                <th width="180">처리자</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list.length > 0 %}
+        {% for item in list %}
+            <tr>
+                <td align="center">
+                    <input type="checkbox" name="id" value="{{ item.id }}" id="id_{{ loop.index }}">
+                    <label for="id_{{ loop.index }}" class="standalone"></label>
+                </td>
+                <td>{{ item.keyword.join("<br>")  | safe }}</td>
+                <td align="center">
+                    <input type="radio" name="isUse_{{ item.id }}" id="isUse_{{ item.id }}_0" value="0"{{ ' checked' if item.isUse != '1' }}>
+                    <label for="isUse_{{ item.id }}_0">미사용</label>
+                    <input type="radio" name="isUse_{{ item.id }}" id="isUse_{{ item.id }}_1" value="1"{{ ' checked' if item.isUse == '1' }}>
+                    <label for="isUse_{{ item.id }}_1">사용</label>
+                </td>
+                <td align="center">
+                    {% if item.idManager %}
+                    {{ item['Manager.managerNm'] }}({{ item['Manager.managerId'] }})
+                    {% endif %}
+                </td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        {% else %}
+            <tr class="no-list">
+                <td colspan="5">등록된 작업목록이 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <div class="table-action">
+        <div>
+        <span class="sbtn black form_update" data-id="frmList">
+            <i class="xi-check-min"></i>
+            선택작업 수정하기
+        </span>
+        <span class="sbtn form_delete" data-id="frmList">
+            <i class="xi-trash-o"></i>
+             선택작업 삭제하기
+        </span>
+        </div>
+    </div>
+    {{ pagination | safe }}
+</form>
+</div>s
+{% endblock %}

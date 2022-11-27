@@ -1,0 +1,113 @@
+<div class="top_box">
+<div class='mtitle top'>디자인 처리상태 등록</div>
+<form id='frmRegist' method='post' action='/order/config' target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='mode' value='designStatus'>
+    <table class='table-cols style2'>
+        <tr>
+            <th>처리상태코드</th>
+            <td width='250'>
+                <input type='text' name='statusCd'>
+            </td>
+            <th>처리상태명칭</th>
+            <td>
+                <input type='text' name='statusNm'>
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='등록하기'>
+    </div>
+</form>
+</div>
+
+<div class="content_box mt50">
+<div class='mtitle'>처리상태 목록</div>
+<form id='frmList' method='post' action='/order/config' target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='mode' value='designStatus'>
+    <table class='table-rows'>
+        <thead>
+            <tr>
+                <th width='30'>
+                    <input type='checkbox' class='js-checkall' data-target-name='statusCd' id='js-checkall'>
+                    <label for='js-checkall' class='standalone'></label>
+                </th>
+                <th width='100'>처리상태코드</th>
+                <th width='200'>처리상태명</th>
+                <th width='100'>진열가중치</th>
+                <th width="200">알림톡 전송메세지</th>
+                <th width='200'>사용여부</th>
+                <th>기타</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list.length > 0 %} 
+        {% for item in list %} 
+            <tr>
+                <td align='center'>
+                    <input type='checkbox' name='statusCd' value='{{ item.statusCd }}' id='statusCd_{{ loop.index }}'>
+                    <label for='statusCd_{{ loop.index }}' class='standalone'></label>
+                </td>
+                <td>{{ item.statusCd }}</td>
+                <td>
+                    <input type='text' name='statusNm_{{ item.statusCd }}' value='{{ item.statusNm }}'>
+                </td>
+                <td>
+                    <input type='number' name='listOrder_{{ item.statusCd }}' value='{{ item.listOrder }}'>
+                </td>
+                <td>
+                    <select name="tmpltCode_{{ item.statusCd }}">
+                        <option value="">- 전송 메세지 선택 -</option>
+                        {% if kakaoTemplates.length > 0 %}
+                        {% for tpl in kakaoTemplates %}
+                        <option value="{{ tpl.tmpltCode }}"{{ ' selected' if item.tmpltCode == tpl.tmpltCode }}>[{{ tpl.tmpltCode }}] {{ tpl.tmpltNm }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                </td>
+                <td align='center'>
+                    <input type='radio' name='isUse_{{ item.statusCd }}' value='1' id='isUse_1_{{ loop.index }}'{{ ' checked' if item.isUse }}>
+                    <label for='isUse_1_{{ loop.index }}'>사용</label>
+                    <input type='radio' name='isUse_{{ item.statusCd }}' value='0' id='isUse_0_{{ loop.index }}'{{ ' checked' if not item.isUse }}>
+                    <label for='isUse_0_{{ loop.index }}'>미사용</label>
+                </td>
+                <td>
+                    <div class="mb5">고객 안내 문구</div>
+                    <input type="text" name="guideMessage_{{ item.statusCd }}" value="{{ item.guideMessage }}">
+                    <div class='mt10'>
+                        <input type="checkbox" name="designerChangePossible_{{ item.statusCd }}" value="1" id="designerChangePossible_{{ item.statusCd }}"{{ ' checked' if item.designerChangePossible }}>
+                        <label for="designerChangePossible_{{ item.statusCd }}">디자이너 변경요청 가능</label>
+                    </div>
+                    <div class="mt10">
+                        <select name="designerChangedTmpltCode_{{ item.statusCd }}" class="wFull">
+                            <option value="">디자이너 변경시 전송 메세지</option>
+                            {% if kakaoTemplates.length > 0 %}
+                            {% for tpl in kakaoTemplates %}
+                            <option value="{{ tpl.tmpltCode }}"{{ ' selected' if item.designerChangedTmpltCode == tpl.tmpltCode }}>[{{ tpl.tmpltCode }}] {{ tpl.tmpltNm }}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %}
+            <tr class='no-list'>
+                <td colspan='7'>등록된 처리상태가 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <div class='table-action'>
+        <div class="left">
+        <span class='sbtn black form_update' data-id='frmList'>
+            <i class='xi-check-min'></i>
+            선택 처리상태 수정하기
+        </span>
+        <span class='sbtn form_delete' data-id='frmList'>
+            <i class='xi-trash-o'></i>
+            선택 처리상태 삭제하기
+        </span>
+        </div>
+    </div>
+</form>
+</div>

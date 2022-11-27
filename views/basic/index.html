@@ -1,0 +1,131 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<form method='post' action='/basic' target='ifrmProcess' autocomplete='off'>
+<div class='stitle'>기본설정</div>
+<table class='table-cols'>
+    <tr>
+        <th>기본 사이트명</th>
+        <td>
+            <input type='text' name='siteTitle' value='{{ siteTitle }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>CSS, JS 버전</th>
+        <td>
+            <input type='number' name='cssJsVer' value="{{ cssJsVer }}">
+        </td>
+    </tr>
+    <tr>
+        <th>파일업로드</th>
+        <td>
+            일반 
+            <input type='number' name='fileUploadMaxSize' value='{{ fileUploadMaxSize }}' class='w70 right'>Mb / 
+            드래그앤드롭 
+            <input type='number' name='fileUploadMaxSizeDragDrop' value='{{ fileUploadMaxSizeDragDrop }}' class='w70 right'>Mb
+        </td>
+    </tr>
+    <tr>
+        <th>기타</th>
+        <td>
+            <dl>
+                <dt>주문서관리 마감시한 : </dt>
+                <dd>
+                    접수일로 부터 <input type="number" name="orderUpdateClosedDays" value="{{ orderUpdateClosedDays }}" class="w70 right">일 이후(0이하 숫자 입력시 마감시한 없음)
+                </dd>
+            </dl>
+        </td>
+    </tr>
+</table>
+<div class='stitle'>법인정보</div>
+<table class='table-cols'>
+    <tr>
+        <th>사업자등록정보</th>
+        <td>
+            <input type='text' name='businessNo' value='{{ businessNo }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>법인명</th>
+        <td>
+            <input type='text' name='companyNm' value='{{ companyNm }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>대표자명</th>
+        <td>
+            <input type='text' name='companyOwner' value='{{ companyOwner }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>사업장 주소</th>
+        <td>
+            <input type='text' name='companyAddress' value='{{ companyAddress }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>업태</th>
+        <td>
+            <input type='text' name='businessCategory' value='{{ businessCategory }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>종목</th>
+        <td>
+            <input type='text' name='businessSubCategory' value='{{ businessSubCategory }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>유선전화</th>
+        <td>
+            <input type='text' name='companyPhone' value='{{ companyPhone }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>팩스번호</th>
+        <td>
+            <input type='text' name='companyFax' value='{{ companyFax }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>입금계좌</th>
+        <td>
+            <input type='text' name='companyBankInfo' value='{{ companyBankInfo }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>법인인감</th>
+        <td>
+                <div id='companyStampImage'>
+                {% if companyStamp %} 
+                    <a href='/file/download/{{ companyStamp.id }}'>
+                        <img src='{{ companyStamp.uploadUrl }}' width='100'>
+                    </a>
+                {% endif %}
+                </div>
+                <input type='hidden' name='companyStampFileId' value='{{ companyStampFileId }}'>
+                <input type='file' id='companyStampUpload'>
+        </td>
+    </tr>
+</table>
+<div class='stitle'>가입약관</div>
+<table class='table-cols'>
+    <tr>    
+        <th>이용약관</th>
+        <td>
+            <textarea name='termsBasic'>{{ termsBasic }}</textarea>
+        </td>
+    </tr>
+    <tr>
+        <th>개인정보처리방침</th>
+        <td>
+            <textarea name='termsPrivate'>{{ termsPrivate }}</textarea>
+        </td>
+    </tr>
+</table>
+<div class='btns'>
+    <input type='submit' class="btn" value="저장하기">
+</div>
+</form>
+</div>
+{% endblock %}

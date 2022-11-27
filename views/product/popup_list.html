@@ -1,0 +1,136 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<div class='popup_product_items'>
+<form id='frmSearch' method='get' autocomplete='off'>
+    <table class='table-cols'>
+        <tr>
+            <th>업체구분</th>
+            <td width='270'>
+            {% for key in itemTypeKeys %}
+                <input type='checkbox' name='itemType' id='itemType_{{ key }}' value='{{ key }}'{{ ' checked' if search.itemType and search.itemType.includes(key) }}>
+                <label for='itemType_{{ key }}'>{{ itemTypes[key] }}</label>
+            {% endfor %}
+            </td>
+            <th>품목분류</th>
+            <td colspan='3'>
+                <select name='cateCd'>
+                    <option value=''>- 품목분류 선택 -</option>
+                {% for category in categories %}
+                    <option value='{{ category.cateCd }}'{{ ' selected' if search.cateCd == category.cateCd }}>{{ category.cateNm }}</option>
+                {% endfor %}
+
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>품목명</th>
+            <td>
+                <input type='text' name='itemNm' value='{{ search.itemNm }}'>
+            </td>
+            <th>품목코드</th>
+            <td>
+                <input type='text' name='itemCode' value='{{ search.itemCode }}'>
+            </td>
+            <th>거래처명</th>
+            <td>
+                <input type='text' name='companyNm' value='{{ search.companyNm }}'>
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='검색하기'>
+    </div>
+</form>
+<div class='mtitle'>품목 리스트</div>
+<table class='table-rows'>
+    <thead>
+        <tr>
+            <th width='30' nowrap>
+                <input type='checkbox' class='js-checkall' data-target-name='id' id='js_checkall'>
+                <label for='js_checkall' class='standalone'></label>
+            </th>
+            <th width='80' nowrap>품목구분</th>
+            <th width='130' nowrap>품목코드</th>
+            <th width='150' nowrap>품목분류</th>
+            <th nowrap>품목명</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if list.length > 0 %}
+    {% for item in list %}   
+        <tr>
+            <td align='center'>
+                <input type='checkbox' name='id' value='{{ item.id }}' id='id_{{ item.id }}'
+                data-item-type='{{ item.itemType }}' 
+                data-item-nm='{{ item.itemNm }}'
+                data-item-code='{{ item.itemCode }}'
+                data-item-price='{{ item.itemPrice }}'
+                data-cate-cd="{{ item['ProductCategory.cateCd'] }}"
+                data-cate-nm="{{ item['ProductCategory.cateNm'] }}"
+                data-options-json="{{ item.optionsJson }}"
+                data-sub-options-json="{{ item.subOptionsJson }}"
+                data-text-options-json="{{ item.textOptionsJson }}"
+                data-delivery-policies-json="{{ item.deliveryPoliciesJson }}">
+                <label for='id_{{ item.id }}' class='standalone'></label>
+            </td>
+            <td align='center'>
+                {{ itemTypes[item.itemType] }}
+                {% if item.itemType == 'company' and item['Company.companyNm'] %}
+                <div>({{ item['Company.companyNm'] }})</div>
+                {% endif %} 
+            </td>
+            <td align='center'>{{ item.itemCode }}</td>
+            <td align='center'>
+                [{{ cateTypes[item['ProductCategory.cateType']] }}]
+                {{ item['ProductCategory.cateNm'] }}
+            </td>
+            <td>
+                {{ item.itemNm }}
+                {% if item.provider or item.texture or item.itemSize %} 
+                <div>
+                    {{ '[구입처]' if item.provider  }} {{ item.provider }}
+                    {{ '[재질]' if item.texture  }} {{ item.texture }}
+                    {{ '[사이즈]' if item.itemSize  }} {{ item.itemSize }}
+                    [재고단위] {{ '길이(yd)' if item.stockType == 'yard' else '수량(매/본)' }}
+                    {{ "[구입가]" + item.providerPrice.toLocaleString() + "원" if item.providerPrice > 0 }}
+                    {% if item.useStock %}
+                    [재고]
+                    {{ item.stock.toLocaleString() if item.stock and item.stock > 0 else '품절' }}
+                    {% if item.stock and item.stock > 0 %}
+                        {{ 'yd' if item.stockType == 'yard' else 'ea' }}
+                    {% endif %}
+                    {% else %}
+                    무제한 
+                    {% endif %}
+                    {% if item.stock  %}
+                    [재고액]
+                    {% if item.stockType == 'yard' %} 
+                    {{ (item.providerPrice * item.stock * 0.914).toLocaleString() + "원" }}
+                    {% else %}
+                    {{ (item.providerPrice * item.stock).toLocaleString() + "원" }}
+                    {% endif %}
+                    {% endif %}
+                    {{ "[판매원가]" + item.itemPrice.toLocaleString() + "원" if item.itemPrice > 0 }}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    {% else %}
+        <tr class='no-list'>
+            <td colspan='5'>등록된 품목이 없습니다.</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
+{% if list.length > 0 %}
+<div class='table-action'>
+    <span class='sbtn sbtn2' id='select_product_items'>
+        <i class='xi-check'></i>선택하기
+    </span>
+</div>
+{% endif %}
+{{ pagination | safe }}
+</div>
+<!--// popup_product_items -->
+{% endblock %}

@@ -1,0 +1,158 @@
+{% extends '../layout/main.html' %}
+{% block content %} 
+<div class="top_box">
+<form id='frmSearch' method="get" autocomplete="off">
+        <table class="table-cols style2">
+            <tr>
+                <th>가입일</th>
+                <td colspan="5">
+                    <input  type='date' name='createSdate'  value='{{ search.createSdate }}' class='wauto'> ~ 
+                    <input type='date' name='createEdate' value='{{ search.createEdate }}' class='wauto'>
+                    <span class='quick_date' data-target-name='createSdate,createEdate'>
+                        <span class='date_span' data-span='1_week'>1주</span>
+                        <span class='date_span' data-span='2_week'>2주</span>
+                        <span class='date_span' data-span='3_week'>3주</span>
+                        <span class='date_span' data-span='4_week'>4주</span>
+                        <span class='date_span' data-span='1_month'>1개월</span>
+                        <span class='date_span' data-span='2_month'>2개월</span>
+                        <span class='date_span' data-span='3_month'>3개월</span>
+                        <span class='date_span' data-span='6_month'>6개월</span>
+                        <span class='date_span' data-span='1_year'>1년</span>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>가입구분</th>
+                <td width="250">
+                    <input type="checkbox" name="managerType" value="admin" id="managerType_admin"{{ ' checked' if search and  search.managerType and search.managerType.indexOf('admin') != -1 }}>
+                    <label for="managerType_admin">내부직원</label>
+
+                    <input type="checkbox" name="managerType" value="associate" id="managerType_associate"{{ ' checked' if search and search.managerType and search.managerType.indexOf('associate') != -1 }}>
+                    <label for="managerType_associate">제휴업체</label>
+                </td>
+                <th>아이디</th>
+                <td width="250">
+                    <input type="text" name="managerId" value="{{ search.managerId }}">
+                </td>
+                <th>관리자명</th>
+                <td>
+                    <input type="text" name="managerNm" value="{{ search.managerNm }}">
+                </td>
+            </tr>
+            <tr>
+                <th>관리레벨</th>
+                <td colspan="3">
+                    <input type="checkbox" name="managerLv" value="0" id="managerLv_0" value="0"{{ ' checked' if search and search.managerLv and search.managerLv.indexOf("0") != -1  }}>
+                    <label for="managerLv_0">미승인 관리자</label>
+                    {% for lv in levels %}
+                        <input type="checkbox" name="managerLv" value="{{ lv.level  }}" id="managerLv_{{ lv.level  }}" value="{{ lv.level  }}"{{ ' checked' if search and search.managerLv and search.managerLv.indexOf("" + lv.level) != -1  }}>
+                        <label for="managerLv_{{ lv.level  }}">{{ lv.levelNm }}</label>
+                    {% endfor %}
+                </td>
+                <th>탈퇴/제한</th>
+                <td>
+                    <input type="checkbox" name="isWithdrawalMember" value="1" id="isWithdrawalMember"{{ ' checked' if search.isWithdrawalMember }}>
+                    <label for="isWithdrawalMember">탈퇴회원</label> 
+                    <input type="checkbox" name="isStopMember" value="1" id="isStopMember"{{ ' checked' if search.isStopMember }}>
+                    <label for="isStopMember">이용제한회원</label>
+                </td>
+            </tr>
+        </table>
+        <div class="table-btn">
+            <input type="submit" value="검색하기">
+        </div>
+</form> 
+</div>
+
+<div class="content_box">
+<div class='mtitle'>관리자 목록</div>
+<div class="scroll_x">
+<form id='frmList' method="post" action="/manager/list" target="ifrmProcess" autocomplete="off">
+<table class='table-rows'>
+    <thead>
+        <tr>
+            <th width='20'>
+                <input type="checkbox" class="js-checkall" id='js-checkall' data-target-name="id">
+                <label for='js-checkall' class='standalone'></label>
+            </th>
+            <th width="120" nowrap>가입일시</th>
+            <th width='120' nowrap>가입구분</th>
+            <th width='120' nowrap>아이디</th>
+            <th width='150' nowrap>관리자명</th>
+            <th width='150' nowrap>관리레벨</th>
+            <th width='220' nowrap>약관동의</th>
+            <th nowrap>탈퇴일시</th>
+            <th nowrap>이용제한</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if list.length > 0 %}
+    {% for item in list %}
+        <tr>
+            <td align='center'>
+                <input type="checkbox" name="id" value="{{ item.id }}" id='id_{{ item.id }}'>
+                <label for='id_{{ item.id }}' class='standalone'></label>
+            </td>
+            <td align="center">
+                {{ getLocalDate(item.createdAt, '%Y.%m.%d<br>%H:%i:%s')  | safe }}
+            </td>
+            <td align='center'>{{ '내부직원' if item.managerType == 'admin' else '제휴업체' }}</td>
+            <td align='center'>{{ item.managerId }}</td>
+            <td align='center'>{{ item.managerNm }}</td>
+            <td align='center'>
+                <select name="managerLv_{{ item.id }}">
+                    <option value="0">미승인 관리자</option>
+                {% for lv in levels %}
+                    <option value="{{ lv.level }}"{{ ' selected' if item.managerLv == lv.level }}>{{ lv.levelNm }}</option>
+                {% endfor %}
+                </select>
+            </td>
+            <td align='center'>
+                {{ '이용약관 ' if item.useTerms }}
+                {{ '개인정보처리방침' if item.privateTerms }}
+            </td>
+            <td align="center">
+                {% if item.withdrawalAt %}
+                {{ getLocalDate(item.withdrawalAt, '%Y.%m.%d<br>%H:%i:%s') | safe }}
+                {% endif %}
+            </td>
+            <td align="center">
+                {% if item.stopUntil %}
+                    {{ getLocalDate(item.stopUntil, '%Y.%m.%d 까지') | safe }}
+                {% endif %}
+            </td>
+            <td nowrap>
+                <a href='../associate/keys/{{ item.id }}' class='sbtn'>
+                    <i class="xi-key"></i>
+                    API키 관리
+                </a>
+                <a href='../manager/edit/{{ item.id }}' class='sbtn'>
+                    <i class="xi-check-min"></i>
+                    정보수정
+                </a>
+                <span class="sbtn manager_control" data-id="{{ item.id }}">
+                    <i class="xi-check-min"></i>
+                    이용관리
+                </span>
+            </td>
+        </tr>
+    {% endfor %}
+    {% else %}
+        <tr class='no-list'>
+            <td colspan='11'>등록된 관리자가 없습니다.</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
+<div class="table-action">
+    <span class="sbtn black form_update" data-id="frmList">
+        <i class="xi-check-min"></i>
+        선택회원 수정하기
+    </span>
+</div>
+</form>
+</div>
+{{ pagination | safe }}
+</div>
+{% endblock %}

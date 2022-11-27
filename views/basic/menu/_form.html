@@ -1,0 +1,76 @@
+<table class="table-cols">
+    <tr>
+        <th>사용여부</th>
+        <td>
+            <input type="radio" name="isUse" value="1" id="isUse_1"{{ ' checked'  if isUse == '1' }}>
+            <label for="isUse_1">사용</label>
+            <input type="radio" name="isUse" value="0" id="isUse_0"{{ ' checked'  if isUse != '1' }}>
+            <label for="isUse_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>메뉴 유형</th>
+        <td>
+            <select name="type">
+                <option value=''>- 선택하세요 -</option>
+                {% for _type, menu in types %}
+                    <option value="{{ _type }}"{{ ' selected' if type == _type }}>{{ menu }}</option>
+                {% endfor %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>메뉴명</th>
+        <td>
+            <input type="text" name="title" value="{{ title }}">
+        </td>
+    </tr>
+    <tr>
+        <th>메뉴URL</th>
+        <td>
+            <input type="text" name="url" value="{{ url }}">
+        </td>
+    </tr>
+    <tr>
+        <th>주메뉴</th>
+        <td>
+            <select name="parentId">
+                <option value="">- 선택하세요-</option>
+                {% if parentMenus and parentMenus.length > 0 %}
+                {% for menu in parentMenus %}
+                    {% if  not id or  id != menu.id %}
+                    <option value="{{ menu.id }}"{{ ' selected' if parentId and menu.id == parentId }}>[{{ menu.typeStr }}] {{ menu.title }}</option>
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>진열순서</th>
+        <td>
+            <input type="number" name="listOrder" value="{{ listOrder }}">
+        </td>
+    </tr>
+    <tr>
+        <th>관리레벨</th>
+        <td>
+            <div class="notice_msg">
+                <i class="xi-info"></i>
+                전체관리자는 모든 메뉴 노출이므로 설정에서 제외
+            </div>
+            {% if levels and levels.length > 0 %}
+            {% for lv in levels %}
+                <input type="checkbox" name="accessLevel" id="accessLevel_{{ lv.level }}" value="{{ lv.level }}"{{ ' checked' if accessLevel.indexOf("" + lv.level) != -1 }}>
+                <label for="accessLevel_{{ lv.level }}">{{ lv.levelNm }}</label>
+            {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>동일매칭 URL</th>
+        <td>
+            <textarea name="subUrls" placeholder="여러개 입력시 엔터(줄개행)로 구분하여 입력">{{ subUrls }}</textarea>
+        </td>
+    </tr>
+</table>

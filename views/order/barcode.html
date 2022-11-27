@@ -1,0 +1,43 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+    <div class="mtitle top">바코드 생성</div>
+    <form id="frmGen" method="get" autocomplete="off">
+        <table class="table-cols style2">
+            <tr>
+                <th>데이터</th>
+                <td>
+                    <input type="text" name="code" value="{{ code }}">
+                </td>
+            </tr>
+            <tr>
+                <th>사이즈</th>
+                <td>
+                    <input type="number" name='width' value="{{ width }}" class="w70"> X 
+                    <input type="number" name='height' value="{{ height }}" class="w70">
+                </td>
+            </tr>
+        </table>
+        <div class="table-btn">
+            <button type="submit" class="btn">생성하기</button>
+        </div>
+    </form>
+</div>
+<!--// top_box -->
+{% if code %}
+<div class="content_box">
+    <div class="stitle">
+        사이즈 : {{ width }} X {{ height }}
+    </div>
+    <svg class="barcode"
+        jsbarcode-value="{{ code }}"
+        jsbarcode-width="{{ width }}"
+        jsbarcode-height="{{ height }}"
+        jsbarcode-displayValue="false">
+    </svg>
+<script>
+JsBarcode(".barcode").init();
+</script>
+</div>
+{% endif %}
+{% endblock %}

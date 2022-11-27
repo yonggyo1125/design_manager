@@ -1,0 +1,71 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+    <form name="frmSearch" method="get" action="/board/admin/show_order" autocomplete="off">
+        <table class="table-cols style2">
+            <tr>
+                <th>진열위치 선택</th>
+                <td>
+                    <select name="showLocation" onchange="frmSearch.submit();">
+                        <option value="">- 선택하세요 -</option>
+                    {% if showLocations and showLocations.length > 0 %}
+                    {% for item in showLocations %}
+                        <option value="{{ item.code }}"{{ ' selected' if search.showLocation == item.code }}>{{ item.title }}</option>
+                    {% endfor %}
+                    {% endif %}
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--// top_box -->
+
+<div class="content_box">
+    <div class="stitle">진열 변경하기</div>
+    <form id="frmList" method="post" action="/board/admin/show_order" target="ifrmProcess" autocomplete="off">
+        <input type="hidden" name="showLocation" value="{{ search.showLocation }}">
+        <table class="table-rows">
+            <thead>
+                <tr>
+                    <th width="150">게시판ID</th>
+                    <th width="200">게시판명</th>
+                    <th width="150">진열순서</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if boards and boards.length > 0 %}
+            {% for item in boards %}
+                <tr>
+                    <td align="center">
+                        <input type="hidden" name="id" value="{{ item.id }}">
+                        {{ item.id }}
+                    </td>
+                    <td align="center">{{ item.title }}</td>
+                    <td>
+                        <input type="number" name="listOrder_{{ item.id }}" value="{{ item.listOrder }}">
+                    </td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            {% else %}
+                <tr class="no-list">
+                    <td colspan="4">조회된 게시판이 없습니다.</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+        {% if boards and boards.length > 0 %}
+        <div class="table-action">
+            <span class="btn4 black form_update" data-id="frmList">
+                <i class="xi-check"></i>설정 저장하기
+            </span>
+        </div>
+        {% endif %}
+    </form>
+   
+
+</div>
+<!--// content_box -->
+{% endblock %}

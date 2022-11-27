@@ -1,0 +1,108 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+<form id='frmSearch' method='get' action='/product/sample' autocomplete='off'>
+    <table class='table-cols style2'>
+        <tr>
+            <th>1차분류</th>
+            <td width='200'>
+                <select name='category'>
+                    <option value=''>- 1차 분류 선택 -</option>
+                {% if categories %}
+                {% for item in categories %}
+                    <option value='{{ item }}'{{ ' selected' if item == search.category }}>{{ item }}</option>
+                {% endfor %}
+                {% endif %}
+                </select>
+            </td>
+            <th>2차분류</th>
+            <td>
+                <select name='subCategory'>
+                {% if subCategories %}
+                    <option value=''>- 2차 분류 선택 -</option>
+                    {% for item in subCategories %}
+                        <option value='{{ item }}'{{ ' selected' if search.subCategory == item }}>{{ item }}</option> 
+                    {% endfor %}
+                {% else %}
+                    <option value=''>- 1차 분류를 먼저 선택 -</option>
+                {% endif %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>샘플번호</th>
+            <td width='200'>
+                <input type='text' name='itemCd' value='{{ search.itemCd }}'>
+            </td>
+            <th>샘플명</th>
+            <td>
+                <input type='text' name='itemNm' value='{{ search.itemNm }}'>
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='검색하기'>
+    </div>
+</form>
+</div>
+
+<div class="content_box">
+<div class='mtitle'>샘플상품 목록</div>
+<table class='table-rows'>
+    <thead>
+        <tr>
+            <th width='150'>1차분류</th>
+            <th width='150'>2차분류</th>
+            <th width='150'>샘플번호</th>
+            <th width='350'>샘플명</th>
+            <th>샘플이미지</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if list.length > 0 %}
+    {% for item in list %}
+        <tr>
+            <td align='center'>{{ item.category }}</td>
+            <td align='center'>{{ item.subCategory }}</td>
+            <td align='center'>{{ item.itemCd }}</td>
+            <td>
+                <span class='item_nm'>{{ item.itemNm }}</span>
+                {% if item.itemCd %}
+                <div class='download_btns'>
+                    <a href='{{ item.downloadUrl }}' class='sbtn' target='ifrmProcess'><i class='xi-file-download-o'></i>이미지파일</a>
+                    <a href='{{ item.downloadAiUrl }}&type=ai' class='sbtn black' target='ifrmProcess'><i class='xi-file-download-o'></i>ai파일</a>
+                </div>
+                {% endif %}
+            </td>
+            <td>
+               <img src='{{ item.image }}' style='max-height: 80px;'>
+            </td>
+        </tr>
+    {% endfor %}
+    {% else %} 
+        <tr class='no-list'>
+            <td colspan='5'>검색된 샘플상품이 없습니다.</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
+
+
+<div class='mtitle'>샘플상품 조회 팝업 URL</div>
+<table class='table-cols'>
+{% if categories %}
+{% for item in categories %}
+    <tr>
+        <th>{{ item }}</th>
+        <td>
+            http://{{ host }}/popup/sample/{{ item }} &nbsp;
+            <span class='sbtn' onclick="codefty.common.copyToClipBoard('http://{{ host }}/popup/sample/{{ item }}');"><i class='xi-paperclip'></i> URL 복사</span>
+            <span class='sbtn' onclick="codefty.popup.setCallback(callbackSamplePopupUrl).open('/product/sample/{{ item }}', '팝업 URL 설정하기({{ item }})', 500, 500);">팝업 URL 설정하기</span>
+            <a href='/popup/sample/{{ item }}' target='_blank' class='sbtn black'>미리보기</a>
+        </td>
+    </tr>
+{% endfor %}
+{% endif %}
+</table>
+</div>
+{% endblock %}

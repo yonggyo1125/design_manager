@@ -1,0 +1,69 @@
+{% if  orderNo %}
+<input type="hidden" name="orderNo" value="{{ orderNo }}">
+{% endif %}
+<table class="table-cols">
+    <tr>
+        <th>상품명</th>
+        <td>
+            <input type="text" name="goodName" value="{{ goodName }}">
+        </td>
+    </tr>
+    <tr>
+        <th>결제금액</th>
+        <td>
+            <input type='number' name="crPrice" value="{{ crPrice }}" class="wauto right w150">원
+            / 
+            <input type='checkbox' id="simpleBusinessType" value="1" id="simpleBusinessType">
+            <label for="simpleBusinessType">간이사업자</label>
+        </td>
+    </tr>
+    <tr>
+        <th>공급가</th>
+        <td>
+            <input type='number' name="supPrice" value="{{ subPrice }}" class="wauto right w150" readonly>원
+        </td>
+    </tr>
+    <tr>
+        <th>부가세</th>
+        <td>
+            <input type="number" name="tax" value="{{ tax }}" class="wauto right w150" readonly>원
+        </td>
+    </tr>
+    <tr>
+        <th>봉사료</th>
+        <td>
+            <input type='number' name="srcvPrice" value="{{ srcvPrice }}" class="wauto right w150">원
+        </td>
+    </tr>
+    <tr>
+        <th>구매자명</th>
+        <td>
+            <input type="text" name="buyerName" value="{{ buyerName }}">
+        </td>
+    </tr>
+    <tr>
+        <th>구매자 이메일</th>
+        <td>
+            <input type="text" name="buyerEmail" value="{{ buyerEmail }}">
+        </td>
+    </tr>
+    <tr>
+        <th>현금영수증<br>식별번호</th>
+        <td>
+            <div class='notice_msg'>
+                <i class="xi-info-o"></i>
+                주민번호, 휴대폰번호, 사업자번호 중 하나
+            </div>
+            <input type="text" name="regNum" value="{{ regNum }}">
+        </td>
+    </tr>
+    <tr>
+        <th>발행용도</th>
+        <td>
+            <input type="radio" name="useOpt" value="0" id="useOpt_0"{{ ' checked' if not useOpt }}>
+            <label for="useOpt_0">소득공제</label>
+            <input type="radio" name="useOpt" value="1" id="useOpt_1"{{ ' checked' if useOpt }}>
+            <label for="useOpt_1">지출증빙</label>
+        </td>
+    </tr>
+</table>

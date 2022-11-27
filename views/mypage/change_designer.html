@@ -1,0 +1,30 @@
+<div class="popup_change_designer">
+    <div class="box1">
+        <div class="stit">주의사항</div>
+        디자인작업은 입금 순차적으로 진행(평일 영업시간)됩니다. 디자인 수정은 2회까지 무료로 진행되며, 2회 이상 요청시 추가금이 발생합니다.
+    </div>
+
+
+    {% if items and items.length > 0 %}
+    <form id="frmChange" method="post" action="/mypage/change_designer/{{ orderNo }}" target="ifrmProcess" autocomplete="off">
+        <div class='item_tit'>변경할 품목선택</div>
+        <ul class="items">
+        {% for item in items %}
+        {% if not item.designConfirmed and item.designerInfo and not item.isDesignerChanging and item.designerChangePossible %}
+        <li>
+            <input type="checkbox" name="idOrderItem" value="{{ item.id }}" id="idOrderItem_{{ item.id }}">
+            <label for="idOrderItem_{{ item.id }}">
+                품주번호 {{ item.id }} / {{ item.productItemInfo['ProductCategory.cateNm'] }}
+                {{ item.itemNm }}{{ " / " + item.itemNmSub if item.itemNmSub }}
+            </label>
+        </li>
+        {% endif %}
+        {% endfor %}
+        </ul>
+        <div class='btn_wrap'>
+            <button type="submit" id="apply_change_designer" onclick="return confirm('정말 변경하시겠습니까?');">변경하기</button>
+        </div>
+    </form>
+    {% endif %}
+</div>
+<!--// popup_change_designer -->

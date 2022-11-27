@@ -1,0 +1,128 @@
+/** review 스킨 - 쓰기, 수정 */
+.board-review .notice { margin-left: 10px; }
+.board-review .attach_files_wrap { margin-top: 10px; }
+.board-review .attach_files { display: flex; flex-wrap: wrap; }
+.board-review .attach_files li { display: flex;  border: 1px solid #222; color: #222; font-size: 12px; margin-top: 5px; padding: 5px 10px; border-radius: 3px; margin-right: 3px; }
+.board-review .attach_files li a:hover { text-decoration: underline; }
+.board-review .attach_files li i { vertical-align: middle; margin-left: 5px; cursor: pointer; font-size: 14px; }
+.board-review #frmRegist #content { width: 100%; border: 1px solid #d5d5d5; height: 300px; padding: 10px; resize: none; }
+.board-review .form_box dl { align-items: stretch;  border-bottom: 1px solid #d5d5d5; }
+.board-review .form_box dl:first-of-type { border-top: 3px solid #222; }
+.board-review .form_box dl dt { background: #f2f3f4; padding: 10px 15px; font-weight: bold; }
+.board-review .form_box dl dd { padding: 10px 15px; }
+.board-review .form_box input[type='text'] { max-width: 350px; }
+.board-review .w120 { width: 120px !important; }
+.board-review .wFull { width: 100% !important; max-width: 100% !important; }
+.board-review .sbtn { border: 1px solid #727272; display: inline-block; border-radius: 5px; min-width: 93px; text-align: center; padding: 5px 15px 6px; cursor: pointer; font-size: 12px; background: #fff; }
+.board-review .sbtn i { vertical-align: middle; font-size: 13px; margin-right: 7px; }
+.board-review .sbtn:hover { background:#000; color: #fff; transition: all 0.5s;  }
+.board-review .sbtn:hover * { color: #fff; transition: all 0.5s; }
+.board-review .sbtn.red { background:#ff221f; color: #fff; border-color: #ff221f; font-weight: bold; }
+.board-review .sbtn.red * { color: #fff; }
+.board-review .sbtn.black { background: #000; color: #fff; }
+.board-review .sbtn.black *  { color: #fff; }
+
+.board-review .btns { text-align: center; margin-top: 50px; }
+.board-review .btns .btn { display: inline-block; height: 45px; line-height: 45px; border: 1px solid #000; color: #fff; background-color: #000; min-width: 170px; padding: 0 15px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: all 0.7s;  }
+.board-review .btns .btn.white { background: #fff; color: #000; }
+
+/** review 스킨 - 글 보기 */
+.board-review .view_box .subject { border: 1px solid #222; padding: 10px; font-size: 15px; font-weight: bold; border-radius: 3px; margin-bottom: 10px; }
+.board-review .view_box .post_info { display: flex; justify-content: space-between; border: 1px solid #222; padding: 10px; }
+.board-review .view_box .post_info .ip { margin-left: 10px; }
+.board-review .view_box .post_info .poster { margin-right: 10px; }
+.board-review .view_box .download_files li { background: #f8f8f8; padding: 10px; border-bottom: 1px solid #d5d5d5; }
+
+.board-review .view_box .content { padding: 10px;  min-height: 500px; }
+.board-review .view_box .controls { text-align: right; }
+.board-review .controls a { display: inline-block; padding: 8px 15px; border: 1px solid #222; transition: all 1s; }
+.board-review .controls a:hover { background: #222; color: #fff; font-size: 13px; }
+.board-review .controls a i { vertical-align: middle; position: relative; top: -1px; margin-right: 3px; }
+.board-review .near_post { margin-bottom: 15px; }
+.board-review .near_post li { border-bottom: 1px solid #d5d5d5;  }
+.board-review .near_post li:first-of-type { border-top: 1px solid #d5d5d5; }
+
+.board-review .near_post li a { display: block; padding: 15px 10px; }
+.board-review .near_post li .direction i { vertical-align: middle; margin-right: 5px; font-size: 15px; }
+.board-review .near_post li .direction { padding-right: 10px;  color: #666; }
+/** review 스킨 - 비회원 비밀번호 */
+.board-review #guest_password .password_box { margin: 0 auto; margin-top: 15%; width: 320px; text-align: center; }
+.board-review #guest_password .password_box .tit { font-size: 16px; line-height: 1.5; margin-bottom: 15px; }
+.board-review #guest_password input[type='password'] { height: 44px; width: 100%; max-width: 100%; }
+.board-review #guest_password button[type='submit'] { margin-top: 15px; border-radius: 5px; font-size: 15px; padding: 0 42px; height: 44px; background: #36466d; color: #fff; font-weight: bold; cursor: pointer; }
+
+/** review 스킨 - 게시글 목록 */
+.board-review .categories { margin-bottom: 25px; display: flex; height: 45px; background: #fff; box-shadow: 1px 1px 5px #cdced5; }
+.board-review .categories .tab { line-height: 45px; padding: 0 25px; font-size: 14px;  }
+.board-review .categories .tab.on { background: #596b99; color: #fff; font-weight: bold;  }
+
+.board-review .list_box { min-height: 700px; }
+.board-review .list_box .data_list li { border-bottom: 1px solid #d5d5d5; display: flex; justify-content: space-between; height: 50px; padding: 0 10px; }
+.board-review .list_box .data_list li:first-of-type { border-top: 1px solid #d5d5d5; line-height: 49px; }
+.board-review .list_box .data_list li .post_info { width: 350px; text-align: right; } 
+.board-review .list_box .data_list li .subject { width: calc(100% - 350px); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 49px; }
+.board-review .list_box .data_list li .post_info span { font-size: 12px; margin-right: 5px; line-height: 49px; }
+.board-review .list_box .data_list li:hover { background: #f8f8f8; }
+
+.board-review .list_box .list_top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+
+.board-review .list_box .total .no { color: #3c4e7a; font-weight: bold; }
+.board-review .no-list { border: 1px solid #d5d5d5; border-left: 0; border-right: 0; }
+
+.board-review .search_box { display: flex; padding: 10px; border-bottom: 1px solid #d5d5d5; background: #f8f8f8; }
+.board-review .search_box select { margin-right: 3px; }
+.board-review .search_box input[type='text'] { margin-right: 3px; width: 200px; }
+.board-review .search_box button { background: #36466d; border: 0; color:#fff; font-weight: bold; padding: 0 20px; font-size: 12px;  cursor: pointer; }
+
+.board-review .depth1 { padding-left: 15px; }
+.board-review .depth2 { padding-left: 30px; }
+.board-review .depth3 { padding-left: 45px; }
+.board-review .depth3 { padding-left: 60px; }
+.board-review .depth4 { padding-left: 75px; }
+.board-review .depth5 { padding-left: 90px; }
+.board-review .depth6 { padding-left: 105px; }
+.board-review .depth7 { padding-left: 120px; }
+.board-review .depth8 { padding-left: 135px; }
+.board-review .depth9 { padding-left: 150px; }
+.board-review .depth10 { padding-left: 165px; }
+.board-review .depth11 { padding-left: 180px; }
+
+.board-review .viewing .icon_view { font-weight: bold; color: #ff0000;  }
+.board-review .data_list .icon_list { vertical-align: middle; }
+.board-review .data_list .icon_notice { height: 20px; }
+.board-review .data_list .list_item.notice a { font-weight: bold; }
+.board-review .data_list li i.icon { vertical-align: middle; font-size: 12px; }
+.board-review .data_list li .icon.new { color: #ff0000; }
+
+/** review 스킨 - 댓글 */
+.board-review #frmComment .comment_box { margin-bottom: 10px; }
+.board-review #frmComment .comment { display: flex; justify-content: space-between; }
+.board-review #frmComment .comment button { width: 120px; background: #fff; border: 1px solid #000; cursor: pointer; font-size: 14px; transition: all 1s; }
+.board-review #frmComment .comment button:hover { background: #000; color: #fff; transition: all 1s; }
+.board-review #frmComment .comment .comment_form { width: calc(100% - 125px); }
+.board-review #frmComment .comment textarea { height: 100px; width: 100%; padding: 10px; resize: none; border: 1px solid #000;  }
+.board-review #frmComment .comment_info { margin-bottom: 5px; display: flex; justify-content: space-between; align-items: end;  }
+.board-review #frmComment .comment_info input[type='text'],
+.board-review #frmComment .comment_info input[type='password'] { width: 120px; }
+.board-review #frmComment .comment_box .attach_box {  border-bottom: 1px solid #d5d5d5; padding: 10px 0;  }
+
+.board-review #frmComment .editor_size i { font-size: 30px; cursor: pointer; }
+.board-review #comments_list li { display: flex; }
+.board-review #comments_list li i.reply { display: inline-block;  font-size: 15px; }
+.board-review #comments_list li > .inner { border: 1px solid #d5d5d5; padding: 10px; border-radius: 3px; margin-bottom: 10px; width: calc(100% - 20px); }
+.board-review #comments_list li .comment_content { font-size: 12px; }
+.board-review #comments_list li .comment_content img { max-width: 500px; cursor: pointer; }
+.board-review #comments_list .comment_info { display: flex; justify-content: space-between; align-items: end; }
+.board-review #comments_list .comment_info { padding-top: 10px; border-top: 1px solid #d5d5d5; }
+
+.board-review #comments_list .download_files .download { border-top: 1px solid #d5d5d5;  padding: 10px; background: #f8f8f8; }
+.board-review #comments_list .download_files .download i { margin-right: 3px; vertical-align: middle; }
+.board-review #comments_list .download_files .download a:hover { text-decoration: underline; }
+.board-review #comments_list .cbtn { border: 1px solid #000; padding: 5px 10px; font-size: 12px; cursor: pointer; display: inline-block; }
+.board-review #comments_list .cbtn i { vertical-align: middle; margin-right: 3px; }
+.board-review #comments_list .cbtn.black { background: #000; color: #fff; }
+.board-review #comments_list .cbtn.black i { color: #fff; position: relative; top: -1px; }
+
+.board-review .view_productInfo { border: 1px solid #222; margin-top: 10px; padding: 10px;  }
+.board-review .view_productInfo dl { margin-top: 10px; line-height: 1.5; }
+.board-review .view_productInfo dl:first-of-type { margin-top: 0; }

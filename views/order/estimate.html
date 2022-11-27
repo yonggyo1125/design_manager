@@ -1,0 +1,183 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<table cellpadding="0" cellspacing="0" width="820">
+    <tr>
+        <td colspan='3' align='center' style='height: 90px'>
+            <span style="text-decoration: underline; font-size: 25px; font-weight: bold; ">견적서</span>
+        </td>
+    </tr>
+    <tr valign='top'>
+        <td width='400'>
+            <table cellpadding="0" cellspacing="0" width="100%" border="0">
+                <tr>
+                    <td style="height: 28px; padding: 0 10px; font-size: 14px; font-weight: 600;">{{ getLocalDate(nowDate, '%Y년 %m월 %d일') }}</td>
+                </tr>
+                <tr rowspan="2">
+                    <td style="height: 56px; padding: 0 10px; font-weight: 600; font-size: 17px;">{{ orderNm }}</td>
+                </tr>
+                <tr>
+                    <td style="height: 28px; padding: 0 10px;"></td>
+                </tr>
+                <tr>
+                    <td style="height: 28px; padding: 0 10px; font-size: 13px;">아래와 같이 견적합니다.</td>
+                </tr>
+            </table>
+        </td>
+        <td width='20'></td>
+        <td width="400" style="position: relative;">
+            {% if siteConfig.companyStamp %}
+            <img src="{{ siteConfig.companyStamp.uploadUrl }}" style="position: absolute; right: -20px; top: -2px;">
+            {% endif %}
+            <table cellpadding="0" cellspacing="0" width="100%" border="1">
+                <tr>
+                    <td rowspan="5" style="width:30px;" align="center">공<br>급<br>자</td>
+                    <td style="height: 28px; padding: 0 10px;" nowrap="" width="120">사업자등록번호</td>
+                    <td style="height: 28px; padding: 0 10px;" nowrap="" colspan="3">{{ siteConfig.businessNo }}</td>
+                </tr>
+                <tr>
+                    <td style="height: 28px; padding: 0 10px;">법인명</td>
+                    <td style="height: 28px; padding: 0 10px;">{{ siteConfig.companyNm }}</td>
+                    <td style="height: 28px; padding: 0 10px;">대표자명</td>
+                    <td style="height: 28px; padding: 0 10px;">{{ siteConfig.companyOwner }}</td>
+                </tr>
+                <tr>
+                    <td style="height: 28px; padding: 0 10px;">사업장 주소</td>
+                    <td colspan="3" style="height: 28px; padding: 0 10px;">{{ siteConfig.companyAddress }}</td>
+                </tr>
+                <tr>
+                    <td style="height: 28px; padding: 0 10px;">업&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;태</td>
+                    <td style="height: 28px; padding: 0 10px;">{{ siteConfig.businessCategory }}</td>
+                    <td style="height: 28px; padding: 0 10px;">종목</td>
+                    <td style="height: 28px; padding: 0 10px;">{{ siteConfig.businessSubCategory }}</td>
+                </tr>
+                <tr>
+                    <td style="height: 28px; padding: 0 10px;">전화번호</td>
+                    <td style="height: 28px; padding: 0 10px;" colspan="3">{{ siteConfig.companyPhone }}{{ '/Fax' +  siteConfig.companyFax if siteConfig.companyFax }}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr><td colspan="3" style="height: 40px;"></td></tr>
+    <tr>
+        <td style="border-top: 1px solid #000000; height: 50px; padding-left: 10px;">
+            <div style="padding-left: 15px;">합 계 금 액</div>
+            <div>(공급가액 + 세액)</div>
+        </td>
+        <td colspan="2" align="right" style="border-top: 1px solid #000000; height: 50px; padding-right: 10px; font-size: 22px; font-weight: 600;">
+            {{ totalPayPrice.toLocaleString() }} 원정
+        </td>
+   </tr>
+</table>
+<table cellpadding="0" cellspacing="0" width="820" border="1">
+    <tr>
+        <td align="center" style="height: 28px;" width="250">품명</td>
+        <td align="center" style="height: 28px;" width="100">규격</td>
+        <td align="center" style="height: 28px;" width="70">수량</td>
+        <td align="center" style="height: 28px;" width="100">단가</td>
+        <td align="center" style="height: 28px;" width="100">공급가액</td>
+        <td align="center" style="height: 28px;" width="95">부가세</td>
+        <td align="center" style="height: 28px;" width="95">비고</td>
+   </tr>
+   {% if items and items.length > 0 %}
+   {% for item in items %}
+   <tr>
+        <td align="center" style="height: 28px;" width="250">
+            {{ item.itemNm }}{{ "(" + item.itemNmSub + ")" if item.itemNmSub }}
+            {% if item.optionInfo and item.optionInfo.length > 0 %}
+            {% for opt in item.optionInfo %}
+            / {{ opt.optionNm }}
+            {% endfor %}
+            {% endif %}
+            {% if item.textOptionTexts and item.textOptionTexts.length > 0 %}
+            {% for opt in item.textOptionTexts %}
+            / {{ opt.optionNm }}추가
+            {% endfor %}
+            {% endif %}}
+        </td>
+        <td align="center" style="height: 28px;" width="100">
+            {% if item.itemSizeWidth > 0 and item.itemSizeHeight > 0 %}
+                {{ item.itemSizeWidth }}Cm X {{ item.itemSizeHeight }}Cm 
+            {% endif %}
+        </td>
+        <td align="center" style="height: 28px;" width="70">{{ item.itemCnt.toLocaleString() }}</td>
+        <td align="center" style="height: 28px;" width="100">
+            {{ (floor((item.itemTotalPrice - item.subOptionPrice - item.itemDiscount) / item.itemCnt)).toLocaleString() }}
+        </td>
+        <td align="center" style="height: 28px;" width="100">
+            {{ (floor(((item.itemTotalPrice - item.subOptionPrice -  item.itemDiscount) - (item.itemTotalPriceVat - item.subOptionPriceVat - item.itemDiscountVat)) / item.itemCnt)).toLocaleString() }}
+        </td>
+        <td align="center" style="height: 28px;" width="95">
+            {{ (floor(item.itemTotalPrice / item.itemCnt) - floor((item.itemTotalPrice - (item.itemTotalPriceVat - item.subOptionPriceVat - item.itemDiscountVat)) / item.itemCnt)).toLocaleString() }}
+        </td>
+        <td align="center" style="height: 28px;" width="95"></td>
+   </tr>
+    {% if item.subOptionInfo and item.subOptionInfo.length > 0 %}
+    {% for opt in item.subOptionInfo %}
+    <tr>
+        <td align="center" style="height: 28px;" width="250">{{ opt.optionNm }}</td>
+        <td align="center" style="height: 28px;" width="100"></td>
+        <td align="center" style="height: 28px;" width="70">{{ opt.optionCnt }}</td>
+        <td align="center" style="height: 28px;" width="100">{{ opt.addPrice.toLocaleString() }}</td>
+        <td align="center" style="height: 28px;" width="100">{{ opt.providePrice.toLocaleString() }}</td>
+        <td align="center" style="height: 28px;" width="95">{{ opt.vat.toLocaleString() }}</td>
+        <td align="center" style="height: 28px;" width="95"></td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    {% endfor %}
+   
+   {% if addPayments and addPayments.length > 0 %}
+   {% for item in addPayments %}
+   <tr>
+    <td align="center" style="height: 28px;" width="250">{{ item.itemNm }}</td>
+    <td align="center" style="height: 28px;" width="100"></td>
+    <td align="center" style="height: 28px;" width="70">1</td>
+    <td align="center" style="height: 28px;" width="100">{{ item.itemPrice.toLocaleString() }}</td>
+    <td align="center" style="height: 28px;" width="100">{{ floor(item.itemPrice / 1.1).toLocaleString() }}</td>
+    <td align="center" style="height: 28px;" width="95">{{ (item.itemPrice - floor(item.itemPrice / 1.1)).toLocaleString() }}</td>
+    <td align="center" style="height: 28px;" width="95"></td>
+    </tr>
+   {% endfor %}
+   {% endif %}
+   {% if totalDeliveryCharge and totalDeliveryCharge > 0 %}
+   <tr>
+        <td align="center" style="height: 28px;" width="250">배송비</td>
+        <td align="center" style="height: 28px;" width="100"></td>
+        <td align="center" style="height: 28px;" width="70">1</td>
+        <td align="center" style="height: 28px;" width="100">{{ totalDeliveryCharge.toLocaleString() }}</td>
+        <td align="center" style="height: 28px;" width="100">{{ (floor(totalDeliveryCharge / 1.1)).toLocaleString() }}</td>
+        <td align="center" style="height: 28px;" width="95">{{ (totalDeliveryCharge - floor(totalDeliveryCharge / 1.1)).toLocaleString() }}</td>
+        <td align="center" style="height: 28px;" width="95"></td>
+   </tr>
+   {% endif %}
+   {% endif %}
+   {% if moreRows.length > 0 %}
+   {% for cnt in moreRows %}
+   <tr>
+        <td align="center" style="height: 28px;" width="250"></td>
+        <td align="center" style="height: 28px;" width="100"></td>
+        <td align="center" style="height: 28px;" width="70"></td>
+        <td align="center" style="height: 28px;" width="100"></td>
+        <td align="center" style="height: 28px;" width="100"></td>
+        <td align="center" style="height: 28px;" width="95"></td>
+        <td align="center" style="height: 28px;" width="95"></td>
+    </tr>
+   {% endfor %}
+   {% endif %}
+    <tr>
+        <td colspan="7" style="height: 100px;" align="center">{{ siteConfig.companyBankInfo }}</td>
+    </tr>
+    <tr>
+        <td style="height: 28px;" align="center">합&nbsp;&nbsp;&nbsp;계</td>
+        <td style="height: 28px;" align="center">공급가액</td>
+        <td style="height: 28px; padding-right: 10px;" colspan="2" align="right">{{ (totalPayPrice - totalVat).toLocaleString() }}</td>
+        <td style="height: 28px;" align="center">VAT</td>
+        <td style="height: 28px; padding-right: 10px;" colspan="2" align="right">{{ totalVat.toLocaleString() }}</td>
+    </tr>
+</table>
+<script>
+window.addEventListener("load", function() {
+    window.print();
+});
+</script>
+{% endblock %}

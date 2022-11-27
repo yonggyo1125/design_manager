@@ -1,0 +1,59 @@
+{% if orderItem %}
+<input type="hidden" name="idOrderItem" value="{{ orderItem.id }}">
+<input type="hidden" name="itemCode" value="{{ orderItem.itemCode }}">
+<div class="productInfo">
+    <dl>
+        <dt>분류/품목명</dt>
+        <dd>
+            {{ orderItem.productItemInfo['ProductCategory.cateNm'] }}
+            <br>
+            {{ orderItem.itemNm }}{{ " / " + orderItem.itemNmSub if orderItem.itemNmSub }} - {{ orderItem.itemCnt.toLocaleString() }}개
+        </dd>
+    </dl>
+    <dl>
+        <dt>구매옵션</dt>
+        <dd>
+            {% if orderItem.itemSizeWidth or orderItem.itemSizeHeight %}
+            <div>
+                {{ orderItem.itemSizeWidth.toLocaleString() + "Cm" if orderItem.itemSizeWidth }}{{ ' X ' if orderItem.itemSizeWidth and orderItem.itemSizeHeight }}{{ orderItem.itemSizeHeight.toLocaleString() + "Cm" if orderItem.itemSizeHeight }}
+            </div>
+            {% endif %}
+            {% if orderItem.options and orderItem.options.length > 0 %}
+                {% for opt in orderItem.options %}
+                <div>{{ opt.optionNm }}</div>
+                {% endfor %}
+            {% endif %}
+            {% if orderItem.itemFont %}
+                <div>폰트 : {{ orderItem.itemFont }}</div>
+            {% endif %}
+            {% if orderItem.itemText  %}
+                <div>문구 : {{ orderItem.itemText }}</div>
+            {% endif %}
+            {% if orderItem.itemMemo %}
+                <div>요청사항 : {{ orderItem.itemMemo }}</div>
+            {% endif %}
+            {% if orderItem.subOptions and orderItem.subOptions.length > 0 %}
+                {% for opt in orderItem.subOptions %}
+                <div>
+                    <span class="badge">추가옵션</span>
+                    {{ opt.optionNm }} - 1개
+                </div>
+                {% endfor %}
+            {% endif %}
+        </dd>
+    </dl>
+    <dl>
+        <dt>구매만족도</dt>
+        <dd>
+            <select name="reviewPt">
+                <option value="5"{{ ' selected' if not reviewPt or reviewPt == 5 }}>★★★★★</option>
+                <option value="4"{{ ' selected' if reviewPt == 4 }}>★★★★</option>
+                <option value="3"{{ ' selected' if reviewPt == 3 }}>★★★</option>
+                <option value="2"{{ ' selected' if reviewPt == 2 }}>★★</option>
+                <option value="1"{{ ' selected' if reviewPt == 1 }}>★</option>
+            </select>
+        </dd>
+    </dl>
+</div>
+<!--// productInfo -->
+{% endif %}        

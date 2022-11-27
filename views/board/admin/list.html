@@ -1,0 +1,39 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+    <div class="mtitle">게시글 목록</div>
+    {% if latests and latests.length > 0 %}
+    <section class="latest_posts">
+    {% for board in latests %}
+        <div class="posts">
+            <div class="tit">
+                <a href='/board/list/{{ board.id }}'>{{ board.title }}</a>
+                <a href="/board/admin/list/{{ board.id }}" class="manage_btn">
+                    <i class="xi-cog"></i>게시글 관리
+                </a>
+            </div>
+            {% if board.list and board.list.length > 0 %}
+            <ul>
+            {% for item in board.list %}
+                <li>
+                    <a href="/board/view/{{ item.id }}">
+                        {% if item.isNotice %}
+                        <img src="/images/icon/notice.png" class='icon_notice'>
+                        {% endif %}
+                        {% if item.icons.new %}
+                        <i class="xi-new icon new"></i>
+                        {% endif %}
+                        {{ item.subject }}
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <!--// posts -->
+    {% endfor %}
+    </section>
+    {% endif %}
+</div>
+<!--// content_box -->
+{% endblock %}

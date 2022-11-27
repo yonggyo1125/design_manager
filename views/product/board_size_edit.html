@@ -1,0 +1,19 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="mtitle top">
+    보드형 사이즈 수정
+    <div class="tit_btns">
+        <a href="/product/board_size" class="btn">
+            <i class="xi-check-min"></i>
+            보드형 사이즈 관리 
+        </a>
+    </div>
+</div>
+<form id='frmRegist' method='post' action="/product/board_size" target="ifrmProcess" autocomplete="off">
+{% include './_form_board_size.html' %}
+<div class="btns">
+    <input type="submit" value="수정하기" class="btn">
+    <button type="button" class="btn cancel_back">취소하기</button>
+</div>
+</form>
+{% endblock %}

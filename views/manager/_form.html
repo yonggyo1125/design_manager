@@ -1,0 +1,77 @@
+<form name="frmJoin" id="frmJoin" class='form_box' method="post" action="/manager/{{ mode }}" target="ifrmProcess" autocomplete="off">
+    <dl>
+        <dt>가입구분</dt>
+        <dd>
+            <input type="radio" name="managerType" value="admin" id="managerType_admin"{{ ' checked' if not isLogin or manager.managerType == 'admin' }}>
+            <label for='managerType_admin'>내부직원</label>
+            <input type="radio" name="managerType" value="associate" id="managerType_associate"{{ ' checked' if isLogin and manager.managerType == 'associate' }}>
+            <label for="managerType_associate">제휴업체</label>
+        </dd>
+    </dl>
+    <dl>
+        <dt>아이디</dt>
+        <dd>
+            {% if isLogin or managerInfo %}
+            {{ managerInfo.managerId if managerInfo else manager.managerId }}
+            {% else %} 
+            <input type="text" name="managerId">
+            {% endif %}
+        </dd>
+    </dl>
+    <dl>
+        <dt>관리자명</dt>
+        <dd>
+            <input type="text" name="managerNm" value="{{ managerInfo.managerNm if managerInfo else manager.managerNm }}">
+        </dd>
+    </dl>
+    <dl>
+        <dt>이메일</dt>
+        <dd>
+            <input type="email" name="email" value="{{ managerInfo.email if managerInfo else manager.email }}">
+        </dd>
+    </dl>
+    <dl>
+        <dt>휴대전화번호</dt>
+        <dd>
+            <input type="text" name="mobile" value="{{ managerInfo.mobile if managerInfo else manager.mobile }}">
+        </dd>
+    </dl>
+    {% if isLogin %}
+    <button type="button" id='changePw' class='sbtn mt10'>비밀번호 변경하기</button>
+    {% endif %}
+    <dl class="password_box{{ ' dn' if isLogin or managerInfo }}">
+        <dt>{{ '변경 ' if isLogin }}비밀번호</dt>
+        <dd>
+            <input type="password" name="managerPw">
+        </dd>
+    </dl>
+    <dl class="password_box{{ ' dn' if isLogin or managerInfo }}">
+        <dt>비밀번호 확인</dt>
+        <dd>
+            <input type="password" name="managerPwRe">
+        </dd>
+    </dl>
+    <div class='terms'>
+        <div class='stitle'>약관동의</div>
+        <div class='terms_tit'>
+            <input type="checkbox" id='check_all'{{ ' checked' if (isLogin and manager.useTerms == 'y' and manager.privateTerms == 'y') or (managerInfo and managerInfo.useTerms == 'y' and managerInfo.privateTerms == 'y') }}>
+            <label for='check_all'>모든 약관을 확인하고 전체 동의합니다.</label>
+        </div>
+        <div class='terms_tit'>
+            <input type="checkbox" class='check' name="useTerms" value='y' id='useTerms'{{ ' checked' if (isLogin and manager.useTerms == 'y') or (managerInfo and managerInfo.useTerms == 'y') }}>
+            <label for='useTerms'>이용약관(필수)</label>
+        </div>
+        <textarea class='terms_contents' readonly>{% include "./_useTerms.html" %}</textarea>
+
+        <div class='terms_tit mt10'>
+            <input type="checkbox" name="privateTerms" class='check' value='y' id='privateTerms'{{ ' checked' if (isLogin and manager.privateTerms == 'y') or (managerInfo and managerInfo.privateTerms == 'y') }}>
+            <label for='privateTerms'>개인정보처리방침(필수)</label>
+        </div>
+        <textarea class='terms_contents' readonly>{% include "./_privateTerms.html" %}</textarea>
+    </div>
+    <!--// terms -->
+    <div class='btns'>
+        <input type="submit" value="{{ '수정하기' if isLogin else '가입하기' }}" class='btn'>
+        <button type="button" class='btn white cancel_back'>취소하기</button>
+    </div>
+</form>

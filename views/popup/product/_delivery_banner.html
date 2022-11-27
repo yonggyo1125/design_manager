@@ -1,0 +1,13 @@
+{% if banners.length > 0 %}
+    {% for item in banners %} 
+    {% if item.file and item.file.uploadUrl %}
+        {% if item.bannerLink %}
+        <a href='{{ item.bannerLink }}' target="{{ item.bannerTarget if item.bannerTarget else 'self' }}">
+        {% endif %}
+            <img src='{{ item.file.uploadUrl }}' alt='{{ bannerAlt }}'>
+        {% if item.bannerLink %}
+        </a>
+        {% endif %}
+    {% endif %}
+    {% endfor %}
+{% endif %}

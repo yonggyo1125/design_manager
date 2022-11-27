@@ -1,0 +1,96 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<form method='post' action='/basic/payment' target='ifrmProcess' autocomplete='off'>
+    <div class="stitle">PG설정</div>
+    <table class="table-cols">
+        <tr>
+            <th>사용구분</th>
+            <td>
+                <input type="radio" name="type" value="real" id="type_real"{{ ' checked' if type == 'real' }}>
+                <label for="type_real">실사용</label>
+                <input type="radio" name="type" value="test" id="type_test"{{ ' checked' if not type or type == 'test' }}>
+                <label for="type_test">테스트</label>
+            </td>
+        </tr>
+        <tr>
+            <th>상점아이디(MID)</th>
+            <td>
+                <input type="text" name="mid" value="{{ mid }}">
+            </td>
+        </tr>
+        <tr>
+            <th>Signkey</th>
+            <td>
+                <input type="text" name="signkey" value="{{ signkey }}">
+            </td>
+        </tr>
+        <tr>
+            <th>INIAPI key</th>
+            <td>
+                <input type="text" name="iniApiKey" value="{{ iniApiKey }}">
+            </td>
+        </tr>
+        <tr>
+            <th>INIAPI iv</th>
+            <td>
+                <input type="text" name="iniApiIv" value="{{ iniApiIv }}">
+            </td>
+        </tr>
+        <tr>
+            <th>결제방법</th>
+            <td>
+                <input type="checkbox" name="payMethod" value="Card" id="payMethod_Card"{{ ' checked' if payMethod and payMethod.indexOf('Card') != -1 }}>
+                <label for="payMethod_Card">신용카드</label>
+
+                <input type="checkbox" name="payMethod" value="Bank" id="payMethod_Bank"{{ ' checked' if payMethod and payMethod.indexOf('Bank') != -1 }}>
+                <label for="payMethod_Bank">실시간계좌이체</label>
+                
+                <input type="checkbox" name="payMethod" value="VBank" id="payMethod_VBank"{{ ' checked' if payMethod and payMethod.indexOf('VBank') != -1 }}>
+                <label for="payMethod_VBank">가상계좌(무통장입금)</label>
+            </td>
+        </tr>
+    </table>
+    <div class="stitle">결제 약관 설정</div>
+    <table class="table-cols">
+        <tr>
+            <th>결제내용 동의</th>
+            <td>
+                <textarea name="termsPayment">{{ termsPayment }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>결제대행 서비스 이용을 위한 개인정보 제3자 제공 위탁동의</th>
+            <td>
+                <textarea name="termsPrivate">{{ termsPrivate }}</textarea>
+            </td>
+        </tr>
+    </table>
+    <div class="stitle">가상계좌 입금통보 URL</div>
+    <table class="table-cols">
+        <tr>
+            <th>입금통보 URL</th>
+            <td>
+                {{ host }}/payment/notice/vbank
+                <span class="sbtn" onclick="codefty.common.copyToClipBoard('{{ host }}/payment/notice/vbank')">
+                    <i class="xi-paperclip"></i>
+                    복사하기
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <th>사용방법 안내</th>
+            <td>
+                <a href='https://manual.inicis.com/iniweb/#vaccturl' target="_blank" class="sbtn">
+                    <i class='xi-share'></i>
+                    입금통보 URL 설정방법
+                </a>
+            </td>
+        </tr>
+    </table>
+    <div class="btns">
+        <input type="submit" class="btn" value="저장하기">
+    </div>
+</form>
+</div>
+{% endblock %}

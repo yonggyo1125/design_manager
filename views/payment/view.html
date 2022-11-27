@@ -1,0 +1,55 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<div class='popup_tit'>
+    <span class='big'>결제내역</span>
+    <div class='xi-close' id='close_popup' onclick="self.close();"></div>
+</div>
+<div class="popup_box">
+<table class="table-cols">
+    <tr>
+        <th>처리번호</th>
+        <td>{{ id }}</td>
+    </tr>
+    <tr>
+        <th>결제품목</th> 
+        <td>{{ title }}</td>
+    </tr>
+    <tr>
+        <th>결제내용</th>
+        <td>{{ nl2br(description) }}</td>
+    </tr>
+    <tr>
+        <th>입금자명</th>
+        <td>{{ name }}</td>
+    </tr>
+    <tr>
+        <th>휴대전화</th>
+        <td>{{ cellPhone }}</td>
+    </tr>
+    <tr>
+        <th>이메일</th>
+        <td>{{ email }}</td>
+    </tr>
+    <tr>
+        <th>처리상태</th>
+        <td>{{ statusStr }}</td>
+    </tr>
+    <tr>
+        <th>결제금액</th>
+        <td>{{ price.toLocaleString() }}원</td>
+    </tr>
+    <tr>
+        <th>결제방법</th>
+        <td>{{ payMethodStr }}</td>
+    </tr>
+    {% if payMethod == 'VBank' %}
+    <tr>
+        <th>입금계좌</th>
+        <td>{{ pgBankName }}  {{ VBankAccount }}</td>
+    </tr>
+    {% endif %}
+</table>
+</div>
+<!-- // popup_box -->
+
+{% endblock %}

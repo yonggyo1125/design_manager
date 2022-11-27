@@ -1,0 +1,33 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<div class='popup_tit'>
+    <span class='big'>{{ title }}</span>
+    사용방법안내
+</div>
+
+<div class="popup_box">
+{% if movies and movies.length > 0 %}
+<section id="video_box">
+{% for item in movies %} 
+<video class="videoplay" controls loop width="100%"{{ ' autoplay' if loop.index == 1 }}>
+    <source src="{{ item.uploadUrl }}" type="video/mp4">
+</video>
+{% endfor %}
+</section>
+{% endif %}
+
+{% if images and images.length > 0 %}
+<section id="image_box">
+{% for item in images %}
+    <img src="{{ item.uploadUrl }}">
+{% endfor %}
+</section>
+{% endif %}
+
+{% if content %}
+<section id="content">{{ content | safe }}</section>
+{% endif %}
+
+</div>
+<!--// popup_box -->
+{% endblock %}

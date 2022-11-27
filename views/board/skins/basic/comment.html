@@ -1,0 +1,63 @@
+<div class="content_box comment_default_list comment_list maginfy_images">
+{% if idComment %}
+<input type="hidden" name="idComment" value="{{ idComment }}">
+{% endif %}
+{% if board.accessible.comment %}
+{% include "./_comment_form.html" %}
+{% endif %}
+
+{% if comments and comments.length > 0 %}
+<ul id="comments_list">
+{% for item in comments %}
+    <li id="comment_{{ item.id }}" class="depth{{ item.depth }}">
+        {% if item.depth %}
+        <i class="xi-subdirectory-arrow reply"></i>
+        <div class="inner" style="width:calc(100% - {{ item.depth * 15 + 20 }}px)">
+        {% else %}
+        <div class="inner">
+        {% endif %}
+            <div class="comment_content">
+            {% if item.useEditor %}
+            {{ item.content | safe }}
+            {% else %}
+            {{ nl2br(item.content) | safe }}
+            {% endif %}
+            </div>
+            <!--// comment_content -->
+            {% if item.attachFiles and item.attachFiles.length > 0 %}
+            <div class="download_files">
+                {% for file in item.attachFiles %} 
+                <div class="download">
+                    <a href="/file/download/{{ file.id }}">
+                        <i class='xi-attachment'></i>{{ file.fileName }}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="comment_info">
+                <div class="left">
+                {% if not item.isMine %}
+                    <a href="/board/comment/reply/{{ item.id }}" class="cbtn reply black"><i class='xi-reply'></i>답변</a>
+                {% endif %}
+                {% if item.isEditable or not item.idManager %}
+                    <a href="/board/comment/{{ item.id }}" class="cbtn edit"><i class='xi-pen-o'></i>수정</a>
+                    <a href="/board/comment/delete/{{ item.id }}" class="cbtn delete" onclick="return confirm('정말 삭제하시겠습니까?');"><i class='xi-trash'></i>삭제</a>
+                {% endif %}
+                
+                </div>
+                <div class="right">
+                    <span class="commenter">{{ item.commenter }}{{ '(' + item.managerId + ')' if item.managerId }}</span> | 
+                    <span class="date">{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i:%s') }}</span>
+                </div>
+            </div>
+            <!--// comment_info -->
+        </div>
+        <!--// inner -->
+    </li>
+{% endfor %}
+</ul>
+<!--// comments_list -->
+{% endif %}
+</div>
+<!--// content_box -->

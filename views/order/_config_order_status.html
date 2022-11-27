@@ -1,0 +1,102 @@
+<div class="top_box">
+<div class='mtitle top'>주문 처리상태 등록</div>
+<form id='frmRegist' method='post' action='/order/config' target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='mode' value='orderStatus'>
+    <table class='table-cols style2'>
+        <tr>
+            <th>처리구분</th>
+            <td width='200'> 
+                    <select name='statusType'>
+                    {% for status in statusTypes %} 
+                        <option value='{{ status.type }}'>{{ status.typeNm }}</option>
+                    {% endfor %}
+                    </select>
+            </td>
+            <th>처리상태코드</th>
+            <td width='200'>
+                <input type='text' name='statusCd' readonly value='{{ statusTypes[0].type }}'>
+            </td>
+            <th>처리상태명</th>
+            <td>
+                <input type='text' name='statusNm' value='{{ statusTypes[0].typeNm }}'>
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='등록하기'>
+    </div>
+</form>
+</div>
+<div class="content_box">
+<div class='mtitle'>처리상태 목록</div>
+<form id='frmList' method='post' action='/order/config' target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='mode' value='orderStatus'>
+    <table class='table-rows'>
+        <thead>
+            <tr>
+                <th width='30'>
+                    <input type='checkbox' class='js-checkall' data-target-name='statusCd' id='js-checkall'>
+                    <label for='js-checkall' class='standalone'></label>
+                </th>
+                <th width='100'>처리상태코드</th>
+                <th width='200'>처리상태명</th>
+                <th width='100'>진열가중치</th>
+                <th width='200'>사용여부</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list.length > 0 %} 
+        {% for item in list %} 
+            <tr>
+                <td align='center'>
+                    <input type='checkbox' name='statusCd' value='{{ item.statusCd }}' id='statusCd_{{ loop.index }}'>
+                    <label for='statusCd_{{ loop.index }}' class='standalone'></label>
+                </td>
+                <td>{{ item.statusCd }}</td>
+                <td>
+                    <input type='text' name='statusNm_{{ item.statusCd }}' value='{{ item.statusNm }}'>
+                </td>
+                <td>
+                    {% if statusOnlyTypes.indexOf(item.statusCd) != -1 %}
+                    <input type='hidden' name='listOrder_{{ item.statusCd }}' value='0'>
+                    {% else %}
+                        <input type='number' name='listOrder_{{ item.statusCd }}' value='{{ item.listOrder }}'>
+                    {% endif %}
+                </td>
+                <td align='center'>
+                    <input type='radio' name='isUse_{{ item.statusCd }}' value='1' id='isUse_1_{{ loop.index }}'{{ ' checked' if item.isUse }}>
+                    <label for='isUse_1_{{ loop.index }}'>사용</label>
+                    <input type='radio' name='isUse_{{ item.statusCd }}' value='0' id='isUse_0_{{ loop.index }}'{{ ' checked' if not item.isUse }}>
+                    <label for='isUse_0_{{ loop.index }}'>미사용</label>
+                </td>
+                <td>
+                    <span class='sbtn setting' data-status-cd="{{ item.statusCd }}">
+                        <i class="xi-cog"></i>
+                        기능설정하기
+                    </span>
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %}
+            <tr class='no-list'>
+                <td colspan='6'>등록된 처리상태가 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <div class='table-action'>
+        <div>
+            <span class='sbtn black form_update' data-id='frmList'>
+                <i class='xi-check-min'></i>
+                선택 처리상태 수정하기
+            </span>
+            <span class='sbtn form_delete' data-id='frmList'>
+                <i class='xi-trash-o'></i>
+                선택 처리상태 삭제하기
+            </span>
+        </div>
+    </div>
+</form>
+</div>
+

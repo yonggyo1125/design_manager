@@ -1,0 +1,74 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<div class="mtitle top flex_between">
+    사이즈별 추가배송비 관리
+    <div class="tit_btns">
+        <a href="/product/size_config/delivery/add" class="sbtn">
+            <i class="xi-plus"></i>
+            추가배송비 등록
+        </a>
+    </div>
+</div>
+
+<form id="frmList" method="post" action="/product/size_config/delivery" target="ifrmProcess" autocomplete="off">
+    <table class="table-rows">
+        <thead>
+            <tr>
+                <th width="30">
+                    <input type="checkbox" class="js-checkall" data-target-name="id" id="js_checkall">
+                    <label for="js_checkall" class="standalone"></label>
+                </th>
+                <th>설정이름</th>
+                <th>기준사이즈</th>
+                <th>추가배송비</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list and list.length > 0 %}
+        {% for item in list %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="id" value="{{ item.id }}" id="id_{{ item.id }}">
+                    <label for="id_{{ item.id }}" class="standalone"></label>
+                </td>
+                <td>
+                    <input type="text" name="configNm_{{ item.id }}" value="{{ item.configNm }}">
+                </td>
+                <td>
+                    <select name="sizeType_{{ item.id }}" class="w170">
+                        <option value="width"{{ ' selected' if item.sizeType == 'width' }}>너비</option>
+                        <option value="height"{{ ' selected' if item.sizeType == 'height' }}>높이</option>
+                        <option value="width_height"{{ ' selected' if item.sizeType == 'width_height' }}>작은사이즈 기준</option>
+                    </select>
+                    <input type="number" name="size_{{ item.id }}" value="{{ item.size }}" class="w200">cm 이상일 때
+                </td>
+                <td>
+                    <input type="number" name="addPrice_{{ item.id }}" value="{{ item.addPrice }}" class="w170">원 추가
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %} 
+            <tr class="no-list">
+                <td colspan="4">등록된 추가배송비가 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    {% if list and list.length > 0 %}
+    <div class="table-action">
+        <div>
+            <span class="sbtn black form_update" data-id="frmList">
+                <i  class="xi-check-min"></i>
+                선택 설정 수정하기
+            </span>
+            <span class="sbtn form_delete" data-id="frmList">
+                <i class="xi-trash-o"></i>
+                선택 설정 삭제하기
+            </span>
+        </div>
+    </div>
+    {% endif %}
+</form>
+</div>
+{% endblock %}

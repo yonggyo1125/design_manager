@@ -1,0 +1,25 @@
+<table class="table-cols">
+    <tr>
+        <th>설정이름</th>
+        <td>
+            <input type="text" name="configNm" value="{{ configNm }}">
+        </td>
+    </tr>
+    <tr>
+        <th>사이즈</th>
+        <td>
+            <select name="sizeType" class="w170">
+                <option value="width"{{ ' selected' if sizeType == 'width' }}>너비</option>
+                <option value="height"{{ ' selected' if sizeType == 'height' }}>높이</option>
+                <option value="width_height"{{ ' selected' if sizeType == 'width_height' }}>작은사이즈 기준</option>
+            </select>
+            <input type="number" name="size" value="{{ size }}" class="w200">cm 이상일 때
+        </td>
+    </tr>
+    <tr>
+        <th>추가배송비</th>
+        <td>
+            <input type="number" name="addPrice" value="{{ addPrice }}" class="w170">원 추가
+        </td>
+    </tr>
+</table>

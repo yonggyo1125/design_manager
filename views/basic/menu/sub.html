@@ -1,0 +1,17 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<div class="mtitle top flex_between">
+    서브 메뉴 관리 - [{{ typeStr }}] {{ title }}
+    <div class="tit_btns">
+        <a href="/basic/menu/add?parentId={{ id }}" class="sbtn">
+            <i class="xi-plus"></i>
+            서브 메뉴 등록
+        </a>
+    </div>
+</div>
+<form id='frmList' method="post" action="/basic/menu" target="ifrmProcess" autocomplete="off">
+     {% include './_list.html' %}
+</form>
+</div>
+{% endblock %}

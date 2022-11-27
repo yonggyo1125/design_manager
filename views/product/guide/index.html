@@ -1,0 +1,67 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+    
+</div>
+<!--// top_box -->
+<div class="content_box">
+    <div class="mtitle flex_between">
+        사용방법안내 목록
+        <div class="tit_btns">
+            <a href="/product/guide/add" class="sbtn">
+                <i class='xi-pen-o'></i> 등록하기
+            </a>
+        </div>
+    </div>
+
+    <form id="frmList" method="post" action="/product/guide" target="ifrmProcess" autocomplete="off">
+        <table class="table-rows">
+            <thead>
+                <tr>
+                    <th width="30">
+                        <input type="checkbox" class="js-checkall" data-target-name="id" id="js_checkall">
+                        <label for="js_checkall" class="standalone"></label>
+                    </th>
+                    <th width="300">사용방법안내명</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if list and list.length > 0 %}
+                {% for item in list %}
+                <tr>
+                    <td align="center">
+                        <input type="checkbox" name="id" value="{{ item.id }}" id="id_{{ item.id }}">
+                        <label for="id_{{ item.id }}" class="standalone"></label>
+                    </td>
+                    <td>{{ item.title }}</td>
+                    <td>
+                        <a href="/product/guide/edit/{{ item.id }}" class="sbtn">
+                            <i class="xi-check"></i>수정하기
+                        </a>
+                        <a href="/guide/{{ item.id }}" target="_blank" class="sbtn black">미리보기</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr class="no-list">
+                    <td colspan="3">등록된 사용방법안내가 없습니다.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        {% if list.length > 0 %}
+        <div class="table-action">
+            <span class="sbtn black form_delete" data-id="frmList">
+                <i class='xi-trash-o'></i>
+                선택안내 삭제하기
+            </span>
+        </div>
+        {% endif %}
+    
+    </form>
+    {{ pagination | safe }}
+</div>
+<!--// content_box -->
+
+{% endblock %}

@@ -1,0 +1,92 @@
+<div class="top_box">
+<div class='mtitle top'>배송업체 등록</div>
+<form id='frmRegist' method='post' action='/order/config' target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='mode' value='deliveryCompany'>
+    <table class='table-cols style2'>
+        <tr>
+            <th>배송업체명</th>
+            <td class="w350">
+                <input type='text' name='companyNm'>
+            </td>
+            <th>배송조회 URL</th>
+            <td>
+                <input type='text' name='invoiceUrl'>
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='등록하기'>
+    </div>
+</form>
+</div>
+<div class="content_box">
+<div class='mtitle'>배송업체 목록</div>
+<form id='frmList' method='post' action='/order/config' target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='mode' value='deliveryCompany'>
+    <table class='table-rows'>
+        <thead>
+            <tr>
+                <th width='30'>
+                    <input type='checkbox' class='js-checkall' data-target-name='num' id='js-checkall'>
+                    <label for='js-checkall' class='standalone'></label>
+                </th>
+                <th width='150'>배송업체명</th>
+                <th>배송조회 URL</th>
+                <th width='120'>수령방식</th>
+                <th width='170'>사용여부</th>
+                <th width='100'>진열가중치</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list.length > 0 %}
+        {% for item in list %}
+        <tr>
+            <td>
+                <input type='checkbox' name='num' value='{{ loop.index - 1 }}' id='num_{{ loop.index - 1 }}'>
+                <label for='num_{{ loop.index - 1 }}' class='standalone'></label>
+                <input type='hidden' name='companyNm_{{ loop.index - 1 }}' value='{{ item.companyNm }}'>
+            </td>
+            <td>{{ item.companyNm }}</td>
+            <td>
+                <input type='text' name='invoiceUrl_{{ loop.index - 1 }}' value='{{ item.invoiceUrl }}'>
+            </td>
+            <td>
+                <select name='type_{{ loop.index - 1 }}'>
+                    <option value='parcel'{{ ' selected' if item.type == 'parcel' }}>택배배송</option>
+                    <option value='cargo'{{ ' selected' if item.type == 'cargo' }}>화물배송</option>
+                    <option value='quick'{{ ' selected' if item.type == 'quick' }}>퀵배송</option>
+                    <option value='visit'{{ ' selected' if item.type == 'visit' }}>방문수령</option>
+                </select>
+            </td>
+            <td align='center'>
+                <input type='radio' name='isUse_{{ loop.index - 1 }}' value='1' id='isUse_1_{{ loop.index - 1 }}'{{ ' checked' if item.isUse }}>
+                <label for='isUse_1_{{ loop.index - 1 }}'>사용</label>
+                <input type='radio' name='isUse_{{ loop.index - 1 }}' value='0' id='isUse_0_{{ loop.index - 1 }}'{{ ' checked' if not item.isUse }}>
+                <label for='isUse_0_{{ loop.index - 1 }}'>미사용</label>
+            </td>
+            <td>
+                <input type='text' name='listOrder_{{ loop.index - 1 }}' value='{{ item.listOrder }}'>
+            </td>
+        </tr>
+        {% endfor %}
+        {% else %} 
+        <tr class='no-list'>
+            <td colspan='5'>등록된 배송업체가 없습니다.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <div class='table-action'>
+        <div>
+            <span class='sbtn black form_update' data-id='frmList'>
+                <i class='xi-check-min'></i>
+                선택 배송업체 수정하기
+            </span>
+            <span class='sbtn form_delete' data-id='frmList'>
+                <i class='xi-trash-o'></i>
+                선택 배송업체 삭제하기
+            </span>
+        </div>
+    </div>
+</form>
+</div>

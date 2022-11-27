@@ -1,0 +1,540 @@
+<form id='frmOrder' method='post' action='/order/{{ mode }}{{ "/" + orderNo if mode == "update" }}' autocomplete='off' target='ifrmProcess'>
+<input type='hidden' name='orderNo' value='{{ orderNo }}'>
+{% if itemsJson %}
+<input type='hidden' id='itemsJson' value='{{ itemsJson }}'>
+{% endif %}
+<div class='mtitle top flex_between'>
+    주문등록
+    <div class='tit_btns'>
+        <a href='/order' class='btn4'>
+            <i class='xi-list'></i> 주문목록
+        </a>
+    </div>
+</div>
+<!-- 기본정보 S -->
+<div class="stitle mt0">기본정보</div>
+<table class='table-cols style3'>
+    <tr>
+        <th>주문번호</th>
+        <td{{ " colspan=3" if mode != 'update' }}>{{ orderNo }}</td>
+        {% if mode == 'update' %}
+        <th>접수일시</th>
+        <td>{{ getLocalDate(createdAt, '%Y.%m.%d %H:%i:%s')}}</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <th>처리상태</th>
+        <td>
+            <select name='orderStatus' class='wauto'>
+            {% if orderStatuses.length > 0 %}
+            {% for item in orderStatuses %}
+                <option value='{{ item.statusCd }}'{{ ' selected' if orderStatus == item.statusCd }}>{{ item.statusNm }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+        <th>접수상담원</th>
+        <td>
+            {% if managerInfo %}
+                {{ managerInfo.managerNm }}({{ managerInfo.managerId }})
+            {% else %}
+                {{ manager.managerNm }}({{ manager.managerId }})
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>주문자구분</th>
+        <td colspan="3">
+            <input type='radio' name='ordererType' value='private' id='orderMemberType_private'{{ ' checked' if not ordererType or ordererType == 'private' }}>
+            <label for='orderMemberType_private'>일반</label>
+            <input type='radio' name='ordererType' value='company' id='orderMemberType_company'{{ ' checked' if ordererType == 'company' }}>
+            <label for='orderMemberType_company'>사업자</label>
+        </td>
+    </tr>
+    <tr>
+        <th>주문자명</th>
+        <td>
+            <input type='text' name='orderNm' value='{{ orderNm }}'>
+        </td>
+        <th>업체명</th>
+        <td>
+            <input type='text' name='companyNm' value='{{ companyNm }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>휴대전화</th>
+        <td>
+            <input type='text' name='orderCellPhone' value='{{ orderCellPhone }}'>
+        </td>
+        <th>상담기록</th>
+        <td>
+            <span class='btn4 black cs_search' data-order-no='{{ orderNo }}' data-customer-nm='{{ orderNm }}' data-cell-phone='{{ orderCellPhone }}'  data-target-customer-nm='orderNm' data-target-cell-phone='orderCellPhone'>
+                <i class='xi-search'></i>상담기록조회
+            </span>
+            <a class='btn4' href='/customer/add?orderNo={{ orderNo }}' target='_blank'>
+                <i class='xi-plus-square'></i>상담등록하기
+            </a>
+        </td>
+    </tr>
+</table>
+<!-- 기본정보 E -->
+
+<!-- 품목 정보 S -->
+<div class='stitle flex_between'>
+    품목 정보
+    <div class='tit_btns'>
+        <span class='btn4' id='add_product'>
+            <i class='xi-plus-square'></i>품목 추가
+        </span>
+    </div>
+</div>
+<div id='product_items'></div>
+<!-- 품목 정보 E -->
+
+<!-- 배송지 정보 S -->
+<div class="stitle">배송지 정보</div>
+<table class="table-cols style3">
+    <tr>
+        <th>배송조건</th>
+        <td>
+            <select name='idDeliveryPolicy' class='wauto'>
+                <option value=''>- 배송조건 선택 -</option> 
+            {% if deliveryPolicies.length > 0 %}
+            {% for item in deliveryPolicies %}
+                <option value='{{ item.id }}'{{ ' selected' if idDeliveryPolicy == item.id }}>{{ item.policyNm }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+        <th>출고일</th>
+        <td>
+            희망출고일: <input type='date' name='preferredDeliveryReleasedDate'  value='{{ getLocalDate(preferredDeliveryReleasedDate, '%Y-%m-%d') if preferredDeliveryReleasedDate }}' class="w140 mr20">
+
+            실제출고일: <input type='date' name='deliveryReleasedDate' value='{{ getLocalDate(deliveryReleasedDate, '%Y-%m-%d') if deliveryReleasedDate }}' class="w140">
+        </td>
+    </tr>
+    <tr>
+        <th>배송비</th>
+        <td>
+            <input type='radio' name='deliveryChargeType' value='pre' class='deliveryChargeType' id='deliveryChargeType_pre'{{ ' checked' if not deliveryChargeType or deliveryChargeType == 'pre' }}>
+            <label for='deliveryChargeType_pre'>선불</label>
+            <input type='radio' name='deliveryChargeType' value="post" class='deliveryChargeType' id="deliveryChargeType_post"{{ ' checked' if deliveryChargeType == 'post' }}>
+            <label for="deliveryChargeType_post">후불</label>
+            <input type="hidden" name="deliveryCharge" value="{{ deliveryCharge }}" id="deliveryCharge2">
+            <span class='deliveryCharge' id="deliveryCharge_str">{{ deliveryCharge.toLocaleString() if deliveryCharge }}</span>
+        </td>
+        <th>운송장</th>
+        <td>
+            <select name='deliveryCompany' class='wauto'>
+            {% if deliveryCompanies.length > 0 %}
+                {% for item in deliveryCompanies %}
+                <option value='{{ item.companyNm }}' data-type='{{ item.type }}'{{ ' selected' if deliveryCompany == item.companyNm }}>{{ item.companyNm }}</option>
+                {% endfor %}
+            {% endif %}
+            </select>
+            <input type='text' name='deliveryInvoice' class='w200' value='{{ deliveryInvoice }}'>
+        </td>
+    </tr>
+    <tr>
+        <th>배송정보</th>
+        <td colspan="3" class="address_box">
+            <dl>
+                <dt></dt>
+                <dd>
+                    <input type="checkbox" id='same_with_orderer'>
+                    <label for="same_with_orderer">주문자 정보와 동일</label>
+                </dd>
+            </dl>
+            <dl>
+                <dt>수령인</dt>
+                <dd>
+                    <input type='text' name='receiverNm' value='{{ receiverNm }}'>
+                </dd>
+            </dl>
+            <dl>
+                <dt>수령인 휴대전화</dt>
+                <dd>
+                    <input type='text' name='receiverCellPhone' value='{{ receiverCellPhone }}'>
+                </dd>
+            </dl>
+            <dl>
+                <dt>배송지 주소</dt>
+                <dd>
+                    <div class='mb5'>
+                        <input type='text' name='receiverZonecode' class='w100' readonly value='{{ receiverZonecode }}'>
+                        <span class='btn5 black searchAddress'  data-zonecode='receiverZonecode' data-address='receiverAddress'>
+                            <i class='xi-search'></i> 우편번호 검색
+                        </span>
+                    </div>
+                    <div class="mb5">
+                        <input type='text' name='receiverAddress' readonly value='{{ receiverAddress }}'>
+                    </div>
+                    <input type='text' name='receiverAddressSub' value='{{ receiverAddressSub }}'>
+                </dd>
+            </dl>
+            <dl>
+                <dt>베송메시지</dt>
+                <dd>
+                    <input type='text' name='deliveryMemo' value='{{ deliveryMemo }}'>
+                </dd>
+            </dl>
+        </td>
+    </tr>
+</table>
+<!-- 배송지 정보 E -->
+
+<!-- 결제 정보 S -->
+<div class="stitle">결제 정보</div>
+<table class="table-cols style3">
+    <tr>
+        <th>증빙자료</th>
+        <td>
+            <input type='checkbox' name='receiptType' value='tax' id='receiptType_tax'{{ ' checked' if receiptType and receiptType.indexOf('tax')  != -1 }}>
+            <label for='receiptType_tax'>세금계산서</label>
+            <input type='checkbox' name='receiptType' value='cash' id='receiptType_cash'{{ ' checked' if receiptType and receiptType.indexOf('cash') != -1}}>
+            <label for='receiptType_cash'>현금영수증</label>
+            <input type='checkbox' name='receiptType' value='estimate' id='receiptType_estimate'{{ ' checked' if receiptType and receiptType.indexOf('estimate') != -1 }}>
+            <label for='receiptType_estimate'>견적서</label>
+
+            <div class='receiptForm tax{{ " dn" if not receiptType or receiptType.indexOf("tax")  == -1 }}'>
+                <dl>
+                    <dt>사업자등록번호</dt>
+                    <dd>
+                        <input type='text' name='taxReceiptBusinessNo' value='{{ taxReceiptBusinessNo }}'>
+                    </dd>
+                </dl>                
+                <dl>
+                    <dt>업체명/대표자명</dt>
+                    <dd>
+                        <input type='text' name='taxReceiptCompanyNm' value='{{ taxReceiptCompanyNm }}'>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>담당자 이메일</dt>
+                    <dd>
+                        <input type='email' name='taxReceiptEmail' value='{{ taxReceiptEmail }}'>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>사업자등록증</dt>
+                    <dd>
+                        <input type='hidden' name='businessCertFileId' value='{{ businessCertFileId }}'>
+                        <div id='business_cert_file' class='mb10'>
+                        {% if businessCert %} 
+                            <span class='file_box'>
+                                <a href='/file/download/{{ businessCertFileId }}'>
+                                    {{ businessCert.fileName }}
+                                </a>
+                                <i class='xi-minus-square deleteFile' data-id='{{ businessCert.id }}'></i>
+                            </span> 
+                        {% endif %}
+                        </div>
+                        <input type='file' id='businessCertUpload' data-order-no='{{ orderNo }}'>
+                    </dd>
+                </dl>
+            </div>
+            <!--// tax -->
+            <div class='receiptForm cash{{ " dn" if not receiptType or receiptType.indexOf("cash")  == -1 }}'>
+                <dl>
+                    <dt>발급유형</dt>
+                    <dd>
+                        <input type='radio' name='cashReceiptType' id='cacheReceiptType_jumin' value='jumin' checked>
+                        <label for='cacheReceiptType_jumin'>주민등록번호</label>
+                        <input type='radio' name='cashReceiptType' id='cacheReceiptType_cellPhone' value='cellPhone'>
+                        <label for='cacheReceiptType_cellPhone'>휴대전화번호</label>
+
+                        <input type='radio' name='cashReceiptType' id='cacheReceiptType_businessNo' value='businessNo'>
+                        <label for='cacheReceiptType_businessNo'>사업자번호</label>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt></dt>
+                    <dd><input type='text' name='cashReceiptNo' value='{{ cashReceiptNo }}' placeholder='-를 제외하고 숫자만 입력'></dd>
+                </dl>
+            </div>
+            <!--// cash -->
+        </td>
+    </tr>
+    <tr>
+        <th>결제수단</th>
+        <td class="payType_wrap">
+            <input type='radio' name='payType' value='lbt' id='payType_lbt'{{ ' checked' if not payType or payType == 'lbt' }}>
+            <label for='payType_lbt'>무통장</label> 
+            <span id='lbt_depositor'>
+                / 입금자명: <input type='text' name='depositor' class='wauto' value='{{ depositor }}'>님
+            </span>
+
+            <input type='radio' name='payType' value='card' id='payType_card'{{ ' checked' if payType == 'card' }}>
+            <label for='payType_card'>카드결제</label>           
+        </td>
+    </tr>
+    <tr>
+        <th>상품합계</th>
+        <td>
+            <span id='itemsTotalPrice'>{{ itemsTotalPrice.toLocaleString() if itemsTotalPrice }}</span>원
+        </td>
+    </tr>
+    <tr>
+        <th>배송비</th>
+        <td>
+            <span id='deliveryCharge'>{{ totalDeliveryCharge.toLocaleString() if totalDeliveryCharge }}</span>원
+        </td>
+    </tr>
+    <tr>
+        <th>할인합계</th>
+        <td>
+            <span id='totalDiscount'>{{ totalDiscount.toLocaleString() if totalDiscount }}</span>원
+        </td>
+    </tr>
+    <tr class='dn'>
+        <th>부가세(10%)</th>
+        <td>
+            <span id='totalVat'>{{ totalVat.toLocaleString() if totalVat }}</span>원
+        </td>
+    </tr>
+    <tr>
+        <th nowrap>총합계<span class="small">(부가세포함)</span></th>
+        <td>
+            <span id='totalPayPrice'>{{ totalPayPrice.toLocaleString() if totalPayPrice }}</span><span>원</span>
+        </td>
+    </tr>
+</table>
+<!-- 결제 정보 E -->
+
+<div class='btns'>
+    {% if not orderStatusInfo or (orderStatusInfo.setting and orderStatusInfo.setting.orderUpdatePossible) %}
+    <button type='submit' class='btn'>{{ '수정' if mode == 'update' else '등록' }}하기</button>
+    {% endif %}
+    <button type='button' class='btn white cancel_back'>취소하기</button>
+</div>
+</form>
+
+
+<script type='text/html' id='template_item'>
+<div class="inner">
+    <div class="item_no_box">
+        <input type='hidden' name='idProductItem' value='<%=id%>'>
+        {% if mode == 'update' %}
+        <input type='hidden' name='idOrderItem_<%=id%>' value='<%=idOrderItem%>'>
+        {% endif %}
+        <div class="center">
+            <div class='item_txt'></div>
+
+            <span class="remove">
+                <i class="xi-minus-square"></i> 삭제하기
+            </span>
+        </div>
+
+    </div>
+    <!-- itemNo -->
+    <div class="item_info_box">
+        <table class="table-cols style2 mb20">
+            <tr>
+                <th>구분</th>
+                <td class="w250"><%=itemType%></td>
+                <th>분류</th>
+                <td><%=cateNm%></td>
+            </tr>
+            <tr>
+                <th>품목코드</th>
+                <td><%=itemCode%></td>
+                <th>품목명</th>
+                <td>
+                    <%=itemNm%>
+                    / <input type='text' name='itemNmSub_<%=id%>' value='<%=itemNmSub%>' class="itemNmSub">
+                </td>
+            </tr>
+        </table>
+
+        <table class="table-rows mb20">
+            <thead>
+                <tr>
+                    <th class="w250">사이즈(cm)</th>
+                    <th class="w250">기본옵션(수량별 적용)</th>
+                    <th class="w250">입력옵션</th>
+                    <th class="w150">수량</th>
+                    <th>추가옵션</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td align="center">
+                        <div  id="board_size_<%=id%>" class="board_size_wrap"></div>
+                        <input type='number' name='itemSizeWidth_<%=id%>' value='<%=itemSizeWidth%>' class='cal_size right' min='0'>
+                         X 
+                        <input type='number' name='itemSizeHeight_<%=id%>' value='<%=itemSizeHeight%>' class='cal_size right' min='0'>
+                    </td>
+                    <td align="center"><%=addOptions%></td>
+                    <td class="input_opts">
+                        <input type='text' name='itemFont_<%=id%>' value='<%=itemFont%>' placeholder='폰트를 입력해 주세요' class="mb10">
+                        <input type='text' name='itemText_<%=id%>' value='<%=itemText%>' placeholder='들어갈 문구를 입력해 주세요.' class="mb10">
+                        <input type="text" name='itemMemo_<%=id%>' value="<%=itemMemo%>" placeholder="요청사항을 입력해 주세요.">
+                    </td>
+                    <td align="center">
+                        <input type='number' name='itemCnt_<%=id%>' value='<%=itemCnt%>' class='item_cnt right'>개
+                    </td>
+                    <td align="center"><%=addSubOptions%></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table-cols style2 mb20">
+            <tr>
+                <th>
+                    첨부파일
+                    <i class='xi-plus-square add_files icon_btn' onclick="codefty.fileUpload.showPopup('order_{{ orderNo }}_<%=id%>');"></i>
+                </th>
+                <td class="w250">
+                    <ul class='uploaded_files'></ul>
+                </td>
+                <th>
+                    샘플이미지
+                    <i class='xi-plus-square add_sample icon_btn' onclick="codefty.order.showSamplePopup('<%=cateNm%>', '<%=id%>');"></i>
+                </th>
+                <td class='sample_images'></td>
+            </tr>
+            <tr>
+                <th>디자인상태</th>
+                <td>
+                    <select name='designStatus_<%=id%>' class='wauto'>
+                        {% if designStatuses.length > 0 %}
+                        {% for item in designStatuses %}
+                            <option value='{{ item.statusCd }}'{{ ' selected' if designStatus == item.statusCd }}>{{ item.statusNm }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                </td>
+                <th>시안관리</th>
+                <td>
+                    <span class='btn4' onclick="codefty.order.showDraftPopup('<%=id%>');">
+                        <i class='xi-file-upload-o'></i>
+                        등록/수정
+                    </span>
+                </td>
+            </tr>
+        </table>
+        
+        <table class="table-cols style2 mb20">
+            <tr>
+                <th>판매원가</th>
+                <td class="w250">
+                    <input type='number' name='itemPrice_<%=id%>' value='<%=itemPrice%>' class='w130 right'>원
+                </td>
+                <th>할인금액</th>
+                <td>
+                    <input type='number' name='itemDiscount_<%=id%>' value='<%=itemDiscount%>'class='w130 right'>원
+                </td>
+            </tr>
+            <tr>
+                <th>금액조정</th>
+                <td>
+                    <input type='number' name='itemAdjust_<%=id%>' value='<%=itemAdjust%>' class='w130 right'>원
+                </td>
+                <th>총합계</th>
+                <td class="itemTotalPrice_wrap">
+                    <span class='itemTotalPrice' id='itemTotalPrice_<%=id%>'><%=itemTotalPrice%></span>원
+                </td>
+            </tr>
+        </table>
+        
+        <table class="table-cols style2">
+            <tbody>
+            <tr>
+                <th>묶음배송</th>
+                <td colspan="3">
+                    <input type="radio" name="packageDelivery_<%=id%>" class="packageDelivery" value="package" id="packageDelivery_package_<%=id%>">
+                    <label for="packageDelivery_package_<%=id%>">묶음배송</label>
+                    <input type="radio" name="packageDelivery_<%=id%>" class="packageDelivery" value="each" id="packageDelivery_each_<%=id%>">
+                    <label for="packageDelivery_each_<%=id%>">개별배송</label>
+                </td>
+            </tr>
+            </tbody>
+            <tbody class="each_delivery_info dn">
+                <tr>
+                    <th>배송조건</th>
+                    <td class="w250">
+                        <select name='idDeliveryPolicy_<%=id%>' class='wauto idDeliveryPolicy'>
+                            <option value=''>- 배송조건 선택 -</option> 
+                        {% if deliveryPolicies.length > 0 %}
+                        {% for item in deliveryPolicies %}
+                            <option value='{{ item.id }}'>{{ item.policyNm }}</option>
+                        {% endfor %}
+                        {% endif %}
+                        </select>
+                    </td>
+                    <th>출고일</th>
+                    <td>
+                       
+                        희망출고일: <input type='date' name='preferredDeliveryReleasedDate_<%=id%>'  value='<%=preferredDeliveryReleasedDate%>' class="w140 mr20">
+
+                        실제출고일: <input type='date' name='deliveryReleasedDate_<%=id%>' value='<%=deliveryReleasedDate%>' class="w140">
+                    </td>
+                </tr>
+                <tr>
+                    <th>배송비</th>
+                    <td>
+                        <input type='radio' name='deliveryChargeType_<%=id%>' value='pre' id='deliveryChargeType_pre_<%=id%>' checked>
+                        <label for='deliveryChargeType_pre_<%=id%>'>선불</label>
+                        <input type='radio' name='deliveryChargeType_<%=id%>' value="post" id="deliveryChargeType_post_<%=id%>">
+                        <label for="deliveryChargeType_post_<%=id%>">후불</label>
+                        <input type="hidden" name="deliveryCharge_<%=id%>" value="<%=deliveryCharge%>" id="deliveryCharge_<%=id%>">
+                        <span class='deliveryCharge' id="deliveryCharge_str_<%=id%>"><%=deliveryChargeStr%></span>
+                    </td>
+                    <th>운송장</th>
+                    <td>
+                        <select name='deliveryCompany_<%=id%>' class='wauto'>
+                        {% if deliveryCompanies.length > 0 %}
+                            {% for item in deliveryCompanies %}
+                            <option value='{{ item.companyNm }}' data-type='{{ item.type }}'>{{ item.companyNm }}</option>
+                            {% endfor %}
+                        {% endif %}
+                        </select>
+                        <input type='text' name='deliveryInvoice_<%=id%>' class='w200' value='<%=deliveryInvoice%>'>
+                    </td>
+                </tr>
+                <tr>
+                    <th>개별배송주소</th>
+                    <td colspan="3" class="address_box">
+                        <dl>
+                            <dt>수령인</dt>
+                            <dd>
+                                <input type='text' name='receiverNm_<%=id%>' value='<%=receiverNm%>'>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>수령인 휴대전화</dt>
+                            <dd>
+                                <input type='text' name='receiverCellPhone_<%=id%>' value='<%=receiverCellPhone%>'>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>배송지 주소</dt>
+                            <dd>
+                                <div class="mb5">
+                                    <input type='text' name='receiverZonecode_<%=id%>' value='<%=receiverZonecode%>' readonly class='w180 mr2'>
+                                    <span class='btn5 black' onclick="codefty.common.showSearchAddress('receiverZonecode_<%=id%>', 'receiverAddress_<%=id%>');">
+                                        <i class='xi-search'></i> 우편번호 검색
+                                    </span>
+                                </div>
+                                <div class="mb5">
+                                    <input type='text' name='receiverAddress_<%=id%>' value='<%=receiverAddress%>' readonly>
+                                </div>
+
+                                <input type='text' name='receiverAddressSub_<%=id%>' value='<%=receiverAddressSub%>'>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>배송메시지</dt>
+                            <dd>
+                                <input type='text' name='deliveryMemo_<%=id%>' value='<%=deliveryMemo%>'>
+                            </dd>
+                        </dl>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- item_info_box -->
+</div>
+<!-- inner -->
+</script>

@@ -1,0 +1,63 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<form id="frmSelect" autocomplete="off">
+    <table class="table-rows">
+        <thead>
+            <tr>
+                <th width="30">
+                    <input type="checkbox" class="js-checkall" data-target-name="amount" id="js-checkall" checked>
+                    <label for="js-checkall" class="standalone"></label>
+
+                </th>
+                <th>결제항목</th>
+                <th width="'150">금액</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <input type="checkbox" name="amount" value="{{ itemsTotalPrice }}" id="itemsTotalPrice" checked>
+                    <label for="itemsTotalPrice" class="standalone"></label>
+                </td>
+                <td>상품합계</td>
+                <td align="center">{{ itemsTotalPrice.toLocaleString() }}원</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" name="amount" value="{{ totalDeliveryCharge }}" id="totalDeliveryCharge" checked> 
+                    <label for="totalDeliveryCharge" class="standalone"></label>
+                </td>
+                <td>배송비</td>
+                <td align="center">{{ totalDeliveryCharge.toLocaleString() }}원</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" name="amount" value="{{ totalDiscount * -1 }}" id="totalDiscount" checked>
+                    <label for="totalDiscount" class="standalone"></label>
+                </td>
+                <td>할인적용</td>
+                <td align="center">{{ (totalDiscount * - 1).toLocaleString() }}원</td>
+            </tr>
+            {% if addPayments and addPayments.length > 0 %}
+            {% for item in addPayments %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="amount" value="{{ item.itemPrice }}" id="addPayment_{{ item.id }}" checked>
+                    <label for="addPayment_{{ item.id }}" class="standalone"></label>
+                </td>
+                <td>{{ item.itemNm }}</td>
+                <td align="center">{{ item.itemPrice.toLocaleString() }}원</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+    <dl class="summary"'>
+        <dt>총 결제금액</dt>
+        <dd id="totalAmount" data-amount='{{ totalPayPrice }}' data-order-no="{{ orderNo }}" data-name="{{ orderNm }}" data-cell-phone="{{ orderCellPhone }}">{{ totalPayPrice.toLocaleString() }}원</dd>
+    </dl>
+    <div class="table-btn">
+        <input type="submit" value="다음으로" id="next_btn">
+    </div> 
+</form>
+{% endblock %}

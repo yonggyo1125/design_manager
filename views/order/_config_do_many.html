@@ -1,0 +1,35 @@
+<div class="content_box mt50">
+    <div class="mtitle top">일괄처리 설정</div>
+    <form id="frmRegist" method="post" action="/order/config" target="ifrmProcess" autocomplete="off">
+        <input type="hidden" name="mode" value="doMany">
+        <div class="stitle">운송장 일괄처리</div>
+        <table class="table-cols style2">
+            <tr>
+                <th>운송장번호</th>
+                <td>
+                    <textarea name="invoiceFieldKeywords" placeholder="운송장번호 엑셀 키워드 입력, 여러단어는 엔터로 구분하여 입력">{{ config.invoiceFieldKeywords }}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>주문 처리상태 설정</th>
+                <td>
+                    <select name="invoiceOrderStatusCd">
+                        <option value="">- 선택하세요 -</option>
+                    {% if orderStatuses and orderStatuses.length > 0 %}
+                    {% for status in orderStatuses %}
+                        <option value="{{ status.statusCd }}"{{ ' selected' if config.invoiceOrderStatusCd == status.statusCd }}>{{ status.statusNm }}</option>
+                    {% endfor %}
+                    {% endif %}
+                    </select>
+                    <div class="guide_txt mt10">운송장이 반영된 후 자동으로 변경될 주문 상태를 선택하세요.</div>
+                </td>
+            </tr>
+        </table>
+
+        
+        <div class="btns">
+            <button type="submit" class="btn">저장하기</button>
+        </div>
+    </form>
+</div>
+<!--// content_box -->

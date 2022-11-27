@@ -1,0 +1,87 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<div class="mtitle top flex_between">
+    보드형 사이즈 추가설정
+    <div class="tit_btns">
+        <a href="/product/board_size_config/add" class="sbtn">
+            <i class="xi-plus"></i>
+            추가 설정 등록 
+        </a>
+    </div>
+</div>
+
+<div class="scroll_x">
+<form id="frmList" method="post" action="/product/board_size_config" target="ifrmProcess" autocomplete="off">
+    <table class="table-rows">
+        <thead>
+            <tr>
+                <th width="30" nowrap>
+                    <input type="checkbox" class="js-checkall" data-target-name="id" id="js_checkall">
+                    <label for="js_checkall" class="standalone"></label>
+                </th>
+                <th nowrap>설정명</th>
+                <th>최소판매금액</th>
+                <th>면적별 추가금액</th>
+                <th>기본헤배 적용제외</th>
+                <th>최소면적</th>
+                <th>최대면적</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list and list.length > 0 %}
+        {% for item in list %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="id" value="{{ item.id }}" id="id_{{ item.id }}">
+                    <label for="id_{{ item.id }}" class="standalone"></label>
+                </td>
+                <td>
+                    <input type="text" name="configNm_{{ item.id }}" value="{{ item.configNm }}">
+                </td>
+                <td>
+                    <input type="number" name="minPrice_{{ item.id }}" value="{{ item.minPrice }}">
+                </td>
+                <td>
+                    <input type="text" name="addPriceByArea_{{ item.id }}" value="{{ item.addPriceByArea }}">
+                </td>
+                <td>
+                    <select name="exceptMinSize_{{ item.id }}">
+                        <option value="0"{{ ' selected' if not item.exceptMinSize }}>기본헤배 적용</option>
+                        <option value="1"{{ ' selected' if item.exceptMinSize }}>기본헤배 적용제외</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="number" name="minSize_{{ item.id }}" value="{{ item.minSize }}">
+                </td>
+                <td>
+                    <input type="number" name="maxSize_{{ item.id }}" value="{{ item.maxSize }}">
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %}
+            <tr class="no-list">
+                <td colspan="7">등록된 설정이 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    {% if list and list.length > 0 %}
+    <div class="table-action">
+        <div>
+            <span class="sbtn black form_update" data-id="frmList">
+                <i class="xi-check-min"></i>
+                선택 추가설정 수정하기
+            </span>
+            <span class="sbtn form_delete" data-id="frmList">
+                <i class="xi-trash-o"></i>
+                선택 사이즈 삭제하기
+            </span>
+        </div>
+    </div>
+    {% endif %}
+</form>
+</div>
+</div>
+
+{% endblock %}

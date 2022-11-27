@@ -1,0 +1,74 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+    <div class="mtitle flex_between">
+        공통 치환코드 관리
+        <div class="tit_btns">
+            <span class="sbtn red" id="delete_row">
+                <i class="xi-minus"></i>삭제
+            </span>
+            <span class="sbtn" id="add_row">
+                <i class="xi-plus"></i>추가
+            </span>
+        </div>
+        <!--// tit_btns -->
+    </div>
+
+    
+    <form id="frmSave" name="frmSave" method="post" action="/kakao_alimtalk/common_code" target="ifrmProcess" autocomplete="off">
+        
+        <table class="table-rows">
+            <thead>
+                <tr>
+                    <th width="250">치환코드</th>
+                    <th width="350">치환내용</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if list and list.length > 0 %}
+            {% for item in list %}
+                <tr>
+                    <td>
+                        <input type="text" name="code" value="{{ item.code }}">
+                    </td>
+                    <td>
+                        <input type="text" name="replace" value="{{ item.replace }}">
+                    </td>
+                    <td>
+                        <span class="sbtn remove">
+                            <i class="xi-minus"></i>삭제
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+
+        <div class="btns">
+            <button type="submit" class="btn">저장하기</button>
+            <button type="button" class="btn white cancel_back">취소하기</button>
+        </div>
+    </form>
+</div>
+<!--// content_box -->
+
+<script type="text/html" id="tpl">
+    <table>
+    <tr>
+        <td>
+            <input type="text" name="code">
+        </td>
+        <td>
+            <input type="text" name="replace">
+        </td>
+        <td>
+            <span class="sbtn remove">
+                <i class="xi-minus"></i>삭제
+            </span>
+        </td>
+    </tr>
+    </table>
+</script>
+{% endblock %}

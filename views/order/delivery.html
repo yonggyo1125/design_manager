@@ -1,0 +1,169 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<div class='mtitle flex_between'>
+    운송장/배송지 관리({{ orderNo }})
+    <div class='tit_btns'>
+        <a href='/order/{{ orderNo }}' class='sbtn'>
+            <i class='xi-check-min'></i>
+            주문내역확인
+        </a>
+        <a href='/order' class='sbtn'>
+            <i class='xi-list'></i> 주문목록
+        </a>
+    </div>
+</div>
+{% if bundleCodes and bundleCodes.length > 0 %}
+<form id='frmUpdate' method='post' action='/order/delivery/{{ orderNo }}' target='ifrmProcess' autocomplete='off'>
+ {% for item in bundleCodes %}
+    <input type='hidden' name='orderNo' value='{{ orderNo }}'>
+    <input type='hidden' name='bundleCodeKey' value='{{ item.bundleCodeKey }}'>
+    <table class='table-cols mb20{{ " style2" if loop.index > 1 }}'>
+        <tr>
+            <th>배송품목</th>
+            <td colspan="3">
+                {% if item.deliveryItems and item.deliveryItems.length > 0  %}
+                    <ul class='delivery_items'>
+                    {% for it in item.deliveryItems %}
+                        <li class='item'>
+                            <input type="hidden" name="idOrderItems_{{ item.bundleCodeKey }}" value="{{ it.idOrderItems }}">
+                            {{ loop.index }}. {{ it.itemNm }}{{ '(' + it.itemNmSub + ")" if it.itemNmSub }}
+                            {% if it.itemSizeWidth > 0 and it.itemSizeHeight > 0 %}
+                            / 사이즈 : {{ it.itemSizeWidth }}Cm X {{ it.itemSizeHeight }}Cm 
+                            {% endif %}
+                            {% if it.optionInfo and it.optionInfo.length > 0 %}
+                            <div class='item_tit'>기본옵션</div>
+                            {% for opt in it.optionInfo %}
+                            <div>[{{ opt.optionCd }}]{{ opt.optionNm }}</div>
+                            {% endfor %}
+                            {% endif %}
+                            
+                            {% if it.textOptionTexts and it.textOptionTexts.length > 0 %}
+                            <div class="item_tit">입력옵션</div>
+                            {% for opt in it.textOptionTexts %}
+                            <div>[{{ opt.optionCd }}]{{ opt.optionNm }} : {{ opt.text }}</div>
+                            {% endfor %}
+                            {% endif %}
+
+
+                            {% if it.subOptionInfo and it.subOptionInfo.length > 0 %}
+                            <div class='item_tit'>추가옵션</div>
+                            {% for opt in it.subOptionInfo %}
+                            <div>[{{ opt.optionCd }}]{{ opt.optionNm }}</div>
+                            {% endfor %}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>묶음배송</th>
+            <td class="w250">
+                {% if item.packageDelivery == 'each' %}
+                개별배송
+                {% else %}
+                묶음배송
+                {% endif %}
+            </td>
+            <th>희망출고일</th>
+            <td>
+                <input type='date' name='preferredDeliveryReleasedDate_{{ item.bundleCodeKey }}' value="{{ getLocalDate(item.preferredDeliveryReleasedDate, '%Y-%m-%d') if item.preferredDeliveryReleasedDate }}" class='w150'>
+            </td>
+        </tr>
+        <tr>
+            <th>배송조건</th>
+            <td>
+                <select name='idDeliveryPolicy_{{ item.bundleCodeKey }}' class='idDeliveryPolicy' data-key="{{ item.bundleCodeKey }}">
+                    <option value=''>- 배송조건 선택 -</option> 
+                {% if deliveryPolicies.length > 0 %}
+                {% for it in deliveryPolicies %}
+                    <option value='{{ it.id }}'{{ ' selected' if item.deliveryPolicy.id == it.id }}{{ ' disabled' if item.deliveryPolicies and item.deliveryPolicies.length > 0 and item.deliveryPolicies.indexOf("" + it.id) == -1 }}>{{ it.policyNm }}</option>
+                {% endfor %}
+                {% endif %}
+                </select>
+
+                <div class="deliveryTypeHtml" id="deliveryTypeHtml_{{ item.bundleCodeKey }}">
+                {% if item.deliveryPolicy and item.deliveryPolicy._deliveryType %}
+                {% for it in item.deliveryPolicy._deliveryType %}
+                <span>
+                    <input type="radio" name="deliveryType_{{ item.bundleCodeKey }}" value="{{ it.type }}" id="deliveryType_{{ item.bundleCodeKey }}_{{ loop.index }}"{{ ' checked'  if item.deliveryType and item.deliveryType == it.type }}>
+                    <label for="deliveryType_{{ item.bundleCodeKey }}_{{ loop.index }}">{{ it.name }}</label>
+                </span>
+                {% endfor %}
+                {% endif %}
+                </div>
+            </td>
+            <th>출고일</th>
+            <td>
+                <input type='date' name='deliveryReleasedDate_{{ item.bundleCodeKey }}' class='w150' value="{{ getLocalDate(item.deliveryReleasedDate, '%Y-%m-%d') if item.deliveryReleasedDate }}">
+            </td>
+        </tr>
+        <tr>
+            <th>운송장</th>
+            <td colspan="3">
+                <select name='deliveryCompany_{{ item.bundleCodeKey }}' class='wauto mr5'>
+                    {% if deliveryCompanies.length > 0 %}
+                    {% for it in deliveryCompanies %}
+                        <option value='{{ it.companyNm }}'{{ ' selected' if item.deliveryCompany == it.companyNm }}>{{ it.companyNm }}</option>
+                    {% endfor %}
+                    {% endif %}
+
+
+                    <input type='text' name='deliveryInvoice_{{ item.bundleCodeKey }}' class='w200' value='{{ item.deliveryInvoice }}'>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>수령인</th>
+            <td colspan="3">
+                <input type='text' name='receiverNm_{{ item.bundleCodeKey }}' value='{{ item.receiverNm }}'>
+            </td>
+        </tr>
+        <tr>
+            <th>수령인휴대전화</th>
+            <td colspan="3">
+                <input type='text' name='receiverCellPhone_{{ item.bundleCodeKey }}' value='{{ item.receiverCellPhone }}'>
+            </td>
+        </tr>
+        <tr>
+            <th>배송지 주소</th>
+            <td colspan="3">
+                <div class='mb5'>
+                    <input type='text' name='receiverZonecode_{{ item.bundleCodeKey }}' value='{{ item.receiverZonecode }}' readonly class='w100'> 
+                    <span class='btn5 black' onclick="codefty.common.showSearchAddress('receiverZonecode_{{ item.bundleCodeKey }}', 'receiverAddress_{{ item.bundleCodeKey }}');">
+                        <i class='xi-search'></i> 우편번호 검색
+                    </span>
+                </div>
+                <div class="mb5">
+                    <input type='text' name='receiverAddress_{{ item.bundleCodeKey }}' value='{{ item.receiverAddress }}' readonly>
+                </div>
+                <input type='text' name='receiverAddressSub_{{ item.bundleCodeKey }}' value='{{ item.receiverAddressSub }}'>
+            </td>
+        </tr>
+        <tr>
+            <th>배송메세지</th>
+            <td colspan="3">
+                <input type='text' name='deliveryMemo_{{ item.bundleCodeKey }}' value='{{ item.deliveryMemo }}'>
+            </td>
+        </tr>
+        
+    </table>
+{% endfor %}
+    <div class='btns'>
+        <input type='submit' value='변경하기' class='btn'>
+        <input type='button' value='취소하기' class='btn white go_link' data-url='/order/{{ orderNo }}'>
+    </div>
+</form>
+</div>
+{% endif %}
+
+<script type="text/html" id="template_deliveryType">
+    <span>
+        <input type="radio" name="deliveryType_<%=id%>" value="<%=type%>" id="deliveryType_<%=id%>_<%=no%>">
+        <label for="deliveryType_<%=id%>_<%=no%>"><%=name%></label>
+    </span>
+</script>
+
+{% endblock %}

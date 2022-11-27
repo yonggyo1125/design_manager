@@ -1,0 +1,122 @@
+<table class="table-cols">
+    <tr>
+        <th>템플릿 코드</th>
+        <td>
+            {% if mode == 'update' %}
+                {{ tmpltCode }}
+            {% else %}
+                 <input type="text" name="tmpltCode" value="{{ tmpltCode }}">
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>템플릿명</th>
+        <td>
+            <input type="text" name="tmpltNm" value="{{ tmpltNm }}">
+        </td>
+    </tr>
+    <tr>
+        <th>알림톡유형</th>
+        <td>
+            <input type="radio" name="messageType" value="AT" id="messageType_AT"{{ ' checked' if messageType != 'AI' }}> 
+            <label for="messageType_AT">기본값</label>
+            <input type="radio" name="messageType" value="AI" id="messageType_AI"{{ ' checked' if messageType == 'AI' }}> 
+            <label for="messageType_AI">이미지 알림톡</label>
+        </td>
+    </tr>
+    <tr>
+        <th>템플릿 내용</th>
+        <td>
+            <textarea name="message" placeholder="공백포함 1000자" class="h300">{{ message }}</textarea>
+        </td>
+    </tr>
+    <tr>
+        <th>버튼종류</th>
+        <td>
+            <input type="radio" name="buttonType" value="web" id="buttonType_web"{{ ' checked' if buttonType == 'web' }}>
+            <label for="buttonType_web">웹링크</label>
+            <input type="radio" name="buttonType" value="delivery" id="buttonType_delivery"{{ ' checked' if buttonType == 'delivery' }}>
+            <label for="buttonType_delivery">배송조회</label>
+            <input type="radio" name="buttonType" value="none" id="buttonType_none"{{ ' checked' if buttonType != 'web' and  buttonType != 'delivery' }}>
+            <label for="buttonType_none">버튼없음</label>
+        </td>
+    </tr>
+    <tr>
+        <th>버튼설정</th>
+        <td>
+            <div class="right mb5">
+                <span class="template_button_del sbtn red"><i class='xi-minus'></i>삭제</span>
+                <span class="template_button_add sbtn black"><i class='xi-plus'></i>추가</span>
+            </div>
+            <table class="table-rows">
+                <thead>
+                    <tr>
+                        <th>버튼명</th>
+                        <th>버튼 URL</th>
+                    </tr>
+                </thead>
+                <tbody id="buttons_html">
+                {% if buttons and buttons.length > 0 %}
+                {% for item in buttons %}
+                    <tr>
+                        <td><input type="text" name="buttonNm" value="{{ item.buttonNm }}" class="wFull"></td>
+                        <td><input type="text" name="buttonUrl" value="{{ item.buttonUrl }}" class="wMin400"></td>
+                    </tr>
+                {% endfor %}
+                {% else %}
+                    <tr>
+                        <td><input type="text" name="buttonNm" value="" class="wFull"></td>
+                        <td><input type="text" name="buttonUrl" value="" class="wMin400"></td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>        
+        </td>
+    </tr>
+    <tr>
+        <th>채널추가</th>
+        <td>
+            <input type="radio" name="useAddChannel" value="1" id="useAddChannel_1"{{ ' checked' if useAddChannel == 1 }}>
+            <label for="useAddChannel_1">사용</label>
+            <input type="radio" name="useAddChannel" value="0" id="useAddChannel_0"{{ ' checked' if useAddChannel != 1 }}>
+            <label for="useAddChannel_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>채널명</th>
+        <td>
+            <input type="text" name="channelNm" value="{{ channelNm }}">
+        </td>
+    </tr>
+    <tr>
+        <th>예약전송 여부</th>
+        <td>
+            <input type="radio" name="useReservation" value="1" id="useReservation_1"{{ ' checked' if useReservation }}>
+            <label for="useReservation_1">사용</label>
+            <input type="radio" name="useReservation" value="0" id="useReservation_0"{{ ' checked' if not useReservation }}>
+            <label for="useReservation_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>예약전송 설정</th>
+        <td>
+            <select name="idSendReservation">
+                <option value="">설정 선택</option>
+            {% if reservations and reservations.length > 0 %}
+            {% for item in reservations %}
+                <option value="{{ item.id }}"{{ ' selected' if idSendReservation == item.id }}>{{ item.title }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+</table>
+
+<script type="text/html" id="tpl_buttons">
+    <table>
+        <tr>
+            <td><input type="text" name="buttonNm" value="" class="wFull"></td>
+            <td><input type="text" name="buttonUrl" value="" class="wMin400"></td>
+        </tr>
+    </table>
+</script>

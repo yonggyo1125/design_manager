@@ -1,0 +1,90 @@
+{% extends '../../layout/popup.html' %}
+{% block content %} 
+{% set nums = [1,2,3] %}
+<form id='frmRegist' method='post' action='/popup/draft/{{ itemUid }}' target='ifrmProcess' autocomplete='off'>
+<input type='hidden' name='draftUid' value='{{ itemUid }}'> 
+<table class='table-cols'>
+    <tr>
+        <th>확정시안</th>
+        <td>
+            <select name='designChoice'>
+                <option value='0'{{ ' selected' if not designChoice or designChoice == '0' }}>미확정</option>
+                <option value='1'{{ ' selected' if designChoice == '1' }}>시안1</option>
+                <option value='2'{{ ' selected' if designChoice == '2' }}>시안2</option>
+                <option value='3'{{ ' selected' if designChoice == '3' }}>시안3</option>
+            </select>
+        </td>
+        <th rowspan="2">메세지전송</th>
+        <td rowspan="2">
+            <div class="mb5">
+                <input type="checkbox" name="sendDegisnerResponseAlim" value="1" id="sendDegisnerResponseAlim">
+                <label for="sendDegisnerResponseAlim">답변 알림톡 전송</label>
+            </div>
+            <input type="checkbox" name="sendCheckDraftAlim" value="1" id="sendCheckDraftAlim">
+            <label for="sendCheckDraftAlim">시안확인 알림톡 전송</label>
+        </td>
+    </tr>
+    <tr>
+        <th>확정일시</th>
+        <td>
+            {{ getLocalDate(confirmDateTime, '%Y.%m.%d %H:%i:%s') if confirmDateTime }}
+        </td>
+    </tr>
+    <tr>
+        <th>고객요청내용</th>
+        <td>
+            <textarea readonly class='client_request'>{{ clientRequest }}</textarea>
+            <div class="attach_files">
+                {% if clientRequestFiles %}
+                {% for file in clientRequestFiles %}
+                    <span class="file_box2">
+                        <a href="/file/download/{{ file.id }}">{{ file.fileName }}</a>
+                    </span> 
+                {% endfor %}
+                {% endif %}
+            </div>
+            
+        </td>
+        <th>고객전달내용</th>
+        <td>
+            <textarea name='designerResponse'>{{ designerResponse }}</textarea>
+        </td>
+    </tr>
+    {% for num in nums %}
+    <tr>
+        <th rowspan='2'>시안{{ num }}</th>
+        <td width='350'>
+            <div class='drop_box' data-draft-no='{{ num }}' data-max-size='{{ siteConfig.fileUploadMaxSizeDragDrop if siteConfig.fileUploadMaxSizeDragDrop else 20 }}' data-gid='{{ gid }}_{{ num }}'>
+                <i class='xi-plus-thin xi-4x'></i>
+                <div class='text'>업로드할 시안이미지 1개를 드래그 하세요</div>
+                <div class='text'>(최대 {{ siteConfig.fileUploadMaxSizeDragDrop if siteConfig.fileUploadMaxSizeDragDrop else 20 }}Mb)</div>
+            </div>
+        </td>
+        <td colspan='2' rowspan='2' id='preview_draft_{{ num }}' class='preview_draft'>
+        {% if draftFiles[num - 1] %}
+            <div>
+                <img src='{{ draftFiles[num - 1].thumbImageUrl if draftFiles[num - 1].thumbImageUrl else draftFiles[num - 1].uploadUrl }}'>
+                <input type='hidden' name='draftFile{{ num }}' value='{{ draftFiles[num - 1].id }}'>
+                <div class='controls'>
+                    <a href='/file/view_image/{{ draftFiles[num - 1].id }}' class='sbtn' target='_blank'>미리보기</a>
+                    <a href='/file/download/{{ draftFiles[num - 1].id }}' class='sbtn'>다운로드</a>
+                    <span class='sbtn remove' data-id='{{ draftFiles[num - 1].id }}'>삭제</span>
+                </div>
+            </div>
+        {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type='file' class='draftFile' id='draftFile_{{ num }}' data-draft-no='{{ num }}' data-max-size='{{ siteConfig.fileUploadMaxSizeDragDrop if siteConfig.fileUploadMaxSizeDragDrop else 20 }}' data-gid='{{ gid }}_{{ num }}'>
+            (최대 {{ siteConfig.fileUploadMaxSizeDragDrop if siteConfig.fileUploadMaxSizeDragDrop else 20 }}Mb)
+        </td>
+    </tr>
+    
+    {% endfor %}
+</table>
+<div class='table-btn'>
+    <input type='submit' value='저장하기'>
+</div>
+</form>
+{% endblock %}

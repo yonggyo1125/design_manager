@@ -1,0 +1,443 @@
+<div class="stitle">일반 설정</div>
+<table class="table-cols">
+    <tr>
+        <th>게시판 ID</th>
+        <td>
+        {% if mode == 'edit' %}
+            {{ id }}
+        {% else %}
+            <input type="text" name="id">
+        {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>게시판명</th>
+        <td>
+            <input type="text" name="title" value="{{ title }}">
+        </td>
+    </tr>
+    <tr>
+        <th>사용여부</th>
+        <td>
+            <input type="radio" name="isUse" value="1" id="isUse_1"{{ ' checked' if mode != 'edit' or isUse == 1 }}>
+            <label for="isUse_1">사용</label>
+            <input type="radio" name="isUse" value="0" id="isUse_0"{{ ' checked' if isUse != '1' }}>
+            <label for="isUse_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>1페이지 게시글 수</th>
+        <td>
+            <input type="number" name="rowsPerPage" value="{{ rowsPerPage }}">
+        </td>
+    </tr>
+    <tr>
+        <th>게시글 하단 목록</th>
+        <td>
+            <input type="radio" name="useViewList" value="1" id="useViewList_1"{{ ' checked' if useViewList == '1' }}>
+            <label for="useViewList_1">사용</label>
+            <input type="radio" name="useViewList" value="0" id="useViewList_0"{{ ' checked' if useViewList != '1' }}>
+            <label for="useViewList_0">미사용</label>
+        </td>
+    </tr>
+</table>
+
+<div class="stitle">분류 설정</div>
+<table class="table-cols">
+    <tr>
+        <th>분류</th>
+        <td>    
+            <textarea name="category" rows="10">{{ category.join('\r\n') if category and category.length > 0 }}</textarea>
+            <div class="guide_txt">분류가 여러개인 경우 엔터키를 눌러 줄개행하여 입력</div>
+        </td> 
+    </tr>
+</table>
+
+<div class="stitle">접근가능 관리레벨</div>
+<table class="table-cols">
+    <tr>
+        <th>목록</th>
+        <td>
+            {% if levels and levels.length > 0 %}
+            {% for item in levels %}
+            <input type="checkbox" name="listAccessLevel" value="{{ item.level }}" id="listAccessLevel_{{ loop.index }}"{{ ' checked' if listAccessLevel and listAccessLevel.indexOf("" + item.level) != -1 }}>
+            <label for="listAccessLevel_{{ loop.index }}">{{ item.levelNm }}</label>
+            {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>게시글</th>
+        <td>
+            {% if levels and levels.length > 0 %}
+            {% for item in levels %}
+            <input type="checkbox" name="viewAccessLevel" value="{{ item.level }}" id="viewAccessLevel_{{ loop.index }}"{{ ' checked' if viewAccessLevel and viewAccessLevel.indexOf("" + item.level) != -1 }}>
+            <label for="viewAccessLevel_{{ loop.index }}">{{ item.levelNm }}</label>
+            {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>글쓰기</th>
+        <td>
+            {% if levels and levels.length > 0 %}
+            {% for item in levels %}
+            <input type="checkbox" name="writeAccessLevel" value="{{ item.level }}" id="writeAccessLevel_{{ loop.index }}"{{ ' checked' if writeAccessLevel and writeAccessLevel.indexOf("" + item.level) != -1 }}>
+            <label for="writeAccessLevel_{{ loop.index }}">{{ item.levelNm }}</label>
+            {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>답글</th>
+        <td>
+            {% if levels and levels.length > 0 %}
+            {% for item in levels %}
+            <input type="checkbox" name="replyAccessLevel" value="{{ item.level }}" id="replyAccessLevel_{{ loop.index }}"{{ ' checked' if replyAccessLevel and replyAccessLevel.indexOf("" + item.level) != -1 }}>
+            <label for="replyAccessLevel_{{ loop.index }}">{{ item.levelNm }}</label>
+            {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>댓글</th>
+        <td>
+            {% if levels and levels.length > 0 %}
+            {% for item in levels %}
+            <input type="checkbox" name="commentAccessLevel" value="{{ item.level }}" id="commentAccessLevel_{{ loop.index }}"{{ ' checked' if commentAccessLevel and commentAccessLevel.indexOf("" + item.level) != -1 }}>
+            <label for="commentAccessLevel_{{ loop.index }}">{{ item.levelNm }}</label>
+            {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+</table>
+
+<div class="stitle">접근가능 관리자</div>
+<table class="table-cols">
+    <tr>
+        <th>목록</th>
+        <td>
+            <ul id="listAccessManagers" class="accessManagers">
+                {% if listAccessManagers and listAccessManagers.length > 0 %}
+                {% for item in listAccessManagers %}
+                <li id="members_listAccessManagers_{{ item.id }}">
+                    <input type="hidden" name="listAccessManagers" value="{{ item.id }}">
+                    {{ item.managerNm }}({{ item.managerId }})
+                    <i class="remove xi-minus-square"></i>
+                </li>
+                {% endfor %}
+                {% endif %}
+            </ul>
+            <span class="sbtn select_managers" data-id="listAccessManagers"><i class='xi-check'></i>관리자 선택</span>
+        </td>
+    </tr>
+    <tr>
+        <th>게시글</th>
+        <td>
+            <ul id="viewAccessManagers" class="accessManagers">
+                {% if viewAccessManagers and viewAccessManagers.length > 0 %}
+                {% for item in viewAccessManagers %}
+                <li id="members_viewAccessManagers_{{ item.id }}">
+                    <input type="hidden" name="viewAccessManagers" value="{{ item.id }}">
+                    {{ item.managerNm }}({{ item.managerId }})
+                    <i class="remove xi-minus-square"></i>
+                </li>
+                {% endfor %}
+                {% endif %}
+            </ul>
+            <span class="sbtn select_managers" data-id="viewAccessManagers"><i class='xi-check'></i>관리자 선택</span>
+        </td>
+    </tr>
+    <tr>
+        <th>글쓰기</th>
+        <td>
+            <ul id="writeAccessManagers" class="accessManagers">
+                {% if writeAccessManagers and writeAccessManagers.length > 0 %}
+                {% for item in writeAccessManagers %}
+                <li id="members_writeAccessManagers_{{ item.id }}">
+                    <input type="hidden" name="writeAccessManagers" value="{{ item.id }}">
+                    {{ item.managerNm }}({{ item.managerId }})
+                    <i class="remove xi-minus-square"></i>
+                </li>
+                {% endfor %}
+                {% endif %}
+            </ul>
+            <span class="sbtn select_managers" data-id="writeAccessManagers"><i class='xi-check'></i>관리자 선택</span>
+        </td>
+    </tr>
+    <tr>
+        <th>답글</th>
+        <td>
+            <ul id="replyAccessManagers" class="accessManagers">
+                {% if replyAccessManagers and replyAccessManagers.length > 0 %}
+                {% for item in replyAccessManagers %}
+                <li id="members_replyAccessManagers_{{ item.id }}">
+                    <input type="hidden" name="replyAccessManagers" value="{{ item.id }}">
+                    {{ item.managerNm }}({{ item.managerId }})
+                    <i class="remove xi-minus-square"></i>
+                </li>
+                {% endfor %}
+                {% endif %}
+            </ul>
+            <span class="sbtn select_managers" data-id="replyAccessManagers"><i class='xi-check'></i>관리자 선택</span>
+        </td>
+    </tr>
+    <tr>
+        <th>댓글</th>
+        <td>
+            <ul id="commentAccessManagers" class="accessManagers">
+                {% if commentAccessManagers and commentAccessManagers.length > 0 %}
+                {% for item in commentAccessManagers %}
+                <li id="members_commentAccessManagers_{{ item.id }}">
+                    <input type="hidden" name="commentAccessManagers" value="{{ item.id }}">
+                    {{ item.managerNm }}({{ item.managerId }})
+                    <i class="remove xi-minus-square"></i>
+                </li>
+                {% endfor %}
+                {% endif %}
+            </ul>
+            <span class="sbtn select_managers" data-id="commentAccessManagers"><i class='xi-check'></i>관리자 선택</span>
+        </td>
+    </tr>
+</table>
+
+<div class="stitle">기능설정</div>
+<table class="table-cols">
+    <tr>
+        <th>출력구분</th>
+        <td>
+            <input type="radio" name="viewType" value="admin" id="viewType_admin"{{ ' checked' if mode != 'edit' or viewType == 'admin' }}>
+            <label for="viewType_admin">관리자페이지</label>
+            <input type="radio" name="viewType" value="member" id="viewType_member"{{ ' checked' if viewType == 'member' }}>
+            <label for="viewType_member">회원페이지</label>
+        </td>
+    </tr>
+    <tr>
+        <th>에디터</th>
+        <td>
+            <input type="radio" name="useEditor" value="1" id="useEditor_1"{{ ' checked' if mode != 'edit' or useEditor == '1' }}>
+            <label for="useEditor_1">사용</label>
+            <input type="radio" name="useEditor" value="0" id="useEditor_0"{{ ' checked' if mode == 'edit' and useEditor != '1' }}>
+            <label for="useEditor_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>파일첨부</th>
+        <td>
+            <input type="radio" name="useFileAttach" value="1" id="useFileAttach_1"{{ ' checked' if  useFileAttach == '1' }}>
+            <label for="useFileAttach_1">사용</label>
+            <input type="radio" name="useFileAttach" value="0" id="useFileAttach_0"{{ ' checked' if useFileAttach != '1' }}>
+            <label for="useFileAttach_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>이미지첨부</th>
+        <td>
+            <input type="radio" name="useImageAttach" value="1" id="useImageAttach_1"{{ ' checked' if mode != 'edit' or useImageAttach == '1' }}>
+            <label for="useImageAttach_1">사용</label>
+            <input type="radio" name="useImageAttach" value="0" id="useImageAttach_0"{{ ' checked' if useImageAttach != '1' }}>
+            <label for="useImageAttach_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>글작성 후 이동</th>
+        <td>
+            <input type="radio" name="afterWriteTarget" value="view" id="afterWriteTarget_view"{{ ' checked' if mode != 'edit' or afterWriteTarget == 'view' }}>
+            <label for="afterWriteTarget_view">게시글</label>
+            <input type="radio" name="afterWriteTarget" value="list" id="afterWriteTarget_list"{{ ' checked' if afterWriteTarget == 'list' }}>
+            <label for="afterWriteTarget_list">목록</label>
+        </td>
+    </tr>
+    <tr>
+        <th>답글 사용</th>
+        <td>
+            <input type="radio" name="useReply" value="1" id="useReply_1"{{ ' checked' if useReply == '1' }}>
+            <label for="useReply_1">사용</label>
+            <input type="radio" name="useReply" value="0" id="useReply_0"{{ ' checked' if useReply != '1' }}>
+            <label for="useReply_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>답글 알림</th>
+        <td>
+            <input type="radio" name="useReplyMessage" value="1" id="useReplyMessage_1"{{ ' checked' if useReplyMessage == '1' }}>
+            <label for="useReplyMessage_1">사용</label>
+            <input type="radio" name="useReplyMessage" value="0" id="useReplyMessage_0"{{ ' checked' if useReplyMessage != '1' }}>
+            <label for="useReplyMessage_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>댓글 사용</th>
+        <td>
+            <input type="radio" name="useComment" value="1" id="useComment_1"{{ ' checked' if useComment == '1' }}>
+            <label for="useComment_1">사용</label>
+            <input type="radio" name="useComment" value="0" id="useComment_0"{{ ' checked' if useComment == '0' }}>
+            <label for="useComment_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>댓글 알림</th>
+        <td>
+            <input type="radio" name="useCommentMessage" value="1" id="useCommentMessage_1"{{ ' checked' if useCommentMessage == '1' }}>
+            <label for="useCommentMessage_1">사용</label>
+            <input type="radio" name="useCommentMessage" value="0" id="useCommentMessage_0"{{ ' checked' if useCommentMessage != '1' }}>
+            <label for="useCommentMessage_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>관리자 알림</th>
+        <td>
+            <input type="radio" name="useAdminMessage" value="1" id="useAdminMessage_1"{{ ' checked' if useAdminMessage == '1' }}>
+            <label for="useAdminMessage_1">사용</label>
+            <input type="radio" name="useAdminMessage" value="0" id="useAdminMessage_0"{{ ' checked' if useAdminMessage != '1' }}>
+            <label for="useAdminMessage_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>자동완성 템플릿</th>
+        <td>
+            <input type="radio" name="useTemplate" value="1" id="useTemplate_1"{{ ' checked' if useTemplate == '1' }}>
+            <label for="useTemplate_1">사용</label>
+            <input type="radio" name="useTemplate" value="0" id="useTemplate_0"{{ ' checked' if useTemplate != '1' }}>
+            <label for="useTemplate_0">미사용</label>
+        </td>
+    </tr>
+    <tr>
+        <th>게시판 스킨</th>
+        <td>
+            <select name="skin">
+                <option value="">선택하세요</option>
+            {% if skins and skins.length > 0 %}
+            {% for item in skins %}
+                <option value="{{ item.id }}"{{ ' selected' if item.id == skin }}>{{ item.skinNm }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+            <a href="/board/admin/skin" target="_blank" class="btn5 black">
+                <i class="xi-cog"></i>
+                스킨관리
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <th>추가노출항목</th>
+        <td>
+            <input type="checkbox" name="useEmail" value="1" id="useEmail"{{ ' checked' if useEmail }}>
+            <label for="useEmail">이메일</label>
+
+            <input type="checkbox" name="useMobile" value="1" id="useMobile"{{ ' checked' if useMobile }}>
+            <label for="useMobile">휴대전화번호</label>
+        </td>
+    </tr>
+    <tr>
+        <th>후기작성설정</th>
+        <td>
+            <input type="radio" name="isReview" value="1" id="isReview_1"{{ ' checked' if isReview == '1' }}>
+            <label for="isReview_1">사용</label>
+            <input type="radio" name="isReview" value="0" id="isReview_0"{{ ' checked' if isReview != '1' }}>
+            <label for="isReview_0">미사용</label>
+
+            <input type="checkbox" name="isReviewOrderOnly" value="1" id="isReviewOrderOnly"{{ ' checked' if isReviewOrderOnly }}>
+            <label for="isReviewOrderOnly">주문상품만 후기 작성 가능</label>
+        </td>
+    </tr>
+</table>
+
+<div class="stitle">알림톡 템플릿</div>
+<table class="table-cols">
+    <tr>
+        <th>답글알림</th>
+        <td>
+            <select name="replyKakaoTmpltCode">
+                <option value=''>선택하세요</option>
+            {% if tmplts and tmplts.length > 0 %}
+            {% for item in tmplts %} 
+                <option value="{{ item.tmpltCode }}"{{ ' selected' if replyKakaoTmpltCode == item.tmpltCode }}>{{ item.tmpltNm }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>댓글알림</th>
+        <td>
+            <select name="commentKakaoTmpltCode">
+                <option value="">선택하세요</option>
+            {% if tmplts and tmplts.length > 0 %}
+            {% for item in tmplts %} 
+                <option value="{{ item.tmpltCode }}"{{ ' selected' if replyKakaoTmpltCode == item.tmpltCode }}>{{ item.tmpltNm }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>문의답변 알림</th>
+        <td>
+            <select name="answerKakaoTmpltCode">
+                <option value="">선택하세요</option>
+                {% if tmplts and tmplts.length > 0 %}
+                {% for item in tmplts %} 
+                    <option value="{{ item.tmpltCode }}"{{ ' selected' if answerKakaoTmpltCode == item.tmpltCode }}>{{ item.tmpltNm }}</option>
+                {% endfor %}
+                {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>관리자 알림</th>
+        <td>
+            <select name="adminKakaoTmpltCode">
+                <option value="">선택하세요</option>
+            {% if tmplts and tmplts.length > 0 %}
+            {% for item in tmplts %} 
+                <option value="{{ item.tmpltCode }}"{{ ' selected' if adminKakaoTmpltCode == item.tmpltCode }}>{{ item.tmpltNm }}</option>
+            {% endfor %}
+            {% endif %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>알림톡 수신관리자</th>
+        <td>
+            <ul id="alimTalkManagers" class="accessManagers">
+                {% if alimTalkManagers and alimTalkManagers.length > 0 %}
+                {% for item in alimTalkManagers %}
+                <li id="members_alimTalkManagers_{{ item.id }}">
+                    <input type="hidden" name="alimTalkManagers" value="{{ item.id }}">
+                    {{ item.managerNm }}({{ item.managerId }})
+                    <i class="remove xi-minus-square"></i>
+                </li>
+                {% endfor %}
+                {% endif %}
+
+            </ul>
+            <span class="sbtn select_managers" data-id="alimTalkManagers"><i class='xi-check'></i>관리자 선택</span>
+        </td>
+    </tr>
+    <tr>
+        <th>추가수신 휴대전화</th>
+        <td>
+            <textarea name="alimTalkMobiles">{{ alimTalkMobiles }}</textarea>
+            <div class="guide_txt">추가 휴대전화번호가 여러개인 경우 엔터키를 눌러 줄개행하여 입력</div>
+        </td>
+    </tr>
+</table>
+
+<div class="stitle">WEB HOOK URL설정</div>
+<table class="table-cols">
+    <tr>
+        <th>데이터 전송 URL</th>
+        <td>
+            <textarea name="webhookUrls" placeholder="여러 URL 입력시 줄개행(엔터키)하여 입력">{{ webhookUrls }}</textarea>
+        </td>
+    </tr>
+</table>
+
+<script type="text/html" id="tplMembers">
+    <li id="members_<%=uid%>">
+        <input type="hidden" name="<%=target%>" value="<%=id%>">
+        <%=managerNm%>(<%=managerId%>)
+        <i class="remove xi-minus-square"><i>
+    </li>
+</script>

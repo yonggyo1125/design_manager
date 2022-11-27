@@ -1,0 +1,490 @@
+{% extends '../layout/mypage.html' %}
+{% block content %}
+<section id="m_mypage_view" data-order-no="{{ orderNo }}"{{ " class=pt0" if isPopup }}>
+    <div class="top_box">
+        <div class="order_info">
+           <div class="txt1">주문번호:<strong>{{ orderNo }}</strong></div>
+           <div class="txt2">
+                접수일 : {{ getLocalDate(createdAt, '%Y.%m.%d') }}
+                <span class='division'></span>
+                출고희망일 : 
+                {% if items and items.length > 0 %}
+                {% for item in items %}
+                {% if item.packageDelivery == 'each' %}
+                    {% if item.preferredDeliveryReleasedDate %}
+                        <span>{{ getLocalDate(item.preferredDeliveryReleasedDate, '%Y.%m.%d') if item.preferredDeliveryReleasedDate }}
+                        </span>
+                    {% endif %}
+                {% else %}
+                    {% if preferredDeliveryReleasedDate %}
+                        <span>{{ getLocalDate(preferredDeliveryReleasedDate, '%Y.%m.%d') if preferredDeliveryReleasedDate }}
+                        </span>
+                    {% endif %}
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+           </div>
+        </div>
+        <!--// order_info -->
+        {% if orderStatuses and orderStatuses.length > 0 %}
+        <div class="progress_status_wrap">
+            <div class="progress_status">
+            {% for item in orderStatuses %}
+                <div class="status{{ ' on' if item.statusCd == orderStatus }}">
+                    <div class="txt">
+                        <span>{{ item.statusNm }}</span>
+                    </div>
+                    <div class="progress">
+                        <div class="lb"></div>
+                        <div class="cl"></div>
+                        <div class="rb"></div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+            <!--// progress_status -->
+        </div>
+        <!--// progress_status_wrap-->
+        {% endif %}
+
+        <div class="orderer_info">
+            <dl>
+                <dt>주문자명</dt>
+                <dd>{{ orderNm }}</dd>
+            </dl>
+            <dl>
+                <dt>업체명</dt>
+                <dd>{{ companyNm }}</dd>
+            </dl>
+            <dl>
+                <dt>휴대전화</dt>
+                <dd>{{ orderCellPhone }}</dd>
+            </dl>
+        </div>
+        <!--// orderer_info -->
+    </div>
+    <!--// top_box -->
+    <section id="order_content">
+        <!-- 주문내역 S -->
+        <div class="content_box box1">
+            <div class="tit">주문내역</div>
+            <div class="gtxt mb15">
+                디자인작업은 입금 순차적으로 진행(평일 영업시간)됩니다.<br>
+                디자인 수정은 2회까지 무료로 진행되며, 2회 이상 요청시 추가금이 발생합니다.
+            </div>
+            {% if designers and designers.length > 0 %}
+            <div class="designer_info">
+                <div class="icon change_designer{{ ' possible' if designerChangePossible }}"></div>
+                <div class="info">
+                    <div class="txt1">
+                        담당디자이너
+                        {% if isDesignerChanging %}
+                        <span class="changing">변경신청</span>
+                        {% endif %}
+                        {% for designer in designers %}
+                            {{ "," if loop.index > 1 }}{{ designer.managerNm }}
+                        {% endfor %}
+                    </div>
+                    <div class="txt2">
+                        고객님 안녕하세요.
+                        시안의 오타와 해상도를 꼼꼼히 확인해 주세요. 시안이 확정된 후에는 수정이 불가능합니다.<br>
+                        시안 확정을 해주셔야 출력이 진행되며, 출고일이 지정됩니다.
+                    </div>
+                </div>
+            </div>
+            <!--// designer_info -->
+            {% endif %}
+
+            {% if items and items.length > 0 %}
+            <div class='order_items'>
+                {% for item in items %}
+                <div class="order_item">
+                    <div class="item_no_box">품주번호 {{ item.id }}</div>
+                    <dl>
+                        <dt>분류/품목명</dt>
+                        <dd>
+                            {{ item.productItemInfo['ProductCategory.cateNm'] }}<br>
+                            {{ item.itemNm }}{{ " / " + item.itemNmSub if item.itemNmSub }}
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>옵션</dt>
+                        <dd>
+                            {% if item.itemSizeWidth or item.itemSizeHeight %}
+                                <div>
+                                    {{ item.itemSizeWidth.toLocaleString() + "Cm" if item.itemSizeWidth }}{{ ' X ' if item.itemSizeWidth and item.itemSizeHeight }}{{ item.itemSizeHeight.toLocaleString() + "Cm" if item.itemSizeHeight }}
+                                </div>
+                            {% endif %}
+                            {% if item.options and item.options.length > 0 %}
+                                {% for opt in item.options %}
+                                <div>{{ opt.optionNm }}</div>
+                                {% endfor %}
+                            {% endif %}
+                            {% if item.itemFont %}
+                                <div>폰트 : {{ item.itemFont }}</div>
+                            {% endif %}
+                            {% if item.itemText  %}
+                                <div>문구 : {{ item.itemText }}</div>
+                            {% endif %}
+                            {% if item.itemMemo %}
+                                <div>요청사항 : {{ item.itemMemo }}</div>
+                            {% endif %}
+                            {% if item.subOptions and item.subOptions.length > 0 %}
+                            {% for opt in item.subOptions %}
+                                <div>
+                                    <span class="badge">추가옵션</span>
+                                    {{ opt.optionNm }} - 1개
+                                </div>
+                            {% endfor %}
+                            {% endif %}
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>수량</dt>
+                        <dd>{{ item.itemCnt.toLocaleString() }}개</dd>
+                    </dl>
+                    <dl>
+                        <dt>가격</dt>
+                        <dd>{{ item.itemTotalPrice.toLocaleString() }}원</dd>
+                    </dl>
+                </div>
+                <!--// order_item -->
+                {% if item.designDraft %}
+                <div class="draft_box">
+                    
+                    {% if item.designDraft.draftFiles %}
+                    <ul class="drafts">
+                    {% for file in item.designDraft.draftFiles %}
+                        <li>
+                            <div class="badge">
+                                시안<br>{{ file.seq }}
+                            </div>
+                            <a class="thumb" href="/file/view_image/{{ file.id }}"  style="background:url('{{ file.thumbImageUrl }}') no-repeat center center;" target="_blank"></a>
+                            <a href="/file/view_image/{{ file.id }}" class="view_images" target="_blank">
+                                <i class="xi-plus-min"></i>이미지 확대보기
+                            </a>
+                        </li> 
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
+                    </ul>
+                    <!--// drafts -->
+                    <div class="draft_info{{ ' confirmed' if item.designDraft.designChoice }}">
+                        {% if item.designDraft.designChoice %}
+                        <div class="design_status">
+                            디자인 상태:
+                            <span>확정완료(시안{{item.designDraft.designChoice}})</span>
+                        </div>
+                        <div class="confirm_date">확정일 : {{ getLocalDate(item.designDraft.confirmDateTime, '%Y-%m-%d %H:%i') if item.designDraft.confirmDateTime }}</div>
+                        <div class="gtxt2">※ 시안이 확정된 이후에는 수정이 불가능합니다.</div>
+                        {% else %}
+                        <div class="design_status">디자인 상태 : {{ item.designStatusStr }}</div>
+                        {% if item.designDraft.designerResponse or item.    designDraft.designerResponse.trim() != "" %}
+                        <div class="cs_reply">
+                            <div class='replier'>From. 디자이너</div>
+                            <div class='reply'>{{ nl2br(item.designDraft.designerResponse) | safe }}</div>
+                        </div>
+                        {% else %}
+                        <form id="frm_{{ item.designDraft.draftUid }}" class="feedbackFrm" autocomplete="off">
+                            <div class="feedback">
+                                <textarea name='clientRequest' class="clientRequest" placeholder="수정하실 내용을 입력해 주세요.">{{ item.designDraft.clientRequest.trim() if item.designDraft.clientRequest }}</textarea>
+                                <div class="fbtns" data-uid="{{ item.designDraft.draftUid }}">
+                                    <button type="button" class="attach_files" onclick="codefty.fileUpload.showPopup(`draft_client_{{ item.designDraft.draftUid }}`);">
+                                        <i class="xi-plus"></i> 파일첨부
+                                    </button>
+                                    <div>
+                                        {% if item.designStatusGuideMessage and item.designStatusGuideMessage.trim() != "" %}
+                                        <span class="gtxt2">{{ item.designStatusGuideMessage }}</span>
+                                        {% endif %}
+                                        <button type="submit">수정하기</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--// feedback -->
+                            <ul class="attach_files" id="attach_files_{{ item.designDraft.draftUid }}">
+                            {% if item.designDraft.clientRequestFiles %}
+                            {% for file in item.designDraft.clientRequestFiles %}
+                                <li id="fileItem_{{ file.id }}">
+                                    <a href="/file/download/{{ file.id }}">{{ file.fileName }}</a>
+                                    <i class="xi-minus-square remove" data-id="{{ file.id }}"></i>
+                                </li> 
+                            {% endfor %}
+                            {% endif %}
+                            </ul>
+                        </form>
+                        {% endif %}
+                        {% if item.designDraft.draftFiles and item.designDraft.draftFiles.length > 0 %}
+                        <div class="confirm">
+                            <div class="designChoice">
+                            {% for file in item.designDraft.draftFiles %}
+                                <input type="radio" name="designChoice_{{ item.designDraft.draftUid }}" value="{{ loop.index }}" id="designChoice_{{ item.designDraft.draftUid }}_{{ loop.index }}"{{ ' checked' if item.designDraft.designChoice == loop.index or (loop.index == 1 and not item.designDraft.designChoice) }}>
+                                <label for="designChoice_{{ item.designDraft.draftUid }}_{{ loop.index }}">시안 {{ file.seq }}</label>
+                            {% endfor %}
+                            </div>
+                            {% if item.designDraft.draftFiles and item.designDraft.draftFiles.length > 0 %}
+                            <button type="button" data-uid="{{ item.designDraft.draftUid }}">확정하기</button>
+                            {% endif %}
+                        </div>
+                        <!--// confirm -->
+                        {% endif %}
+
+                        {% endif %}
+
+                    </div>
+                    <!--// draft_info -->
+                </div>
+                <!--// draft_box -->
+                {% endif %}
+
+                {% endfor %}
+            </div>
+            
+            {% endif %}
+
+        </div>
+        <!--// content_box : 주문내역 E -->
+
+        <!-- 증빙서류 S -->
+        <div class="content_box box2">
+            <div class="tit">증빙자료</div>
+            <div class="receipts">
+                {{ '세금계산서' if receiptType.indexOf('tax') != -1 }}
+                {{ '현금영수증' if receiptType.indexOf('cash') != -1 }}
+                {% if receiptType.indexOf('estimate') != -1 %}
+                <a href='/order/estimate/{{ orderNo }}' target='_blank'>
+                    견적서 출력하기
+                </a>
+                {% endif %}
+            </div>
+            <!--// receipts -->
+        </div>
+        <!-- 증빙서류 E -->
+
+
+        <div class="info_bottom">
+            <!-- 배송정보 S -->
+            <div class="content_box box3">
+                <div class="tit">배송정보</div>
+                {% if items and items.length > 0 %}
+                {% for item in items %}
+                {% if item.packageDelivery == 'each' %}
+                <div class="delivery_info">
+                    <dl>
+                        <dt>묶음배송</dt>
+                        <dd>{{ '개별배송' if item.packageDelivery == 'each' else '묶음배송' }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>출고일</dt>
+                        <dd>{{ getLocalDate(item.deliveryReleasedDate, '%Y-%m-%d') if item.deliveryReleasedDate }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>배송료</dt>
+                        <dd>
+                            {{ '후불' if item.deliveryChargeType == 'post' else '선불' }}
+                            {{ item.deliveryCharge.toLocaleString() }}원
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>운송장</dt>
+                        <dd>
+                            {{ item.deliveryCompany }} {{ item.deliveryInvoice }}
+                            {% if item.deliveryCompany and item.deliveryInvoice %}
+                            <span class='delivery_trace' data-company-nm='{{ item.deliveryCompany }}' data-invoice='{{ item.deliveryInvoice }}'>
+                                배송조회
+                            </span>
+                            {% endif %}
+                        </dd>
+                    </dl>
+                </div>
+                <!--// delivery_info -->
+
+                <div class="delivery_info delivery_info2">
+                    <dl>
+                        <dt>수령자</dt>
+                        <dd>{{ item.receiverNm }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>휴대전화</dt>
+                        <dd>{{ item.receiverCellPhone }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>주소</dt>
+                        <dd>
+                            {{ '(' + item.receiverZonecode  + ')' if item.receiverZonecode }}
+                            {{ item.receiverAddress }} {{ item.receiverAddressSub }}
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>배송시 요청사항</dt>
+                        <dd>{{ item.deliveryMemo }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>전달사항</dt>
+                        <dd></dd>
+                    </dl>
+                </div>
+            
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% if isPackageDeliveryIncluded %}
+                <div class="delivery_info">
+                    <dl>
+                        <dt>묶음배송</dt>
+                        <dd>묶음배송</dd>
+                    </dl>
+                    <dl>
+                        <dt>출고일</dt>
+                        <dd>{{ getLocalDate(deliveryReleasedDate, '%Y-%m-%d') if deliveryReleasedDate }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>배송료</dt>
+                        <dd>
+                            {{ '후불' if deliveryChargeType == 'post' else '선불' }}
+                            {{ deliveryCharge.toLocaleString() }}원
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>운송장</dt>
+                        <dd>
+                            {{ deliveryCompany }} {{ deliveryInvoice }}
+                            {% if deliveryCompany and item.deliveryInvoice %}
+                            <span class='delivery_trace' data-company-nm='{{ deliveryCompany }}' data-invoice='{{ deliveryInvoice }}'>
+                                배송조회
+                            </span>
+                            {% endif %}
+                        </dd>
+                    </dl>
+                </div>
+                <!--// delivery_info -->
+
+                <div class="delivery_info delivery_info2">
+                    <dl>
+                        <dt>수령자</dt>
+                        <dd>{{ receiverNm }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>휴대전화</dt>
+                        <dd>{{ receiverCellPhone }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>주소</dt>
+                        <dd>
+                            {{ '(' + receiverZonecode  + ')' if receiverZonecode }}
+                            {{ receiverAddress }} {{ receiverAddressSub }}
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>배송시 요청사항</dt>
+                        <dd>{{ deliveryMemo }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>전달사항</dt>
+                        <dd></dd>
+                    </dl>
+                </div>
+                {% endif %}
+            </div>
+            <!-- 배송정보 E -->
+
+            <!-- 결제 정보 S -->
+            <div class="content_box box4">
+                <div class="tit">결제정보</div>
+                
+                <div class="pay_info">
+                    <dl>
+                        <dt>상품 합계</dt>
+                        <dd>
+                            {{ itemsTotalPrice.toLocaleString() if itemsTotalPrice }}원
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>배송비 합계</dt>
+                        <dd>
+                        <dd>
+                            {{ totalDeliveryCharge.toLocaleString() }}원
+                            {% if totalDeliveryChargePost > 0 %}
+                            (착불 {{ totalDeliveryChargePost.toLocaleString() }}원 포함)
+                            {% endif %}
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>할인 합계</dt>
+                        <dd>{{ (totalDiscount * -1).toLocaleString() }}원</dd>
+                    </dl>
+                </div>
+                <!--// pay_info -->
+                {% if addPayments and addPayments.length > 0 %}
+                <div class="pay_info add_pay">
+                    <div class="stit">추가금액</div>
+                    {% for item in addPayments %}
+                    <dl>
+                        <dt>{{ item.itemNm }}</dt>
+                        <dd>{{ item.itemPrice.toLocaleString() }}원</dd>
+                    </dl>
+                    {% endfor %}
+                </div>
+                <!--// add_pay -->
+                {% endif %}
+                <div class="total_pay">
+                    <dl>
+                        <dt>최종금액</dt>
+                        <dd>
+                            <div class='price'>{{ totalPayPrice.toLocaleString() }}원</div>
+                            <div class="notice">※제작상황에 따라 견적금액은 가감될 수 있습니다.</div>
+                        </dd>
+                    </dl>
+
+                    {% if paymentItems and paymentItems.length > 0 %}
+                    {% for item in paymentItems %}
+                        {% if item.payDoneAt %}
+                        {% for payment in item.payments %}
+                        {% if payment.status != 'request' %}
+                        <dl class="payment_procees_info">
+                            <dt>결제 정보</dt>
+                            <dd>
+                                
+                                <div class="row">
+                                {{ payment.statusStr }} / {{ payment.payMethodStr }} / <strong>{{ payment.price.toLocaleString() }}원</strong>
+                                </div>
+                                <div class="row">
+                                {% if payment.canceledAt %}
+                                    취소/환불 일시 : {{ payment.canceledAt }}
+                                {% endif %}       
+                                {% if payment.receiptUrl %}
+                                <a href="{{ payment.receiptUrl }}" class="pay_receipt" target="_blank">
+                                    <i class="xi-list"></i>
+                                    매출전표
+                                </a>
+                                {% endif %}
+                                </div>
+                            </dd>
+                        </dl>
+                        {% endif %}
+                        {% endfor %}
+                        {% else %}
+                        <br>
+                        <a class="payBtn" href="{{ host }}{{ item.payUrl }}" target="_top">
+                            {{ item.amount.toLocaleString() }}원 결제하기
+                        </a>
+                        {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <!--// total_pay -->
+                
+            </div>
+            <!-- 결제 정보 E -->
+        </div>
+    </section>
+    <!--// order_content -->
+</section>
+<!-- mypage_view -->
+
+<script type="text/html" id="fileTpl">
+    <li id="fileItem_#[id]">
+        <a href="/file/download/#[id]">#[fileName]</a>
+        <i class="xi-minus-square remove" data-id="#[id]"></i>
+    </li>
+</script>
+{% endblock %}

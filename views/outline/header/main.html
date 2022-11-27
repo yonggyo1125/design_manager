@@ -1,0 +1,33 @@
+<nav>
+    <div class="inner">
+        <div class='left'>
+            <a href='/'>
+                <img src='/images/common/logo.png'>
+            </a>
+        </div>
+        <div class='right'>
+            <div class="btns">
+            {% if isLogin %}
+                <a href='/manager/info'>회원정보수정</a>
+                <a href='/manager/logout'>로그아웃</a>
+            {% else %}
+                <a href='/manager/join'>회원가입</a>
+                <a href='/manager/login'>로그인</a>
+            {% endif %}
+                <a href='http://n-mk.kr/index.php/login?user=guest' target='_blank' class="on">웹하드</a>
+            </div>
+            {% if isLogin %}
+            <div class="board_links">
+                {% if topBoards and topBoards.length > 0 %}
+                    {% for item in topBoards %}
+                    <a href="/board/list/{{ item.id }}"{{ " class=first" if loop.index == 1 }}>{{ item.title }}</a>
+                    {% endfor %}
+                {% endif %}
+                <a href="#">조직도</a>
+                <a href="{{ openMarketManagerURL }}">오픈마켓 관리</a>
+            </div>
+            {% endif %}
+            
+        </div>
+    </div>
+</nav>

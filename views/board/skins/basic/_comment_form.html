@@ -1,0 +1,81 @@
+<form id="frmComment" method="post" action="/board/comment/{{ commentData.idBoardData if mode == 'edit' else id }}" target="ifrmProcess" autocomplete="off">
+    <input type="hidden" name="gid" value="{{ commentData.gid if mode == 'edit' else gid }}">
+    {% if mode and mode == 'edit' %}
+    <input type="hidden" name="id" value="{{ commentData.id }}">
+    {% endif %}
+    {% if idParent %}
+    <input type="hidden" name="idParent" value="{{ idParent }}">
+    {% endif %}
+    <div class="comment_box">
+        <div class="comment_info">
+            <div>
+                <input type="text" name="commenter" value="{{ commentData.commenter if mode == 'edit' else manager.managerNm }}" placeholder="작성자">
+                {% if not isLogin %}
+                <input type="password" name="guestPw" placeholder="비밀번호">
+                {% endif %}
+            </div>
+            {% if board.useEditor %}
+            <div class="editor_size">
+                <i class="xi-plus-square-o plus"></i>
+                <i class="xi-minus-square-o minus"></i>
+            </div>
+            {% endif %}
+        </div>
+        <!--// comment_info -->
+        <div class="comment">
+            <div class="comment_form">
+            <textarea name="content" id="comment_form" placeholder="댓글을 작성하세요.">{{ commentData.content if mode == 'edit' }}</textarea>
+            </div>
+            <button type="submit">
+                <i class="xi-pen-o"></i>
+                {{ '수정하기' if mode == 'edit' else '작성하기' }}
+            </button>
+        </div>
+        <!--// comment -->
+        {% if board.useImageAttach or board.useFileAttach %}
+        {% if board.useImageAttach %}
+        <div class="attach_box">
+            <span class="attach_comment_files image sbtn">
+                <input type="file" data-gid="{{ commentData.gid if mode == 'edit' else gid }}_images" data-file-type="image" data-is-single="1" class="uploadFile dn">
+                <i class="xi-image-o"></i> 이미지 추가
+            </span>
+            <ul class="attach_files" id="attach_image_files">
+            {% if mode == 'edit' and commentData.attachImages and commentData.attachImages.length > 0 %}
+            {% for item in commentData.attachImages %}
+            <li>
+                <a href="/file/download/{{ item.id }}">{{ item.fileName }}</a>
+                <i class="insetImage xi-file-upload" data-id="{{ item.id }}"></i>
+                <i class="deleteFile xi-file-remove" data-id="{{ item.id }}"></i>
+            </li>
+            {% endfor %}
+            {% endif %}
+            </ul>
+        </div>
+        <!--// attach_box -->
+        {% endif %}
+        {% if board.useFileAttach %}
+        <div class="attach_box">
+            <span class="attach_comment_files sbtn">
+                <input type="file" data-gid="{{ commentData.gid if mode == 'edit' else gid }}_files" class="uploadFile dn">
+                <i class="xi-attachment"></i> 파일 첨부
+            </span>
+            <ul class="attach_files" id="attach_files">
+            {% if mode == 'edit' and commentData.attachFiles and commentData.attachFiles.length > 0 %}
+            {% for item in commentData.attachFiles %}
+                <li>
+                    <a href="/file/download/{{ item.id }}">{{ item.fileName }}</a>
+                    <i class="deleteFile xi-file-remove" data-id="{{ item.id }}"></i>
+                </li>
+            {% endfor %}
+            {% endif %}
+            </ul>
+        </div>
+        <!--// attach_box -->
+        {% endif %}
+        {% endif %}
+    </div>
+    <!--// comment_box -->
+</form>
+
+
+{% include "./_fileTpl.html" %}

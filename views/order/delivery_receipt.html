@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8'>
+		<title>물품확인 인수증</title>
+		<style>		 
+		@page {
+			size: 297mm 210mm;
+			margin: 5mm 15mm 5mm 5mm;
+		}
+		
+		@media print {
+
+			.paper {				
+				page-break-after: always;
+			}
+			hr { display: none; } 
+		}
+		</style>
+		<script>
+			window.addEventListener("load", function() {
+				window.print();
+			});
+		</script>
+	</head>
+	<body style="margin: 0;">
+    {% for data in list %}
+        {% if data.deliveryInfo and data.deliveryInfo.length > 0 %}
+        {% for info in data.deliveryInfo %}
+        {% if info.deliveryType != 'parcel'%}
+        <table cellspacing="0" cellpadding="0" width="100%">
+            <tr>
+                <td valign='top'>
+                    <table cellspacing="0" cellpadding="0" width="100%">
+                        <tr>
+                            <td rowspan='2' colspan='3' style='font-weight: bold; font-size: 30px;'>
+                                <span style="border-bottom: 1px double #000; padding-bottom: 3px;">물품확인 인수증</span>
+                            </td>
+                            <td align='right' colspan='2' style="font-size: 14px; height: 40px;">납품일자</td>
+                        </tr>
+                        <tr>
+                            <td align='right' colspan='2' style="color: red; font-size: 20px; font-weight: bold;">
+                                {{ getLocalDate(info.deliveryReleasedDate, '%Y-%m-%d') if info.deliveryReleasedDate }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='5' style="height: 35px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan='5' style='border-bottom: 2px solid #000; font-size: 23px; font-weight: bold;'>공급자</td>
+                        </tr>
+                        <tr>
+                            <td colspan='5' style='height: 10px;'></td>
+                        </tr>
+                        <tr>
+                            <td style="background: #999; border-right: 2px solid #000; padding: 5px; color: #fff; font-weight: bold; border-bottom: 1px dotted #000; font-size: 14px;">등록번호</td>
+                            <td style="border-bottom: 1px dotted #000; padding: 5px; font-size: 14px;">848-86-01521</td>
+                            <td style="background: #999; border-right: 2px solid #000; padding: 5px; color: #fff; font-weight: bold; border-bottom: 1px dotted #000; font-size: 14px;">상호(법인명)</td>
+                            <td colspan='2'  style="border-bottom: 1px dotted #000; padding: 5px; font-size: 14px;">(주)뉴마커스</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #999; border-right: 2px solid #000; padding: 5px; color: #fff; font-weight: bold; border-bottom: 1px dotted #000;">성명</td>
+                            <td style="border-bottom: 1px dotted #000; padding: 5px; font-size: 14px;">박상희</td>
+                            <td style="background: #999; border-right: 2px solid #000; padding: 5px; color: #fff; font-weight: bold; border-bottom: 1px dotted #000;">사업장주소</td>
+                            <td colspan='2'  style="border-bottom: 1px dotted #000; padding: 5px; font-size: 14px;">인천광역시 미추홀구 미추로 28 (숭의동)</td>
+                        </tr>
+                        <tr>
+                            <td colspan='5' style='height: 10px; border-bottom: 2px solid #000;'></td>
+                        </tr>
+                        <tr>
+                            <th width='120' style='border-bottom: 1px dotted #000; height: 40px; border-right: 1px dotted #000;font-size: 15px;'>품명</th>
+                            <th width='120' style='border-bottom: 1px dotted #000; height: 40px; border-right: 1px dotted #000; font-size: 15px;'>규격</th>
+                            <th width='120' style='border-bottom: 1px dotted #000; height: 40px; border-right: 1px dotted #000; font-size: 15px;'>수량</th>
+                            <th style='border-bottom: 1px dotted #000; height: 40px; border-right: 1px dotted #000; font-size: 15px;' width='80'></th>
+                            <th style='border-bottom: 1px dotted #000; height: 40px; font-size: 15px; background: #ffe599;'>특이사항(비고)</th>
+                        </tr>
+                        {% if info.deliveryItems and info.deliveryItems %}
+                        {% for item in info.deliveryItems %}
+                        <tr>
+                            <td style='border-bottom: 1px dotted #000; height: 30px; border-right: 1px dotted #000; font-size: 14px;'>
+                                {{ item.itemNm }}{{ ' ' + item.itemNmSub if item.itemNmSub }}
+                            </td>
+                            <td style='border-bottom: 1px dotted #000; height: 30px; border-right: 1px dotted #000; font-size: 13px;' align='center'>
+                            {% if item.productItemInfo and item.productItemInfo.idSizeConfig %}
+                                {{ item.itemSizeWidth }}Cm X {{ item.itemSizeHeight }}Cm
+                            {% endif %}
+                            </td>
+                            <td style='border-bottom: 1px dotted #000; height: 30px; border-right: 1px dotted #000; font-size: 13px;' align='center'>{{ item.itemCnt }}</td>
+                            <td  style='border-bottom: 1px dotted #000; height: 30px; border-right: 1px dotted #000;'></td>
+                            <td style='border-bottom: 1px dotted #000; height: 30xx; padding:5px; color: red; font-size: 13px;'>
+                            {% if item.optionInfo and item.optionInfo.length > 0 %}
+                            {% for it in item.optionInfo %}
+                                {{ '/' if loop.index > 1 }}
+                                {{ it.optionNm }}
+                            {% endfor %}
+                            {% endif %}
+                            {% if item.subOptionInfo and item.subOptionInfo.length > 0 %}
+                            {% for it in item.subOptionInfo %}
+                            {{ '/' if item.optionInfo  or loop.index > 1 }}
+                            {{ it.optionNm }} X {{ it.optionCnt }}
+                            {% endfor %}
+                            {% endif %}
+                            </td> 
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                        {% for i in range(info.startCnt, info.endCnt) %}
+                        <tr>
+                            <td style='border-bottom: 1px dotted #000; height: 25px; border-right: 1px dotted #000;'></td>
+                            <td style='border-bottom: 1px dotted #000; height: 25px; border-right: 1px dotted #000;'></td>
+                            <td style='border-bottom: 1px dotted #000; height: 25px; border-right: 1px dotted #000;'></td>
+                            <td  style='border-bottom: 1px dotted #000; height: 25px; border-right: 1px dotted #000;'></td>
+                            <td style='border-bottom: 1px dotted #000; height: 25px;'></td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan='2' style="border-bottom: 2px solid #000; font-weight: bold; font-size: 19px;" align="center">합계</td>
+                            <td style="border-bottom: 2px solid #000; background:yellow; color: red; font-weight: bold; font-size: 16px;" align='center' >{{ info.totalCnt }}</td>
+                            <td colspan='2' align='center' style="border-bottom: 2px solid #000; background: #1155cc; color: #fff; font-weight: bold; padding:10px; font-weight: bold; font-size: 15px;">
+                                물품 받으시고 싸인 후<br>
+                                팩스나 사진전송바랍니다.<br>
+                                F: <font color='yellow'>032-765-1864</font> M : <font color='yellow'>010-4696-9483</font>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='5' style='height: 25px;'></td>
+                        </tr>
+                        <tr>
+                            <td style="border-bottom: 2px solid #000; font-size: 23px; font-weight: bold;">인수자</td>
+                            <td colspan='3' style="border-bottom: 2px solid #000; font-size: 23px; font-weight: bold; color: red;">{{ info.deliveryMemo }}</td>
+                            <td align='center' style="background: yellow; border-bottom: 2px solid #000; font-weight: bold; font-size: 18px; padding: 5px;">{{ info.receiverNm }}</td>
+                        </tr>
+                        <tr>
+                            <td style='border-bottom: 1px dotted #000; height: 35px; border-right: 1px dotted #000; font-size: 15px;'>주소</td>
+                            <td colspan='3' style='border-bottom: 1px dotted #000; height: 35px; border-right: 1px dotted #000; font-size: 14px; font-weight: bold; padding: 5px;'>
+                                {{ info.receiverAddress }} {{ info.receiverAddressSub }}
+                            </td>
+                            <td rowspan='2' style='border-bottom: 1px dotted #000; height: 35px;' align='center'>(인)</td>
+                        </tr>
+                        <tr>
+                            <td  style='border-bottom: 1px dotted #000; height: 35px; border-right: 1px dotted #000;'>연락처</td>
+                            <td colspan='3'  style='border-bottom: 1px dotted #000; height: 45px; border-right: 1px dotted #000; font-sie: 15px; color: red; font-weight: bold;' align='center'>{{ info.receiverCellPhone }}</td>
+                        </tr>
+                    </table>
+                </td>
+                <td width='15'></td>
+                <td width='15' style='border-left: 1px dotted #000;'></td>
+                <td width='330' valign='top'>
+                    <table cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                            <td style="border: 2px solid #000; border-right: 0; background: yellow; font-size: 15px; font-weight: bold; height: 30px; padding: 0 5px;" width='100'>
+                                {{ '내방' if info.deliveryType == 'parcel' else info.deliveryTypeStr }}
+                            </td>
+                            <td colspan='2' style="border: 2px solid #000; border-left: 0; font-size: 15px;" align="right" nowrap>
+                            {% if info.deliveryType != 'parcel' %}
+                                선불일때만 기재 / <strong>공급가액기준</strong>
+                            {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='3' style="height: 45px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan='3' style='color: red; border: 2px solid red; text-align: center; font-weight: bold; padding: 10px; font-size: 14px;'>금액이 다를경우만 인수증 올려주세요</td>
+                        </tr>
+                        <tr>
+                            <td colspan='3' style="height: 10px"></td>
+                        </tr>
+                        <tr>
+                            <th style="border-top: 2px solid #000; border-bottom: 1px solid #000; border-left: 2px solid #000; border-right: 1px solid #000; font-size: 14px; font-weight: bold; height: 35px; width: calc(100% / 3);">디자이너</th>
+                            <th style="border-top: 2px solid #000; border-bottom: 1px solid #000;  border-right: 1px solid #000; font-size: 14px; font-weight: bold; height: 35px; width: calc(100% / 3);">담당자</th>
+                            <th style="border-top: 2px solid #000; border-bottom: 1px solid #000; border-right: 2px solid #000; font-size: 14px; font-weight: bold; height: 35px; width: calc(100% / 3);">기사님 연락처</th>
+                        </tr>
+                        {% if info.designs and info.designs.length > 0 %}
+                        {% for item in info.designs %}
+                        <tr>
+                            <td style="border-left: 2px solid #000; border-right: 1px solid #000; height: 35px; font-size: 14px;" align='center'>{{ item.designerNm }}</td>
+                            <td style="border-right: 1px solid #000;"></td>
+                            <td style="border-right: 2px solid #000;"></td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td style="border-left: 2px solid #000; border-right: 1px solid #000; height: 10px;"></td>
+                            <td style="border-right: 1px solid #000; height: 10px;"></td>
+                            <td style="border-right: 2px solid #000; height: 10px;"></td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <td style="border-bottom: 2px solid #000; border-left: 2px solid #000; border-right: 1px solid #000; font-size: 14px; height: 35px; width: calc(100% / 3); padding: 5px;" align="center">{{ info.receiverNm }}</td>
+                            <td style="border-bottom: 2px solid #000; border-right: 1px solid #000; font-size: 14px; font-weight: bold; height: 35px; width: calc(100% / 3); padding: 5px;" align="center"></td>
+                            <td style="border-bottom: 2px solid #000; border-right: 2px solid #000; font-size: 14px; font-weight: bold; height: 35px; width: calc(100% / 3); padding: 5px;" align="center"></td>
+                        </tr>
+                        <tr>
+                            <td colspan='3' style="padding-top: 5px;">
+                            {% for item in info.designs %}
+                            {% if item.draft %}
+                            <img src="{{ item.draft.uploadUrl }}" style='display: block; max-width: calc(90% - 1px); max-height: 400px;'>
+                            {% endif %}
+                            {% endfor %}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+        </table>
+        <div class='paper'></div>
+        <hr>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+    {% endfor %}
+    </body>
+    </html>

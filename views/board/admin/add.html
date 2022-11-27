@@ -1,0 +1,20 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+    <div class="mtitle flex_between">
+        게시판 등록
+        <div class="tit_btns">
+            <a href="/board/admin" class="sbtn">
+                <i class='xi-list'></i>게시판 목록
+            </a>
+        </div>
+    </div>
+    <form id="frmRegist" method="post" action="/board/admin/add" autocomplete="off" target="ifrmProcess">
+        {% include "./_form.html" %}
+        <div class="btns">
+            <button type="submit" class="btn">등록하기</button>
+            <button type="reset" class="btn white">다시작성</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

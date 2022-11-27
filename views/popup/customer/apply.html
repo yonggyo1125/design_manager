@@ -1,0 +1,84 @@
+{% extends '../../layout/popup.html' %}
+{% block content %}
+<div class='cs_tit'>
+    전화 상담 예약
+    <div class='xi-close' id='close_popup'></div>
+</div>
+
+<form id='frmApply' method='post' action='/popup/customer/apply' target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='preferredDate' id='preferredDate'>
+    <input type='hidden' name='channel' value='{{ search.channel }}'>
+    <dl>
+        <dt>상담 종류</dt>
+        <dd class='cs_type'>
+            <input type='radio' name='csType' value='tel' id='csType_tel' checked>
+            <label for='csType_tel'>전화상담</label>
+            <input type='radio' name='csType' value='kakao' id='csType_kakao'>
+            <label for='csType_kakao'>카카오톡 상담</label>
+        </dd>  
+    </dl>
+    <dl>
+        <dt>희망 날짜</dt>
+        <dd>
+            <div class='datepicker preferred_date' data-mode='customer_apply'>
+                상담 희망 날짜를 선택해 주세요
+            </div>
+        </dd>
+    </dl>
+    <dl>
+        <dt>희망 상담 시간</dt>
+        <dd>
+            <div class='schedules_wrap'>
+                {% if schedules.length > 0 %}
+                <div class='schedules'>
+                {% for item in schedules %}
+                    {% if item.period.indexOf('오전') != -1 %} 
+                    <div class='item'>
+                        <input type='radio' name='preferredTime' value='{{ item.hour }}' id='preferredTime_{{ item.hour }}'>
+                        <label for='preferredTime_{{ item.hour }}'>{{ item.period }}</label>              
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+                <div class='schedules'>
+                    {% for item in schedules %}
+                        {% if item.period.indexOf('오후') != -1 %} 
+                        <div class='item'>
+                            <input type='radio' name='preferredTime' value='{{ item.hour }}' id='preferredTime_{{ item.hour }}'>
+                            <label for='preferredTime_{{ item.hour }}'>{{ item.period }}</label>              
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </dd>
+    </dl>
+    <dl>
+        <dt>신청자명</dt>
+        <dd>
+            <input type='text' name='customerNm' placeholder='이름을 입력하세요' value='{{ search.customerNm }}'> 
+        </dd>
+    </dl>
+    <dl class='dn' id='kakao_id_wrap'>
+        <dt>카카오톡ID</dt>
+        <dd>
+            <input type='text' name='kakaoId' placeholder='카카오톡 ID를 입력하세요'>
+        </dd>
+   </dl>
+   <dl>
+        <dt>연락처</dt>
+        <dd>
+            <input type='text' name='customerCellPhone' placeholder='휴대전화번호' value='{{ search.customerCellPhone }}'>
+        </dd>
+    </dl>
+
+    <div class='btns'>
+        <button type='button' class='cancel_btn'>취소</button>
+        <button type='submit'>예약하기</button>
+    </div>
+</form>
+
+
+
+{% endblock %}

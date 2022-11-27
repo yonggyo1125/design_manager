@@ -1,0 +1,41 @@
+<table class="table-cols">
+    <tr>
+        <th>설정명</th>
+        <td>
+            <input type="text" name="configNm" value="{{ configNm }}">
+        </td>
+    </tr>
+    <tr>
+        <th>최소판매금액</th>
+        <td>
+            <input type="number" name="minPrice" value="{{ minPrice }}">
+        </td>
+    </tr>
+    <tr>
+        <th>면적별 추가금액</th>
+        <td>
+            <input type="text" name="addPriceByArea" value="{{ addPriceByArea }}" placeholder="'면적|금액,면적|금액'의 형태로 입력">
+        </td>
+    </tr>
+    <tr>
+        <th nowrap>기본헤배 적용제외</th>
+        <td>
+            <input type="radio" name="exceptMinSize" value="0" id="exceptMinSize_0"{{ ' checked' if not exceptMinSize }}>
+            <label for="exceptMinSize_0">기본헤베 적용</label>
+            <input type="radio" name="exceptMinSize" value="1" id="exceptMinSize_1"{{ ' checked' if exceptMinSize }}>
+            <label for="exceptMinSize_1">기본헤베 적용제외</label>
+        </td>
+    </tr>
+    <tr>
+        <th>최소면적</th>
+        <td>
+            <input type="number" name="minSize" value="{{ minSize }}">
+        </td>
+    </tr>
+    <tr>
+        <th>최대면적</th>
+        <td>
+            <input type="number" name="maxSize" value="{{ maxSize }}">
+        </td>
+    </tr>
+</table>

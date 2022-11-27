@@ -1,0 +1,32 @@
+{% if subCategories %}
+<form id='frmSampleUrl' method='get' autocomplete='off' data-category='{{ category }}'>
+    <table class='table-cols'>
+    {% for sub in subCategories %}
+        <tr>
+            <th>1행 진열갯수<br>({{ sub }})</th>
+            <td>
+                <input type='number' name='cols' class='w100' value='2'>개
+            </td>
+        </tr>
+    {% endfor %}
+        <tr>
+            <th>샘플코드 복사</th>
+            <td>
+                <input type='checkbox' name='copy' value='1' id='sample_copy'>
+                <label for='sample_copy'>활성화</label>
+            </td>
+        </tr>
+        <tr>
+            <th>샘플코드 선택</th>
+            <td>
+                <input type='checkbox' name='userSelect' value='1' id='sample_user_select'>
+                <label for='sample_user_select'>활성화</label>
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='URL 생성하기'>
+    </div>
+</form>
+<div id='generated_sample_url'></div>
+{% endif %}

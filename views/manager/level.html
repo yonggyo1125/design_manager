@@ -1,0 +1,102 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+{% set levels = [1,2,3,4,5,6,7,8,9,10] %}
+<div class="top_box">
+<div class="mtitle top flex_between">
+    관리레벨 등록
+    <div class="tit_btns">
+        <a href="/manager/list" class="sbtn">
+            <i class="xi-list"></i>
+            회원관리
+        </a>
+    </div>
+</div>
+<form id='frmRegist' method="post" action="/manager/level" target="ifrmProcess" autocomplete="off">
+<table class="table-cols style2">
+    <tr>
+        <th>레벨</th>
+        <td width="200">
+            <select name="level">
+            {% for level in levels %}
+                <option value="{{ level }}">Lv. {{ level }}</option>
+            {% endfor %}
+            </select>
+        </td>
+        <th>관리명</th>
+        <td>
+            <input type="text" name="levelNm">
+        </td>
+    </tr>
+    <tr>
+        <th>역할</th>
+        <td colspan="3">
+            {% for k, v in roles %}
+                <input type="checkbox" name="roles" id="role_{{ loop.index }}" value="{{ k }}">
+                <label for="role_{{ loop.index }}">{{ v }}</label>
+            {% endfor %}
+        </td>
+    </tr>
+</table>
+<div class="table-btn">
+    <input type="submit" value="등록하기">
+</div>
+</form>
+</div>
+
+<div class="content_box">
+<div class="mtitle">관리 목록</div>
+<form id='frmList' method="post" action="/manager/level" target="ifrmProcess" autocomplete="off">
+<table class="table-rows">
+    <thead>
+        <tr>
+            <th width='20'>
+                <input type="checkbox" class="js-checkall" id="js-checkall" data-target-name="level">
+                <label for="js-checkall" class="standalone"></label>
+            </th>
+            <th width="120">레벨</th>
+            <th width="250">관리명</th>
+            <th>역할</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if list.length > 0 %}
+    {% for item in list %}
+        <tr>
+            <td>
+                <input type="checkbox" name="level" value="{{ item.level }}" id="level_{{ item.level }}">
+                <label for="level_{{ item.level }}" class="standalone"></label>
+            </td>
+            <td>Lv. {{ item.level }}</td>
+            <td>
+                <input type="text" name="levelNm_{{ item.level }}" value="{{ item.levelNm }}">
+            </td>
+            <td>
+                {% for k, v in roles %}
+                    <input type="checkbox" name="roles_{{ item.level }}" id="role_{{ item.level }}_{{ loop.index }}" value="{{ k }}"{{ ' checked' if item.roles.indexOf(k) != -1 }}>
+                    <label for="role_{{ item.level }}_{{ loop.index }}">{{ v }}</label>
+                 {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+    {% else %}
+        <tr class="no-list">
+            <td colspan="4">등록된 관리레벨이 없습니다.</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
+<div class="table-action">
+    <div>
+    <span class="sbtn black form_update" data-id="frmList">
+        <i class="xi-check-min"></i>
+        선택 관리레벨 수정하기
+    </span>
+    <span class="sbtn form_delete" data-id='frmList'>
+        <i class="xi-trash-o"></i>
+        선택 관리레벨 삭제하기
+    </span>
+    </div>
+</div>
+</form>
+</div>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends '../layout/mypage.html' %}
+{% block content %}
+<section class="content_box layout_width mb20">
+    <div class="mtitle">주문 검색하기</div>
+    <form id="frmSearch" name="frmSearch" method="get" autocomplete="off">
+        <table class="table-cols mb20">
+            <tr>
+                <th>조회기간</th>
+                <td class="flex">
+                    <span class='quick_date mr10' data-target-name='createSdate,createEdate'>
+                        <span class='date_span' data-span="today">오늘</span>
+                        <span class='date_span' data-span='1_week'>1주</span>
+                        <span class='date_span' data-span='1_month'>1개월</span>
+                        <span class='date_span' data-span='3_month'>3개월</span>
+                        <span class='date_span' data-span='6_month'>6개월</span>
+                        <span class='date_span' data-span='1_year'>1년</span>
+                    </span>
+                    <input  type='date' name='createSdate'  value='{{ search.createSdate }}' class='wauto'> ~ 
+                    <input type='date' name='createEdate' value='{{ search.createEdate }}' class='wauto'>
+                </td>
+            </tr>
+            <tr>
+                <th>상세조건</th>
+                <td>
+                    <select name="sopt" class="w190">
+                        <option value="all">전체</option>
+                        <option value="orderNo"{{ ' selected' if search.sopt == 'orderNo' }}>주문번호</option>
+                        <option value="name"{{ ' selected' if search.sopt == 'name' }}>이름</option>
+                        <option value="mobile"{{ ' selected' if search.sopt == 'mobile' }}>연락처</option>
+                    </select>
+                    <input type="text" name="skey" value="{{ search.skey }}">
+                </td>
+            </tr>
+        </table>
+        <div class="table-btn">
+            <button type="submit">검색하기</button>
+        </div>
+    </form>
+</section>
+<!-- content_box -->
+
+<section class="content_box layout_width">
+    <div class="stitle">주문목록{{ '(총 ' + total.toLocaleString() + "개)" if total }}</div>
+
+    <table class="table-rows mb20">
+        <thead>
+            <tr>
+                <th>진행상황</th>
+                <th>주문번호</th>
+                <th>주문품목</th>
+                <th>디자인상태</th>
+                <th>담당디자이너</th>
+                <th>접수일</th>
+                <th>출고일</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if list and list.length > 0 %}
+        {% for item in list %}
+            <tr onclick="location.href='/mypage/{{ item.orderNo }}';" class="curp">
+                <td align="center"><strong>{{ item.orderStatusInfo.statusNm }}</strong></td>
+                <td align="center"><strong>{{ item.orderNo }}</strong></td>
+                <td align="center">
+                    {% if item.items and item.items.length > 0 %}
+                    {{ item.items[0].itemNm }}
+                    {{ " / " + item.items[0].itemNmSub if item.items[0].itemNmSub }}{{ '외 ' + (item.items.length - 1).toLocaleString() + "건" if item.items.length > 1 }}
+                    {% endif %}
+                </td>
+                <td align="center">
+                    <strong>
+                    {% if item.items and item.items.length > 0 %}
+                    {% for it in item.items %}
+                    {{ it.designStatusStr + " " if it.designStatusStr }}
+                    {% endfor %}
+                    {% endif %}
+                    </strong>
+                </td>
+                <td align="center"><strong>담당디자이너</strong></td>
+                <td>
+                   <strong>{{ getLocalDate(item.createdAt, '%Y.%m.%d') }}</strong>
+                </td>
+                <td align="center">
+                    <strong>
+                    {% if item.deliveryReleasedDate %}
+                        {{ getLocalDate(item.deliveryReleasedDate, '%Y.%m.%d') }}
+                    {% else %}
+                        {% if item.items and item.items.length > 0 %}
+                        {% for it in item.items %}
+                        {% if it.packageDelivery == 'each' and it.deliveryReleasedDate %}
+                            {{ " " + getLocalDate(it.deliveryReleasedDate, '%Y.%m.%d') }}
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                    </strong>
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="7" class='no-list'>검색된 주문이 없습니다.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    {{ pagination | safe }}
+
+</section>
+{% endblock %}

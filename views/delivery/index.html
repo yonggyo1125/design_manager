@@ -1,0 +1,42 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<div class="popup_box">
+    <div class="popup_tit">
+        <span class='big'>배송지 조회</span> 
+        <a href='/mypage' target="_blank">주문번호 : {{ orderNo }}</a>
+        <div class='xi-close' id='close_popup' onclick="self.close();"></div>
+    </div>
+
+    {% if list and list.length > 0 %}
+    {% for item in list %}
+    <table class="table-cols mb10">
+        <tr>
+            <th>운송장</th>
+            <td>
+                {% if item.traceUrl %}
+                    <a href="{{ item.traceUrl }}" target="_blank">{{ item.deliveryCompany }} {{ item.deliveryInvoice }}</a>
+                    <a href="{{ item.traceUrl }}" class="sbtn" target="_blank">
+                        <i class='xi-search'></i> 배송조회
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>배송상품</th>
+            <td>
+                {% if item.deliveryItems and item.deliveryItems.length > 0 %}
+                    <ul>
+                    {% for it in item.deliveryItems %}
+                        <li>{{ it.itemNm }} X {{ it.itemCnt }}개 </li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    {% endfor %}
+    {% endif %}
+
+</div>
+<!--// popup_box -->
+{% endblock %}

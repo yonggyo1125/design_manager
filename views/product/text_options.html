@@ -1,0 +1,87 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+    <div class="mtitle top flex_between">
+        텍스트옵션관리
+        <div class='tit_btns'>
+            <a href='/product/text_options/add' class='sbtn'>
+                <i class='xi-plus'></i> 텍스트옵션 등록
+            </a>
+        </div>
+    </div>
+    {% if limits and limits.length > 0 %}
+    <form id="frmSearch">
+        <input type="hidden" name="limit" value="{{ limit }}">
+    </form>
+    <div class="limits_tab" data-target-id="frmSearch">
+    {% for num in limits %}
+        <span class="sbtn tab{{ ' on' if num == limit }}" data-limit="{{ num }}">{{ num }}개씩 보기</span>
+    {% endfor %}
+    </div>
+    {% endif %}
+    <form id='frmList' method='post' action='/product/text_options' target='ifrmProcess' autocomplete='off'>
+        <table class='table-rows'>
+            <thead>
+                <tr>
+                    <th width='30'>
+                        <input type='checkbox' class='js-checkall' data-target-name='id' id='js-checkall'>
+                        <label for='js-checkall' class='standalone'></label>
+                    </th>
+                    <th width='250'>옵션분류명</th>
+                    <th width='200'>사용여부</th>
+                    <th width='100'>진열가중치</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if list.length > 0 %}
+            {% for item in list %}
+                <tr>
+                    <td>
+                        <input type='checkbox' name='id' value='{{ item.id }}' id='id_{{ item.id }}'>
+                        <label for='id_{{ item.id }}' class='standalone'></label>
+                    </td>
+                    <td>{{ item.cateNm }}</td>
+                    <td align='center'>
+                        <input type='radio' name='isUse_{{ item.id }}' value='1' id='isUse_{{ item.id }}_1'{{ ' checked' if item.isUse == '1' }}>
+                        <label for='isUse_{{ item.id }}_1'>사용</label>
+                        <input type='radio' name='isUse_{{ item.id }}' value='0' id='isUse_{{ item.id }}_0'{{ ' checked' if not item.isUse or item.isUse == '0' }}>
+                        <label for='isUse_{{ item.id }}_0'>미사용</label>
+                    </td>
+                    <td>
+                        <input type='text' name='listOrder_{{ item.id }}' value='{{ item.listOrder }}'>
+                    </td>
+                    <td>
+                        <a href='/product/text_options/{{ item.id }}' class='sbtn'>
+                            <i class='xi-check-min'></i>
+                            수정하기
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% else %}
+                <tr class='no-list'>
+                    <td colspan='5'>등록된 추가옵션이 없습니다.</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+        <div class='table-action'>
+            <div>
+                <span class='sbtn black form_update' data-id='frmList'>
+                    <i class='xi-check-min'></i>
+                    선택옵션 수정하기
+                </span>
+                <span class='sbtn form_delete' data-id='frmList'>
+                    <i class='xi-trash-o'></i>
+                    선택옵션 삭제하기
+                </span>
+            </div>
+        </div>
+    </form>
+        
+    {{ pagination | safe }}
+
+</div>
+<!--// content_box -->
+{% endblock %}

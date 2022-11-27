@@ -1,0 +1,14 @@
+{% if items.length > 0 %}
+    {% for item in items %}
+    <li class='rows'>
+        <div class='item_tit'>{{ item.itemNm }}</div>
+        <div class='item_content'>
+            오늘 <b>{{ '오전' if item.designAmPm == 'am' else '오후'}}<span class='montserrat'></span>{{ item.designHour }}</span></b>시전까지 디자인 시안 확정시 
+            <span class='delivery_schedule'>
+                <b class='montserrat'>{{ item.deliveryStartDate }}</b>({{ item.deliveryStartYoil }})
+                <b class='montserrat'>{{ '0' if item.deliveryHour < 10 }}{{ item.deliveryHour }}:00</b> 이후 출고 예정
+            </span>
+        </div>
+    </li>
+    {% endfor %}
+{% endif %}

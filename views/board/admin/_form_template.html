@@ -1,0 +1,14 @@
+<table class="table-cols">
+    <tr>
+        <th>양식명</th>
+        <td>
+            <input type="text" name="title" value="{{ title }}" class="wFull">
+        </td>
+    </tr>
+    <tr>
+        <th>내용</th>
+        <td>
+            <textarea name="content" id="content">{{ content | safe }}</textarea>
+        </td>
+    </tr>
+</table>

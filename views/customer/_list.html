@@ -1,0 +1,125 @@
+    <ul class="customer_list">
+    {% if list.length > 0 %}
+    {% for item in list %}
+    <li{{ " class=mb20" if search.isPopup }}>
+        {% if not search.isPopup %}
+        <div class="cs_no">
+            <div>등<br>록<br>번<br>호<br>{{ item.id }}</div>
+        </div>
+        {% endif %}
+        <div class="cs_content">
+            <table class='table-rows mb10'>
+            <thead>
+                <tr>
+                    {% if not search.isPopup %}
+                    <th width='30'></th>
+                    {% endif %}
+                    <th width='100'>상담구분</th>
+                    <th width='150'>유입경로</th>
+                    <th width='100'>등록일시</th>
+                    <th width='150'>처리자</th>
+                    <th width='200'>주문번호</th>
+                    <th width='150'>고객명</th>
+                    <th width='{{ 180 if not search.isPopup }}'>연락처/이메일</th>
+                    {% if not search.isPopup %}
+                    <th></th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% if not search.isPopup %}
+                    <td align='center'>
+                        <input type='checkbox' name='id' value='{{ item.id }}' id='id_{{ item.id }}'>
+                        <label for='id_{{ item.id }}' class='standalone'></label>
+                    </td>
+                    {% endif %}
+                    <td align='center'>
+                    {% if search.isPopup %}
+                        {{ item.category }}
+                    {% else %}
+                        <select name='category_{{ item.id }}'>
+                        {% for category in categories %}
+                            <option value='{{ category }}'{{ ' selected' if item.category == category }}>{{ category }}</option>
+                        {% endfor %}
+                        </select>
+                    {% endif %}
+                    </td>
+                    <td align='center'>{{ item.channel }}</td>
+                    <td align='center'>{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i') }}</td>
+                    <td align='center'>
+                        {{ item['Manager.managerNm']}}
+                        <div>({{ item['Manager.managerId']}})</div>
+                    </td>
+                    <td align='center'>
+                        {% if isDesigner %}
+                            {{ item.orderNo }}
+                        {% else %}
+                            {% if item.orderNo %}
+                            <div class='mb5'><a href='/order/{{ item.orderNo }}' target='_blank' class='underline'>{{ item.orderNo }}</a></div>
+                            <a href='/order/add?copy_orderNo={{ item.orderNo }}' class='sbtn on' target='_blank'>
+                                <i class='xi-pen'></i>
+                                복사등록
+                            </a>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td align='center'>{{ item.customerNm }}</td>
+                    <td align='center'>
+                        {{ item.cellPhone }}
+                        {% if item.email %}
+                        <div>{{ item.email }}</div>
+                        {% endif %}
+                    </td>
+                    {% if not search.isPopup %}
+                    <td nowrap>
+                        <a href='/customer/update/{{ item.id }}' class='sbtn'>
+                            <i class='xi-pen-o'></i>
+                            수정하기
+                        </a>
+                    </td>
+                    {% endif %}
+                </tr>
+            </tbody>
+            </table>
+            <table class="table-cols style2">
+                <tr>
+                    <th>주소</th>
+                    <td>
+                        {% if item.zonecode %}({{ item.zonecode }}){% endif %}
+                        {{ item.address }} {{ item.addressSub }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>상담상품</th>
+                    <td>{{ item.productNm }}</td>
+                </tr>
+                <tr>
+                    <th>고객요청사항</th>
+                    <td>{{ nl2br(item.question) | safe }}</td>
+                </tr>
+                <tr>
+                    <th>상담메모</th>
+                    <td>{{ nl2br(item.memo) | safe }}</td>
+                </tr>
+                {% if item.attachFiles %}
+                <tr>
+                    <th>첨부파일</th>
+                    <td>
+                    {% for file in item.attachFiles %}
+                        <span class='file_box mr2'> 
+                            <a href='/file/download/{{ file.id }}'>{{ file.fileName }}</a>
+                        </span> 
+                    {% endfor %}
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+    </li>
+    {% endfor %}
+    {% else %} 
+        <li class='no-list'>조회된 상담이 없습니다.</li>
+    {% endif %}
+    </ul>
+    

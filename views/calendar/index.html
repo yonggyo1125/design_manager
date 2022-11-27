@@ -1,0 +1,21 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+<div class='navi'>
+    <a href='?year={{ prevYear }}&month={{ prevMonth }}&mode={{ search.mode }}' class='btn'><i class='xi-angle-left'></i></a>
+    <span class='current montserrat'>{{ year }}.{{ 0 if month < 10 }}{{ month }}</span>
+    <a href='?year={{ nextYear }}&month={{ nextMonth }}&mode={{ search.mode }}' class='btn'><i class='xi-angle-right'></i></a>
+</div>
+<ul class='yoils'>
+{% for yoil in yoils %}
+    <li>{{ yoil }}</li>
+{% endfor %}
+</ul>
+
+<ul class='days'>
+    {% for item in days %}
+    <li>
+      <div class="day{{ ' available ' if item.available }}" data-date='{{ item.date }}' data-stamp='{{ item.stamp }}' data-yoil='{{ item.yoil }}'>{{ item.day }}</div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,30 @@
+<table class="table-cols">
+    <tr>
+        <th>설정이름</th>
+        <td>
+            <input type="text" name="sizeNm" value="{{ sizeNm }}"'>
+        </td>
+    </tr>
+    <tr>
+        <th>사이즈방향</th>
+        <td>
+            <select name="sizeDirection">
+                <option value="portrait"{{ ' selected' if sizeDirection == 'portrait' }}>세로형</option>
+                <option value="landscape"{{ ' selected' if sizeDirection == 'landscape' }}>가로형</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>사이즈종류</th>
+        <td>
+            <input type="text" name="sizeType" value="{{ sizeType }}">
+        </td>
+    </tr>
+    <tr>
+        <th>사이즈</th>
+        <td>
+            <input type="number" name="width" value="{{ width }}" class='w70'>Cm X 
+            <input type="number" name="height" value="{{ height }}" class="w70">Cm
+        </td>
+    </tr>
+</table>

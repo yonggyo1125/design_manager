@@ -1,0 +1,21 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<div class="mtitle top flex_between">
+    사이즈별 추가배송비 등록 
+    <div class="tit_btns">
+        <a href="/product/size_config/delivery" class="sbtn">
+            <i class="xi-check-min"></i>
+            사이브별 추가배송비 관리
+        </a>
+    </div>
+</div>
+<form id="frmRegist" method="post" action="/product/size_config/delivery/add" target="ifrmProcess" autocomplete="off">
+    {% include './_form_size_config_delivery.html' %}
+    <div class="btns">
+        <input type="submit" value="등록하기" class="btn">
+        <button type="button" class="btn cancel_back white">취소하기</button>
+    </div>
+</form>
+</div>
+{% endblock %}

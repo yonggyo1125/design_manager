@@ -1,0 +1,99 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+<div class="mtitle top flex_between">
+    템플릿 검색
+    <div class="tit_btns">
+        <a href="/kakao_alimtalk/template/add" class="sbtn">
+            <i class="xi-plus"></i>
+            템플릿 등록
+        </a>
+    </div>
+</div>
+<form method="get" autocomplete="off">
+    <table class="table-cols style2">
+        <tr>
+            <th>템플릿코드</th>
+            <td width="300">
+                <input type="text" name="tmpltCode" value="{{ search.tmpltCode }}">
+            </td>
+            <th>템플릿명</th>
+            <td>
+                <input type="text" name="tmpltNm" value="{{ search.tmpltNm }}">
+            </td>
+        </tr>
+    </table>
+    <div class="table-btn">
+        <input type="submit" value="검색하기">
+    </div>
+</form>
+</div>
+
+<div class="content_box">
+<div class="mtitle">템플릿 목록</div>
+<form id='frmList' method='post' action="/kakao_alimtalk/template" autocomplete="off" target="ifrmProcess">
+<table class="table-rows">
+    <thead>
+        <tr>
+            <th width="20">
+                <input type="checkbox" class="js-checkall" id="js-checkall" data-target-name="tmpltCode">
+                <label for="js-checkall" class="standalone"></label>
+            </th>
+            <th width="300">템플릿코드</th>
+            <th width="300">템플릿명</th>
+            <th width="120">등록일시</th>
+            <th width="180">처리자</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if list.length > 0 %}
+    {% for item in list %}
+        <tr>
+            <td align="center">
+                <input type="checkbox" name="tmpltCode" value="{{ item.tmpltCode }}" id='tmpltCode_{{ loop.index }}'>
+                <label for="tmpltCode_{{ loop.index }}" class="standalone"></label>
+            </td>
+            <td align='center'>
+                {{ item.tmpltCode }}
+                {% if item.useReservation and item.idSendReservation %}
+                <span class='highlight4'>[예약전송 사용]</span>
+                {% endif %}
+            </td>
+            <td align='center'>{{ item.tmpltNm }}</td>
+            <td align="center">{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i:%s') }}</td>
+            <td align="center">
+                {% if item.idManager  %}
+                {{ item['Manager.managerNm'] }}<br>
+                ({{ item['Manager.managerId'] }})
+                {% endif %}
+            </td>
+            <td nowrap>
+                <a href="/kakao_alimtalk/template/update/{{ item.tmpltCode }}" class="sbtn">
+                    <span class="xi-check"></span>
+                    템플릿 수정
+                </a>
+                <span class='send_kakao_alimtalk sbtn black' data-code="{{ item.tmpltCode }}">
+                    <i class="xi-send"></i>
+                    메세지 전송
+                </span>
+            </td>
+        </tr>
+    {% endfor %}
+    {% else %}
+        <tr class="no-list">
+            <td colspan="6">등록된 템플릿이 없습니다.</td>
+        </tr>    
+    {% endif %}
+    </tbody>
+</table>
+<div class="table-action">
+    <span class="sbtn form_delete" data-id="frmList">
+        <i class="xi-trash-o"></i>
+        선택 템플릿 삭제하기
+    </span>
+</div>
+{{ pagination | safe }}
+</form>
+</form>
+{% endblock %}

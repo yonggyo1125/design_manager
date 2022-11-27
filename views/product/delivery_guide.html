@@ -1,0 +1,70 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+<form method='post' action='/product/delivery_guide/{{ cateCd }}' target='ifrmProcess' autocomplete='off'>
+    <div class='mtitle flex_between'>
+        출고예정일 안내배너({{ cateNm }})
+        <div class='tit_btns'>
+            <a href='/popup/delivery_guide/{{ cateCd }}' class='btn4' target='_blank'>
+                <i class='xi-share'></i>
+                출고예정일 미리보기
+            </a>
+        </div>
+    </div>
+    <table class='table-cols'>
+        <tr>
+            <th>배너그룹</th>
+            <td>
+                <select name='bannerGroupCd'>
+                    <option value=''>- 배너 그룹 선택 -</option>
+                {% if bannerGroups.length > 0 %}
+                {% for item in bannerGroups %}
+                    <option value='{{ item.groupCd }}'{{ ' selected' if bannerGroupCd == item.groupCd }}>{{ item.groupNm }}</option>
+                {% endfor %}
+                {% endif %}
+                </select>
+            </td>
+        </tr>
+    </table>    
+
+    <div class='mtitle'>출고예정일 설정({{ cateNm }})</div>
+    <table class='table-cols'>
+    {% if items.length > 0 %}
+    {% for item in items %}
+        <tr>
+            <th>{{ item.itemNm }}</th>
+            <td>
+                <input type='hidden' name='itemId' value='{{ item.id }}'>
+                오늘 
+                <select name='designAmPm_{{ item.id }}' class='wauto'>
+                    <option value='am'{{ ' selected' if item.designAmPm == 'am' }}>오전</option>
+                    <option value='pm'{{ ' selected' if item.designAmPm == 'pm' }}>오후</option>
+                </select>
+                <select name='designHour_{{ item.id }}' class='wauto'>
+                {% for hour in hours %}
+                    <option value='{{ hour }}'{{ ' selected' if item.designHour == hour }}>{{ hour }}</option>
+                {% endfor %}
+                </select>
+                시전까지 디자인 시안 확정시 &nbsp;
+                +<input type='number' name='deliveryAddDay_{{ item.id }}' class='w70 right' value='{{ item.deliveryAddDay }}'>일 &nbsp;
+                <select name='deliveryHour_{{ item.id }}' class='wauto'>
+                {% for hour in hours2 %}
+                    <option value='{{ hour }}'{{ ' selected' if item.deliveryHour == hour }}>{{ hour }}</option>
+                {% endfor %}
+                </select>
+                이후 출고예정
+            </td>
+        </tr>
+    {% endfor %}
+    {% else %}
+        <tr class='no-list'>
+            <td colspan='2'>등록된 품목이 없습니다.</td>
+        </tr>
+    {% endif %}
+    </table>
+    <div class='table-btn'>
+        <input type="submit" value="설정 저장하기">
+    </div>
+</form>
+</div>
+{% endblock %}

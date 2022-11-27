@@ -1,0 +1,74 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+
+<form id='frmSearch' method="get" autocomplete="off">
+    <table class="table-cols style2 mb20">
+        <tr>
+            <th class="w100">검색구분</th>
+            <td>
+                <div class="form_grp w350">
+                    <select name="sopt">
+                        <option value="all"{{ ' selected' if not search.sopt or search.sopt == 'all' }}>통합검색</option>
+                        <option value="managerId"{{ ' selected' if search.sopt == 'managerId' }}>아이디</option>
+                        <option value="managerNm"{{ ' selected' if search.sopt == 'managerNm' }}>관리자명</option>
+                    </select>
+                    <input type="text" name="skey" value="{{ search.skey }}" class="w200">
+                    <button type="submit" class="btn1 black">조회하기</button>
+                </div>
+                <!--// form_grp -->
+            </td>
+        </tr>
+    </table>
+</form>
+
+<table class="table-rows">
+    <thead>
+        <tr>
+            <th width='40'>
+                <input type="checkbox" class="js-checkall" data-target-name="id" id="js_checkall">
+                <label for="js_checkall" class="standalone"></label>
+            </th>
+            <th width="100">가입구분</th>
+            <th width="300">관리자</th>
+            <th>관리레벨</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if list and list.length > 0 %}
+        {% for item in list %}
+        <tr>
+            <td align="center">
+                {% if not item.withdrawalAt %}
+                <input type="checkbox" name="id" value="{{ item.id }}" id="id_{{ loop.index }}"
+                data-manager-id="{{ item.managerId }}" data-manager-nm="{{ item.managerNm }}">
+                <label for="id_{{ loop.index }}" class="standalone"></label>
+                {% endif %}
+            </td>
+            <td align="center">
+                {{ '내부직원' if item.managerType == 'admin' else '제휴업체' }}
+            </td>
+            <td align="center">
+                {% if item.withdrawalAt %}
+                <span class="highlight4">[탈퇴]</span>
+                {% endif %}
+                {% if item.item.stopUntil %}
+                <span class="highlight4">[이용제한]</span>
+                {% endif %}
+                {{ item.managerNm }}({{ item.managerId }})
+               
+            </td>
+            <td align="center">{{ item['Level.levelNm'] }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr class="no-list">
+            <td colspan="5">조회된 회원이 없습니다.</td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
+<div class="table-action">
+    <button type="button" id="selected_members" class="sbtn" data-id="{{ id }}">선택하기</button>
+</div>
+{{ pagination | safe }}
+{% endblock %}

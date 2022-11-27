@@ -1,0 +1,79 @@
+<div class="top_box">
+<div class='mtitle top'>지역별 배송 조건 등록</div>
+<form id='frmRegist' method="post" action="/order/config" target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='mode' value='deliveryAreaPolicy'>
+    <table class='table-cols style2'>
+        <tr>
+            <th class='w150'>지역별<br>추가배송비명</th>
+            <td>
+                <input type='text' name='policyNm'>
+            </td>
+        </tr>
+        <tr>
+            <th>지역별<br>추가배송비 설명</th>
+            <td>
+                <input type='text' name='description'>
+            </td>
+        </tr>
+    </table>
+    <div class='btns'>
+        <button class='btn' type='submit'>등록하기</button>
+        <button class='btn cancel_back white' type='button'>취소하기</button>
+    </div>
+</form>
+</div>
+
+<div class="content_box">
+<div class='mtitle'>지역별 배송조건 목록</div>
+<form id='frmList' method='post' action='/order/config' target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='mode' value='deliveryAreaPolicy'>
+    <table class='table-rows'>
+        <thead>
+            <th width='30'>
+                <input type='checkbox' class='js-checkall' data-target-name='id' id='js-checkall'>
+                <label for='js-checkall' class='standalone'></label>
+            </th>
+            <th width='250'>추가배송비명</th>
+            <th width='350'>추가배송비 설명</th>
+            <th></th>
+        </thead>
+        <tbody>
+        {% if list.length > 0 %}
+        {% for item in list %}
+            <tr>
+                <td align='center'>
+                    <input type='checkbox' name='id' value='{{ item.id }}' id='id_{{ item.id }}'>
+                    <label for='id_{{ item.id }}' class='standalone'></label>
+                </td>
+                <td>
+                    <input type='text' name='policyNm_{{ item.id }}' value='{{ item.policyNm }}'>
+                </td>
+                <td>
+                    <input type='text' name='description_{{ item.id }}' value='{{ item.description }}'>
+                </td>
+                <td>
+                    <a href='/order/config/delivery_area_policy/{{ item.id }}' class='sbtn'>
+                        <i class='xi-plus-square'></i>지역별 추가배송비 관리
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        {% else %}
+            <tr class='no-list'>
+                <td colspan='4'>등록된 지역별 추가배송조건이 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <div class='table-action'>
+        <div>
+            <span class='sbtn black form_update' data-id='frmList'>
+                <i class='xi-check-min'></i>선택 배송조건 수정하기
+            </span>
+            <span class='sbtn form_delete' data-id='frmList'>
+                <i class='xi-trash-o'></i>선택 배송조건 삭제하기
+            </span>
+        </div>
+    </div>
+</form>
+</div>

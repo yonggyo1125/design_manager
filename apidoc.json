@@ -1,0 +1,12 @@
+{
+    "name" : "마커스 디자인관리자 API",
+    "version" : "0.0.1",
+    "description" : "<style>pre  { background-color: #333333 !important; color: #ffffff !important ; font-size:  14px !important; }</style>",
+    "title" : "마커스 디자인관리자 API DOC",
+    "url" : "http://dm.n-mk.kr",
+    "order" : [
+        "API 사용 인증",
+        "주문관리",
+        "품목관리"
+    ]
+}

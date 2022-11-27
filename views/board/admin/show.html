@@ -1,0 +1,66 @@
+{% extends '../../layout/main.html' %}
+{% block content %}
+
+<div class="content_box mt50">
+    <div class="mtitle">게시판 노출관리</div>
+
+    <form id="frmList" method="post" action="/board/admin/show" target="ifrmProcess" autocomplete="off">
+        <table class="table-rows">
+            <thead>
+                <tr>
+                    <th width="150">게시판ID</th>
+                    <th width="200">게시판명</th>
+                    <th>노출설정</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if list and list.length > 0 %}
+            {% for item in list %}
+                <tr>
+                    <td align="center">{{ item.id }}</td>
+                    <td align="center">{{ item.title }}</td>
+                    <td>
+                        <input type="hidden" name="id" value="{{ item.id }}">
+                        <div class="mb20">
+                            <div class="ititle">노출위치</div>
+                            {% if showLocations and showLocations.length > 0 %}
+                            {% for loc in showLocations %}
+                                <input type="checkbox" name="showLocation_{{ item.id }}" value="{{ loc.code }}" id="showLocation_{{ item.id }}_{{ loop.index }}"{{ ' checked' if item.showConfig and item.showConfig.location and item.showConfig.location.indexOf(loc.code) != -1 }}>
+                                <label for="showLocation_{{ item.id }}_{{ loop.index }}">{{ loc.title }}</label>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div>
+                            <div class="ititle">노출 관리레벨</div>
+                            {% if levels and levels.length > 0 %}
+                            {% for level in levels %}
+                                <input type="checkbox" name="showLevel_{{ item.id }}" value="{{ level.level }}" id="showLevel_{{ item.id }}_{{ loop.index }}"{{ ' checked' if item.showConfig and item.showConfig.location and item.showConfig.level.indexOf("" + level.level) != -1 }}>
+                                <label for="showLevel_{{ item.id }}_{{ loop.index }}">{{ level.levelNm }}</label>
+                            {% endfor %}
+                            {% endif %}
+
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% else %}
+                <tr>
+                    <td class="no-list" colspan="3">등록된 게시판이 없습니다.</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+        {% if list and list.length > 0 %}
+        <div class="table-action">
+          <span class="btn4 black form_update" data-id="frmList">
+            <i class='xi-check'></i>설정 저장하기
+          </span>
+        </div>
+        {% endif %}
+    </form>
+</div>
+<!--// content_box -->
+
+
+
+{% endblock %}

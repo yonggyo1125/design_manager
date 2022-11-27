@@ -1,0 +1,31 @@
+{% extends '../layout/popup.html' %}
+{% block content %}
+{% if not isPopup %}
+<div class='popup_tit'>
+    <span class='big'>파일 업로드</span>
+    <i class='xi-close' id='close_popup'></i>
+</div>
+{% endif %}
+<div class="file_box{{ ' notPopup' if not isPopup }}">
+    <form id='frmFileAttach' method='post' action='/file/upload' enctype='multipart/form-data' autocomplete='off' target='ifrmProcess'>
+        <input type='hidden' name='gid' value='{{ gid }}'>
+        <input type='hidden' name='channel' value='{{ channel }}'>
+        <div class='drop_box' data-gid='{{ gid }}' data-channel='{{ channel }}' data-max-size='{{ siteConfig.fileUploadMaxSizeDragDrop if siteConfig.fileUploadMaxSizeDragDrop else 20 }}'>
+            <i class='xi-plus-thin xi-4x'></i>
+            <div class='text'>업로드할 파일을 드래그 하세요</div>
+            <div class='text'>(최대 {{ siteConfig.fileUploadMaxSizeDragDrop if siteConfig.fileUploadMaxSizeDragDrop else 20 }}Mb)</div>
+        </div>
+        <!--// drop_box -->
+        <ul id='file_list'></ul>
+
+        <ul id='attaches'>
+            <li>
+                <input type='file' name='attachFiles'>
+                <i class='xi-plus-square' id='add_files'></i>
+            </li>
+        </ul>
+        <button type='submit'>업로드 하기</button>
+    </form>
+</div>
+<!--// file_box -->
+{% endblock %}

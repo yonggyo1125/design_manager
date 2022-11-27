@@ -1,0 +1,14 @@
+{% extends board.layoutPath %}
+{% block content %}
+{% if board.viewSkinPath %}
+{% include board.viewSkinPath %}
+{% endif %}
+
+{% if board.useComment and board.commentSkinPath %}
+{% include board.commentSkinPath %}
+{% endif %}
+
+{% if board.useViewList and board.listSkinPath %}
+{% include board.listSkinPath %}
+{% endif %}
+{% endblock %}

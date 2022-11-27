@@ -1,0 +1,54 @@
+{% extends '../../layout/popup.html' %}
+{% block content %}
+<div class="cs_tit2">
+    상담예약하기
+    <div class='xi-close-thin' id='close_popup'></div>
+</div>
+<form id='frmApply' class="apply_mobile" method='post' action='/popup/customer/apply' target='ifrmProcess' autocomplete='off'>
+    <input type='hidden' name='preferredDate' id='preferredDate'>
+    <input type='hidden' name='channel' value='{{ search.channel }}'>
+
+    <div class='cs_type'>
+        <input type='radio' name='csType' value='tel' id='csType_tel' checked>
+        <label for='csType_tel'>전화상담</label>
+        <input type='radio' name='csType' value='kakao' id='csType_kakao'>
+        <label for='csType_kakao'>카카오톡 상담</label>
+    </div>  
+    
+    <div  class='item_tit'>상담 희망 날짜</div>
+    <div class='item_content datepicker preferred_date' data-mode='customer_apply'>
+        상담 희망 날짜를 선택해 주세요
+    </div>
+    <div class="item_tit">희망 상담 시간</div>
+    <div class='item_content'>
+         {% if schedules.length > 0 %}
+        <select name="preferredTime">
+        {% for item in schedules %}
+            {% if item.period.indexOf('오전') != -1 %} 
+            <option value="{{ item.hour }}">{{ item.period }}</option>
+                            
+            {% endif %}
+         {% endfor %}
+        {% for item in schedules %}
+            {% if item.period.indexOf('오후') != -1 %} 
+            <option value="{{ item.hour }}">{{ item.period }}</option>
+            {% endif %}
+        {% endfor %}
+        </select>
+        {% endif %}
+    </div>
+    <div class="item_content">
+        <input type='text' name='customerNm' placeholder='신청자분 성함을 기입해 주세요.' value='{{ search.customerNm }}'> 
+    </div>
+    <div class="dn item_content" id='kakao_id_wrap'>
+        <input type='text' name='kakaoId' placeholder='카카오톡 ID를 입력하세요'>
+    </div>
+    <div class="item_content">
+        <input type='text' name='customerCellPhone' placeholder='휴대전화번호 : - 없이 숫자만 입력하세요' value='{{ search.customerCellPhone }}'>
+    </div>
+    <div class='mobile_btns'>
+        <button type='button' class='cancel_btn'>취소</button>
+        <button type='submit'>문의하기</button>
+    </div>
+</form>
+{% endblock %}

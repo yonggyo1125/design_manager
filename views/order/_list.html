@@ -1,0 +1,246 @@
+<ul class="order_list">
+{% if list.length > 0 %}
+{% for item in list %}
+    <li>
+        {% if not isDesigner %}
+        <div class="check">
+            <input type='checkbox' name='orderNo' value='{{ item.orderNo }}' id='orderNo_{{ item.orderNo }}'>
+            <label for='orderNo_{{ item.orderNo }}' class='standalone'></label>
+        </div>
+        {% endif %}
+        <div class="orderNo_status">
+            <div>
+                {% if item.orderStatusInfo and item.orderStatusInfo.setting %}
+                <div class="icons mb5">
+                    {% if item.orderStatusInfo.setting.orderDeletePossible %}
+                    <span class='icon delete'>삭제가능</span>
+                    {% endif %}
+                    {% if item.orderStatusInfo.setting.orderUpdatePossible %}
+                    <span class="icon update">수정가능</span>
+                    {% endif %}
+                    {% if item.deliveryReceipt %}
+                    <a href='/order/delivery_receipt/{{ item.orderNo }}' target="_blank" class="icon receipt">인수증</a>
+                    {% endif %}
+                </div>    
+                {% endif %}
+                <a href="/order/{{ item.orderNo }}" class="highlight3 orderNo" target="_blank">
+                    {{ item.orderNo }}
+                </a>
+                {% if item.shopOrderNo %}
+                <div class="shopOrderNo showShopOrderDetail" data-order-no="{{ item.orderNo }}">[{{ item.shopOrderNo }}]</div>
+                <div class="shopName showShopOrderDetail" data-order-no="{{ item.orderNo }}">{{ item.shopName }}</div> 
+                {% endif %}
+                <div>
+                    {% if isDesigner %}
+                    <span class='badge orderNo'>{{ item.orderStatusInfo.statusNm }}</span>
+                    {% else %}
+                    <select name='orderStatus_{{ item.orderNo }}' class="change_orderStatus" data-order-no="{{ item.orderNo }}">
+                        {% for it in orderStatuses %}
+                        <option value='{{ it.statusCd }}'{{ ' selected' if item.orderStatus == it.statusCd }}>{{ it.statusNm }}</option>
+                        {% endfor %}
+                    </select>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!--// orderNo_status -->
+        <div class="order_detail">
+            <table class="table-rows info">
+                <thead>
+                    <tr>
+                        <th>최종금액</th>
+                        <th>주문자</th>
+                        <th>휴대전화</th>
+                        <th>접수일</th>
+                        <th>출고희망일</th>
+                        <th>접수상담원</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                   <tr>
+                        <td align="center">{{ item.totalPayPrice.toLocaleString() }}원</td>
+                        <td align="center">{{ item.orderNm }}</td>
+                        <td align="center">{{ item.orderCellPhone }}</td>
+                        <td align="center">{{ getLocalDate(item.createdAt, '%Y.%m.%d') }}</td>
+                        <td align="center">
+                            {% for it in item.items %}
+                                <div>{{ getLocalDate(it.preferredDeliveryReleasedDate, '%Y.%m.%d') if it.preferredDeliveryReleasedDate }}</div>
+                            {% endfor %}
+
+                        </td>
+                        <td align="center">
+                            {{ item['Manager.managerNm'] }}
+                            <div>({{ item['Manager.managerId']}})</div>
+                        </td>
+                        <td>
+                            <span class='btn4 red cs_search' data-order-no='{{ item.orderNo }}' data-customer-nm='{{ item.orderNm }}' data-cell-phone='{{ item.orderCellPhone }}'>
+                               상담 {{ item.csCount }}회
+                            </span>
+                            {% if not isDesigner %}
+                            <a class='btn4' href='/customer/add?orderNo={{ item.orderNo }}' target='_blank'>
+                                <i class='xi-plus-square'></i>상담하기
+                            </a>
+                            {% endif %}
+                        </td>
+                   </tr> 
+                </tbody>
+            </table>
+            
+            {% if item.items %}
+            <table class="table-rows style2">
+                <thead>
+                    <tr>
+                        {% if not isDesigner %}
+                        <th>
+                        {% if item.orderStatusInfo and item.orderStatusInfo.setting.orderDesignUpdate %}
+                            <input type="checkbox" class="js-checkall" data-target-id="id_{{ item.orderNo }}" id="id_{{ item.orderNo }}">
+                            <label for="id_{{ item.orderNo }}" class="standalone"></label>
+                        {% endif %}
+                        </th>
+                        {% endif %}
+                        <th>디자인상태</th>
+                        <th>담당디자이너</th>
+                        <th>확정일</th>
+                        <th>출고일</th>
+                        <th>품목분류</th>
+                        <th>품목</th>
+                        <th>수량</th>
+                        <th>품목총합</th>
+                        <th>배송비</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for it in item.items %}
+                {% if not isDesigner or (isDesigner and it.idDesigner == manager.id ) %}
+                <tr>
+                    {% if not isDesigner %}
+                    <td align="center">
+                        {% if not it.designConfirmed and item.orderStatusInfo and item.orderStatusInfo.setting.orderDesignUpdate %}
+                        <input type="checkbox" name="id" id="id_{{ item.orderNo }}_{{ it.id }}" value="{{ it.id }}">
+                        <label for="id_{{ item.orderNo }}_{{ it.id }}" class="standalone"></label>
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                    <td align="center">
+                        {% if isDesigner %}
+                            {{ it.designStatusStr }}
+                        {% else %}
+                            {% if not it.designConfirmed and item.orderStatusInfo and item.orderStatusInfo.setting.orderDesignUpdate %}
+                            <select name="designStatus_{{ it.id }}">
+                                <option value="">디자인상태 선택</option>
+                                {% if designStatuses.length > 0 %}
+                                {% for status in designStatuses %}
+                                <option value='{{ status.statusCd }}'{{ ' selected' if it.designStatus == status.statusCd }}>{{ status.statusNm }}</option>
+                                {% endfor %}
+                                {% endif %}
+                            </select>
+                            {% else %}
+                            {{ it.designStatusStr }}
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td align="center">
+                        {% if isDesigner %}
+                            {% if it.designerInfo %}
+                                {{ it.designerInfo.managerNm }}<br>({{ it.designerInfo.managerId }})
+                                <div class="mt10"
+                                ><a href="/order/{{ item.orderNo }}" class="sbtn black">관리하기</a></div>
+                            {% endif %}
+                        {% else %}
+                            {% if not it.designConfirmed and item.orderStatusInfo and item.orderStatusInfo.setting.orderDesignUpdate %}
+                            <select name='idDesigner_{{ it.id }}' class="wFull">  
+                            {% if not it.idDesginer %}
+                                <option value="">디자이너 배정</option>
+                            {% endif %}
+                            {% if designers and designers.length > 0 %}
+                            {% for designer in designers %}
+                                <option value="{{ designer.id }}"{{ ' selected' if designer.id == it.idDesigner }}>{{ designer.managerNm }}({{ designer.managerNm }})</option>
+                            {% endfor %}
+                            {% endif %}
+                            </select>
+                            {% if it.isDesignerChanging %}
+                            <div class="icons mt5">
+                                <span class="icon change_designer" data-id-order-item="{{ it.id }}">디자이너 변경 요청</span>
+                            </div>
+                            {% endif %}
+                            {% else %}
+                            {% if it.designerInfo %}
+                                {{ it.designerInfo.managerNm }}<br>({{ it.designerInfo.managerId }})
+                            {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td align="center">
+                        {% if it.designConfirmed %}
+                            <div class='highlight'>{{ getLocalDate(it.desginConfirmDateTime, '%Y.%m.%d') if it.desginConfirmDateTime }}</div>
+                        {% endif %}
+                    </td>
+                    <td align="center">
+                        {% if it.packageDelivery == 'each' %}
+                        {{ getLocalDate(it.deliveryReleasedDate, '%Y.%m.%d') if it.deliveryReleasedDate }}
+                        {% else %}
+                        {{ getLocalDate(item.deliveryReleasedDate, '%Y.%m.%d') if item.deliveryReleasedDate }}
+                        {% endif %}
+                    </td>
+                    <td align="center">
+                        {{ it.productItemInfo['ProductCategory.cateNm'] if it.productItemInfo['ProductCategory.cateNm'] }}
+                    </td>
+                    <td class="pItem">
+                        <div class="itemNm">{{ it.itemNm }}{{ "(" + it.itemNmSub + ")" if it.itemNmSub }}</div>
+                        {% if it.itemSizeWidth or it.itemSizeHeight %}
+                        <dl>
+                            <dt>사이즈</dt>
+                            <dd>{{ it.itemSizeWidth }}Cm X {{ it.itemSizeHeight }}Cm</dd>
+                        </dl>
+                        {% endif %}
+                        {% if it.optionInfo and it.optionInfo.length > 0 %}
+                        <dl>
+                            <dt>기본옵션</dt>
+                            <dd>
+                                {% for opt in it.optionInfo %}
+                                <div>[{{ opt.optionCd }}]{{ opt.optionNm }}</div>
+                                {% endfor %}
+                            </dd>
+                        </dl>
+                        {% endif %}
+                        {% if it.textOptionTexts and it.textOptionTexts.length > 0 %}
+                        <dl>
+                            <dt>입력옵션</dt>
+                            <dd>
+                                {% for opt in it.textOptionTexts %}
+                                <div>[{{ opt.optionCd }}]{{ opt.optionNm }} : {{ opt.text }}</div>
+                                {% endfor %}
+                            </dd>
+                        </dl>
+                        {% endif %}
+                        {% if it.subOptionInfo and it.subOptionInfo.length > 0 %}
+                        <dl>
+                            <dt>추가옵션</dt>
+                            <dd>
+                                {% for opt in it.subOptionInfo %}
+                                <div>[{{ opt.optionCd }}]{{ opt.optionNm }} X {{ opt.optionCnt }}개</div>
+                                {% endfor %}
+                            </dd>
+                        </dl>
+                        {% endif %}
+                    </td>
+                    <td align="center">{{ it.itemCnt.toLocaleString() }}</td>
+                    <td align="center">{{ it.itemTotalPrice.toLocaleString() }}</td>
+                    <td align="center">{{ it.deliveryCharge.toLocaleString() }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            
+            {% endif %}
+
+        </div>
+        <!--// order_detail -->
+    </li>
+{% endfor %}
+{% else %}
+    <li class="no-list">조회된 주문이 없습니다.</li>
+{% endif %}
+</ul>

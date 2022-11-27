@@ -1,0 +1,137 @@
+<div class='customer_form'>
+    <form id='frmCustomer' method="post" action="/customer/{{ mode }}" target="ifrmProcess" autocomplete='off' enctype='multipart/form-data'>
+        <input type='hidden' name='gid' value='{{ gid }}'>
+        <table class='table-cols'>
+            <tr>
+                <th>상담구분</th>
+                <td>
+                    <select name='category' class='wauto'>
+                    {% for cate in categories %}
+                        <option value='{{ cate }}'{{ ' selected' if cate == category }}>{{ cate }}</option>
+                    {% endfor %}
+                    </select>
+                    <input type='checkbox' name='addAsApply' value='1' id='addAsApply'>
+                    <label for='addAsApply'>A/S 신청서 함께 등록</label>
+
+                    <input type="checkbox" name="replyAlimTalk" value="1" id="replyAlimTalk">
+                    <label for="replyAlimTalk">답변완료 메세지 전송</label>
+                </td>
+            </tr>
+            <tr>
+                <th>처리자</th>
+                <td>{{ manager.managerNm }}({{ manager.managerId }})</td>
+            </tr>
+            <tr>
+                <th>상담상품</th>
+                <td>
+                    <input type="text" name="productNm" value="{{ productNm }}" class="wFull">
+                </td>
+            </tr>
+            <tr>
+                <th>고객요청사항</th>
+                <td>
+                    <textarea name="question">{{ question }}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>상담메모</th>
+                <td>
+                    <textarea name='memo'>{{ memo }}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>파일첨부</th>
+                <td id='attach_files_wrap'>
+                    <div class='item'>   
+                        <input type='file' name='attachFiles'><span class='sbtn' id='add_files'>
+                            <i class='xi-plus-square'></i>파일추가
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            {% if attachFiles and attachFiles.length > 0 %}
+            <tr>
+                <th>첨부된파일</th>
+                <td>
+                    <ul class='vlist'>
+                    {% for file in attachFiles %}
+                        <li class='file_item'>
+                            {{ loop.index }}.
+                            <a href='/file/download/{{ file.id }}'>{{ file.fileName }}</a>
+                            <i class='deleteFile xi-close' data-id='{{ file.id }}'></i>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endif %}
+            <tr>    
+                <th>주문번호</th>
+                <td>
+                    <input type='text' name='orderNo' class='w200' value='{{ orderNo }}'>
+                    <span class='btn5 view_order'>
+                        <i class='xi-share'></i> 자세히
+                    </span>
+                    <span class='btn5 black search_history'>
+                        <i class='xi-search'></i> 조회
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>고객명</th>
+                <td>
+                    <input type='text' name='customerNm' class='w200' value='{{ customerNm }}'>
+                    <span class='btn5 black search_history'>
+                        <i class='xi-search'></i> 조회
+                    </span>
+                    <span class='btn5 send_message'>
+                        <i class='xi-send'></i> 메세지
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>연락처</th>
+                <td>
+                    <input type='text' name='cellPhone' class='w200' value='{{ cellPhone }}'>
+                    <span class='btn5 black search_history'>
+                        <i class='xi-search'></i> 조회
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>이메일</th>
+                <td>
+                    <input type='email' name='email' class='w200' value='{{ email }}'>
+                    <span class='btn5 black search_history'>
+                        <i class='xi-search'></i> 조회
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>주소</th>
+                <td>
+                    <div class='mb5'>
+                        <input type='text' name='zonecode' class='w100' readonly value='{{ zonecode }}'>
+                        <span class='btn5 black searchAddress'  data-zonecode='zonecode' data-address='address'>
+                            <i class='xi-search'></i> 우편번호 검색
+                        </span>
+                    </div>
+                    <div class="mb5">
+                        <input type='text' name='address' readonly value='{{ address }}'>
+                    </div>
+                    <input type='text' name='addressSub' value='{{ addressSub }}'>
+                </td>
+            </tr>
+        </table>
+        <div class='btns'>
+            <button type='submit' class='btn'>{{ '등록' if mode == 'add' else '수정' }}하기</button>
+            <button type='button' class='btn cancel_back white'>취소하기</button>
+        </div>
+    </form>
+    <div class='right_box'>
+        <div class='tit'>상담기록</div>
+        <div id="search_html"></div>
+    </div>
+    <!--// right_box -->
+</div>
+<!--// customer_form -->
