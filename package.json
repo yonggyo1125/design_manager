@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server",
-    "start": "cross-env NODE_ENV=production PORT=3001 TZ=Asia/Seoul pm2 start server.js -i 2",
+    "start": "cross-env NODE_ENV=production PORT=3002 TZ=Asia/Seoul pm2 start server.js -i 2",
     "test": "cross-env NODE_ENV=test jest",
     "coverage": "jest --coverage"
   },
