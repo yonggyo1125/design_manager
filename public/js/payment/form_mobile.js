@@ -114,6 +114,7 @@ codefty.payment = {
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
                     var result = xhr.response;
+                    console.log(result);
                     if (result.isSuccess)  {
                         var P_NOTI = document.querySelector("input[name='P_NOTI']");
                         if (P_NOTI) P_NOTI.value = result.idPayment;
