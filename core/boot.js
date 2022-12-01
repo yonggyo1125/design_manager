@@ -107,6 +107,7 @@ module.exports = async (req, res, next) => {
     if (port != 80 && port != 443) {
         res.locals.host += ":" + port;
     }
+    res.locals.host = "https://dm.n-mk.kr";
 
     /** 현재 Date */
     res.locals.nowDate = new Date();
