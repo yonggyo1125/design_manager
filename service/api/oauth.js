@@ -132,7 +132,8 @@ const oAuthService = {
         if (data.state) {
             url += `&state=${data.state}`;
         }
-
+        console.log("--------------- url ---------------");
+        console.log(url);
         return url;
     },
     /**
