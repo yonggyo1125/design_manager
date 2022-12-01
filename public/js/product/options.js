@@ -53,8 +53,7 @@ codefty.options = {
                     .replace(/<%=listOrder%>/g, item.listOrder)
                     .replace(/<%=maxLength%>/g, item.maxLength);
        
-            
-        console.log(item);;
+        
         var parser = new DOMParser();
         var dom = parser.parseFromString(html, "text/html");
         var selectOptions = dom.querySelectorAll("select[name='isUse'] option");

@@ -489,10 +489,7 @@ const orderService = {
         if (!orderNo) {
             throw new BadRequestException("삭제할 주문번호가 누락되었습니다");
         }
-        console.log("-------------------------");
-        console.log(orderNo);
         const result = await orderDao.delete(orderNo);
-        console.log("-------------------------------");
         if (!result) {
             throw new OrderDeleteException();
         }

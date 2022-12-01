@@ -68,7 +68,7 @@ const sessionOption = session({
 app.use(express.static(path.join(__dirname, "public")));
 
 /** body-parser */
-app.use(express.json({ limit : '40mb'}));
+app.use(express.json({ limit : '100mb'}));
 app.use(express.urlencoded({ extended : false, limit : '1024mb' }));
 
 /** 세션 설정 */
