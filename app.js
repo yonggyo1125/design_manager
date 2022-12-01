@@ -53,16 +53,24 @@ app.use(methodOverride('_method'));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // 세션 설정 
-const sessionOption = session({
+const sessionConfig = {
     resave: false,
     saveUninitialized : true,
     cookie : {
         httpOnly : true,
         secure : false,
+        sameSite: 'strict'
     },
     name : "MKSESSID",
     store : new RedisStore({ client : redisClient }),
-});
+};
+
+if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1);
+    sessionConfig.cookie.secure = true;
+}
+
+const sessionOption = session(sessionConfig);
 
 /** 정적 경로 */
 app.use(express.static(path.join(__dirname, "public")));
