@@ -39,6 +39,9 @@ router.use("/notice", noticeRouter);
 /** 결제 주문 S */
 router.route('/')
     .get(async (req, res) => {
+        if (!req.isLogin) {
+            return res.redirect("/manager/login");
+        }
         const data = await paymentSvc.gets(req.query.page, 20, req, req.query);
         data.statuses = paymentDao.statuses;
         data.payMethods = paymentDao.payMethods;

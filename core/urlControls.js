@@ -16,6 +16,7 @@ const urlControls = {
             '/mypage',
 
             // 결제 관련
+            '/payment',
             '/payment/notice',
             '/payment/process',
             '/payment/view',
