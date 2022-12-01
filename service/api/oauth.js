@@ -117,7 +117,7 @@ const oAuthService = {
         }
         
         let url = keyData.domain + keyData.redirectURL;
-        if (url.indexOf("http") != 0) {
+        if (url.indexOf("http") == -1) {
             url = "http://" + url;
         }
 
