@@ -47,12 +47,12 @@ const sendStatusMessage = {
             replaceCodeData['totalPayPrice'] = orderInfo.shopTotalPayPrice;
         }
 
-        let url = "http://dm.n-mk.kr/mypage";
+        let url = "https://dm.n-mk.kr/mypage";
         replaceCodeData['url'] = url;
         
-        replaceCodeData['deliveryLink'] = "http://dm.n-mk.kr/delivery/" + orderNo;
+        replaceCodeData['deliveryLink'] = "https://dm.n-mk.kr/delivery/" + orderNo;
         replaceCodeData['companyBankInfo'] = siteConfig.companyBankInfo;
-        replaceCodeData['reviewUrl'] = `http://dm.n-mk.kr/board/write/review?orderNo=${orderNo}`;
+        replaceCodeData['reviewUrl'] = `https://dm.n-mk.kr/board/write/review?orderNo=${orderNo}`;
         
         //  주문서 상태변경시 1회만 전송 설정이 있는 경우
         if (statusConf.setting.sendAlimTalkOnce && !isManual) {

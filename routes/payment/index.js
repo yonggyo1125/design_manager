@@ -180,7 +180,7 @@ router.route('/cancel/:id')
     .post(async (req, res) => {
         try {
             await paymentSvc.cancel(req);
-            alert("취소되었습니다.", res, "reload", "parent");
+            alert("취소되었습니다.", res, "reload", "parent.parent");
         } catch (err) {
             alert(err.message,  res);
         }

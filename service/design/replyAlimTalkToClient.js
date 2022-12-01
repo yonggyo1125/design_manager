@@ -41,7 +41,7 @@ module.exports = async (itemUid, tmpltCode) => {
     
     const _url = `/mypage/${data.orderNo}`;
     const token = await generateUrlAccessToken(_url, 60 * 60 * 3);
-    const url = `http://dm.n-mk.kr${_url}?token=${token}`; 
+    const url = `https://dm.n-mk.kr${_url}?token=${token}`; 
     data.url = url;
 
     

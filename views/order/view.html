@@ -815,7 +815,7 @@
                                     <td nowrap>
                                        
                                         {% if payment.canceledAt %}
-                                        취소/환불 일시 : {{ payment.canceledAt }}
+                                        <dv>취소/환불 일시 : {{ payment.canceledAt }}</div>
                                         {% else %}
                                         {% if payment.status == 'confirm' or payment.status == 'incash' %}
                                         <span class="cancel_payment sbtn" data-id="{{ payment.id }}">
