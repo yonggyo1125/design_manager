@@ -59,7 +59,7 @@ const sessionConfig = {
     cookie : {
         httpOnly : true,
         secure : false,
-        sameSite: 'strict'
+        //sameSite: 'strict'
     },
     name : "MKSESSID",
     store : new RedisStore({ client : redisClient }),
