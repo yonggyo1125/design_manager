@@ -65,7 +65,7 @@ window.addEventListener("DOMContentLoaded", function() {
                     });
 
                 })
-                .open(url, "옵션설정", 650, 500);
+                .open(url, "옵션설정", 1100, 750);
         });
     }
     /** 옵션 선택 E */
