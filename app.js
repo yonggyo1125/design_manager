@@ -59,15 +59,18 @@ const sessionConfig = {
     cookie : {
         httpOnly : true,
         secure : false,
-        sameSite: 'strict'
     },
     name : "MKSESSID",
+    resave: true,
     store : new RedisStore({ client : redisClient }),
 };
 
 if (process.env.NODE_ENV === 'production') {
     app.set('trust proxy', 1);
-    //sessionConfig.cookie.secure = true;
+    
+    sessionConfig.cookie.secure = true;
+    sessionConfig.cookie.sameSite = 'lax';
+    sessionConfig.proxy = true;
 }
 
 const sessionOption = session(sessionConfig);
