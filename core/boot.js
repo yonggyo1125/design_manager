@@ -102,8 +102,8 @@ module.exports = async (req, res, next) => {
     
     /** 현재 HOST */
     res.locals.host = getProtocol(req) + "://" +  req.hostname;
-    res.locals.openMarketManagerURL = getProtocol(req) + "://" +  req.hostname + ":30000";
-    //res.locals.openMarketManagerURL = "https://dm.n-mk.kr/openmarket";
+    //res.locals.openMarketManagerURL = getProtocol(req) + "://" +  req.hostname + ":30000";
+    res.locals.openMarketManagerURL = "https://openmarket.n-mk.kr";
     const port = req.app.get("PORT");
     if (port != 80 && port != 443) {
         res.locals.host += ":" + port;
