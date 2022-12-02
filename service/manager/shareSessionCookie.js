@@ -11,8 +11,8 @@ module.exports = (req, res) => {
     if (process.env.NODE_ENV === 'production') {
         options.domain = ".n-mk.kr";
         options.proxy = true;
-        options.cookie.sameSite='lax';
+        options.sameSite='lax';
     }
-    
+
     res.cookie("SMKSESSID", req.session.id, options);
 };
