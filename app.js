@@ -14,6 +14,7 @@ const { sequelize } = require('./models');
 const redisClient = require('./core/redisClient');
 const RedisStore = require('connect-redis')(session);
 const NotFoundException = require("./core/Exception/NotFoundException"); // 없는 페이지 예외
+const shareSessionCookie = require('./service/manager/shareSessionCookie');
 
 const app = express();
 
@@ -68,7 +69,9 @@ const sessionConfig = {
 if (process.env.NODE_ENV === 'production') {
     app.set('trust proxy', 1);
     
-    //sessionConfig.cookie.secure = true;
+    sessionConfig.cookie.secure = true;
+    sessionConfig.cookie.domain = '.dm.n-mk.kr';
+    sessionConfig.cookie.path = '/';
     sessionConfig.cookie.sameSite = 'lax';
     sessionConfig.proxy = true;
 }
