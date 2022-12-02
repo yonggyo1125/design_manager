@@ -70,7 +70,7 @@ if (process.env.NODE_ENV === 'production') {
     app.set('trust proxy', 1);
     
     sessionConfig.cookie.secure = true;
-    sessionConfig.cookie.domain = '.dm.n-mk.kr';
+    sessionConfig.cookie.domain = '.n-mk.kr';
     sessionConfig.cookie.path = '/';
     sessionConfig.cookie.sameSite = 'lax';
     sessionConfig.proxy = true;
