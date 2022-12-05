@@ -19,6 +19,9 @@ const boardDao = require("../../models/board/boardDao");
 const menuSvc = require('../../service/menu');
 const getCsAgents = require("../../service/manager/getCs");
 
+/** 상담원 상담 통계 */
+const getCsAgentStatistics = require('../../service/customer/getCsAgentStatistics');
+
 const router = express.Router();
 
 /** 파일 업로드 설정  */
@@ -229,8 +232,22 @@ router.route("/apply")
     });
 
 /** 상담 통계 */
-router.get("/stat", (req, res) => {
-    res.render("customer/stat");
+router.get("/stat", async (req, res) => {
+
+    const search = req.query;
+    if (!search.sDate) {
+        const date = new Date();
+        date.setMonth(date.getMonth() - 1);
+        console.log(date);
+    }
+
+    let sdate = search.sDate;
+    const edate = search.eDate;
+    
+    const list = await getCsAgentStatistics(sdate, edate);
+
+    const data = { list, search };
+    res.render("customer/stat", data);
 });
 
 /** 상담 설정 */

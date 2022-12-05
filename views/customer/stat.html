@@ -1,4 +1,42 @@
 {% extends '../layout/main.html' %}
 {% block content %}
+<div class="top_box">
+    <div class="mtitle top">상담 검색</div>
+    <form id="frmSearch" method="get" autocomplete="off">
+    <table class="table-cols style2">
+        <tr>
+            <th>등록일시</th>
+            <td>
+                <input type='date' name='sDate' value='{{ search.sDate }}' class='w120'> ~ 
+                <input type='date' name='eDate' value='{{ search.eDate }}' class='w120'>
+            </td>
+        </tr>
+    </table>
+    <div class='table-btn'>
+        <input type='submit' value='검색하기'>
+    </div>
+    </form>
+</div>
+<div class="content_box">
+    <div class="mtitle">상담 통계</div>
+   <table class="table-rows">
+        <thead>
+            <tr>
+                <th width="220">상담원</th>
+                <th width="150">상담횟수</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for li in list %}
+            <tr>
+                <td align="center">{{ li.managerNm }}({{ li.managerId }})</td>
+                <td align="center">{{ li.cnt.toLocaleString() }}회</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+   </table> 
+</div>
 
 {% endblock %}
