@@ -1,0 +1,71 @@
+<ul class="customer_list">
+    {% if oldList.length > 0 %}
+    {% for item in oldList %}
+    <li{{ " class=mb20" if search.isPopup }}>
+        {% if not search.isPopup %}
+        <div class="cs_no"></div>
+        {% endif %}
+        <div class="cs_content">
+            <table class='table-rows mb10'>
+            <thead>
+                <tr>
+                    <th width="100">상담구분</th>
+                    <th width="150">등록일시</th>
+                    <th width="150">처리자</th>
+                    <th width="200">주문번호</th>
+                    <th width="150">고객명</th>
+                    <th width="180">연락처/이메일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <td align="center">{{ item.category }}</td>
+                <td align="center">{{ item.regDt }}</td>
+                <td align="center">{{ item.cs_name }}<br>({{ item.id }})</td>
+                <td align="center">{{ item.ordno if item.ordno }}</td>
+                <td align="center">{{ item.name }}</td>
+                <td align="center">{{ item.mobile }}<br>{{ item.email }}</td>
+            </tbody>
+            </table>
+            <table class="table-cols style2">
+                <tr>
+                    <th>주소</th>
+                    <td>
+                        {% if item.zonecode %}({{ item.zonecode }}){% endif %}
+                        {{ item.address }} {{ item.address_sub }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>상담상품</th>
+                    <td>{{ item.order_item }}</td>
+                </tr>
+                {% if item.question %}
+                <tr>
+                    <th>고객요청사항</th>
+                    <td>
+                        <div>[{{ item.godo5Channel }}]</div>
+                        {{ item.question | safe }}
+                    </td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th>상담메모</th>
+                    <td>{{ nl2br(item.memo) | safe }}</td>
+                </tr>
+                {% if item.godo5files and item.godo5files.length > 0 %}
+                <tr>
+                    <th>첨부파일</th>
+                    <td>
+                    {% for file in item.godo5files %}
+                    <span class="file_box mr2">
+                        <a href="https://n-mk.kr/team/godo5/file?url={{ file.fileUrl }}&fileName={{ file.uploadFileNm }}" target="_blank">{{ file.uploadFileNm }}</a>
+                    </span>
+                    {% endfor %}
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+    </li>
+    {% endfor %}
+    {% endif %}
+</ul>

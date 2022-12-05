@@ -11,24 +11,24 @@
             <table class='table-rows mb10'>
             <thead>
                 <tr>
-                    {% if not search.isPopup %}
+                    {% if not search.isPopup and not search.withOldDesignManager %}
                     <th width='30'></th>
                     {% endif %}
-                    <th width='100'>상담구분</th>
-                    <th width='150'>유입경로</th>
-                    <th width='100'>등록일시</th>
-                    <th width='150'>처리자</th>
-                    <th width='200'>주문번호</th>
-                    <th width='150'>고객명</th>
-                    <th width='{{ 180 if not search.isPopup }}'>연락처/이메일</th>
-                    {% if not search.isPopup %}
+                    <th width='100' nowrap>상담구분</th>
+                    <th width='150' nowrap>유입경로</th>
+                    <th width='100' nowrap>등록일시</th>
+                    <th width='150' nowrap>처리자</th>
+                    <th width='200' nowrap>주문번호</th>
+                    <th width='150' nowrap>고객명</th>
+                    <th width='{{ 180 if not search.isPopup }}' nowrap>연락처/이메일</th>
+                    {% if not search.isPopup and not search.withOldDesignManager %}
                     <th></th>
                     {% endif %}
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    {% if not search.isPopup %}
+                    {% if not search.isPopup and not search.withOldDesignManager %}
                     <td align='center'>
                         <input type='checkbox' name='id' value='{{ item.id }}' id='id_{{ item.id }}'>
                         <label for='id_{{ item.id }}' class='standalone'></label>
@@ -71,7 +71,7 @@
                         <div>{{ item.email }}</div>
                         {% endif %}
                     </td>
-                    {% if not search.isPopup %}
+                    {% if not search.isPopup and not search.withOldDesignManager %}
                     <td nowrap>
                         <a href='/customer/update/{{ item.id }}' class='sbtn'>
                             <i class='xi-pen-o'></i>

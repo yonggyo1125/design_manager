@@ -48,7 +48,10 @@
                 <option value='memo'{{ ' selected' if search.sopt == 'memo' }}>상담메모</option>
             </select>
             <input type='text' name='skey' value='{{ search.skey }}' class='w300'>
-        </td>
+            &nbsp;&nbsp;&nbsp;
+            <input type="checkbox" name="withOldDesignManager" value="1" id="withOldDesignManager"{{ ' checked' if search.withOldDesignManager }}>
+            <label for="withOldDesignManager">구 디자인관리자와 함께 검색</label>
+        </td> 
     </tr>
     <tr>
         <th>처리상담원</th>
@@ -76,12 +79,27 @@
 {% endfor %}
 </div>
 {% endif %}
-<div class="scroll_x">
+
 <form id='frmList' method="post" action="/customer" target='ifrmProcess' autocomplete='off'>
 <input type='hidden' name='search' value=''>
 {% endif %}
-{% include './_list.html' %}
-{% if not search.isPopup %}
+{% if search.withOldDesignManager %}
+<div class="cs_list_result">
+    <div class="list1">
+{% endif %}
+    <div class="scroll_x">
+        {% include './_list.html' %}
+    </div>
+{% if search.withOldDesignManager %}
+    </div>
+    <div class="list2 scroll_x">
+        
+    {% include './_list_old.html' %}
+    </div>
+</div>
+<!--// cs_list_result -->
+{% endif %}
+{% if not search.isPopup and not search.withOldDesignManager %}
 <div class='table-action'>
     <div>
         <input type="checkbox" class="js-checkall" data-target-id='id_' id="js_checkall_all">
@@ -97,7 +115,7 @@
 </div>
 </form>
 {% endif %}
-</div>
+
 {{ pagination | safe }}
 </div>
 {% endblock %}

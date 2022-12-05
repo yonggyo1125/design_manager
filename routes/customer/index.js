@@ -19,8 +19,10 @@ const boardDao = require("../../models/board/boardDao");
 const menuSvc = require('../../service/menu');
 const getCsAgents = require("../../service/manager/getCs");
 
-/** 상담원 상담 통계 */
+// 상담원 상담 통계
 const getCsAgentStatistics = require('../../service/customer/getCsAgentStatistics');
+// 구 디자인관리자 조회
+const searchOldDesignManager = require('../../service/customer/searchOldDesignManager');
 
 const router = express.Router();
 
@@ -51,6 +53,7 @@ router.route("/")
         const channels = await customerDao.getChannels();
         const csAgents = await getCsAgents();
 
+       
         const data = {
             list,
             total,
@@ -62,7 +65,12 @@ router.route("/")
             limit,
             limits : [20, 50, 100, 500, 1000],
         };
-        
+
+        if (search.withOldDesignManager) {
+            const oldList = await searchOldDesignManager(search, req.query.page, limit);
+            data.oldList = oldList;
+        }
+
         res.render("customer/list", data);
     })
     // 상담 (목록)수정 하기 

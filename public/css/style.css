@@ -413,6 +413,10 @@ aside .menus li:first-of-type { border-top: 0; }
 .body-customer .customer_list li .cs_no > div { width: 40px; line-height: 1.5; }
 
 .body-customer .customer_list li .cs_content { width: calc(100% - 50px); }
+.body-customer .cs_list_result { display: flex; align-items: start; }
+.body-customer .cs_list_result > div { flex-grow: 1; width: 0; }
+.body-customer .cs_list_result > div:first-of-type { margin-right: 10px; }
+.body-customer .cs_list_result > div:last-of-type { margin-left: 10px; }
 
 /** manager/login.html */
 .body-manager-login main { display: block; position: fixed; width: 100%; height: 100%;  }
