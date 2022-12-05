@@ -238,7 +238,7 @@ router.get("/stat", async (req, res) => {
     if (!search.sDate) {
         const date = new Date();
         date.setMonth(date.getMonth() - 1);
-        console.log(date);
+        search.sDate = dateFormat(date, "%Y-%m-%d");
     }
 
     let sdate = search.sDate;
