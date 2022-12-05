@@ -9,19 +9,27 @@
             <table class='table-rows mb10'>
             <thead>
                 <tr>
-                    <th width="100">상담구분</th>
-                    <th width="150">등록일시</th>
-                    <th width="150">처리자</th>
-                    <th width="200">주문번호</th>
-                    <th width="150">고객명</th>
-                    <th width="180">연락처/이메일</th>
+                    <th width="100" nowrap>상담구분</th>
+                    <th width="150" nowrap>등록일시</th>
+                    <th width="150" nowrap>처리자</th>
+                    <th width="200" nowrap>주문번호</th>
+                    <th width="150" nowrap>고객명</th>
+                    <th width="180" nowrap>연락처/이메일</th>
                 </tr>
             </thead>
             <tbody>
                 <td align="center">{{ item.category }}</td>
                 <td align="center">{{ item.regDt }}</td>
                 <td align="center">{{ item.cs_name }}<br>({{ item.id }})</td>
-                <td align="center">{{ item.ordno if item.ordno }}</td>
+                {% if item.ordno and item.ordno != '0' %}
+                <td align="center">
+                    <a href="https://n-mk.com/team/admin/order2_view/{{ item.ordno }}" target="_blank">
+                    {{ item.ordno }}
+                    </a>
+                </td>
+                {% else %}
+                <td></td>
+                {% endif %}
                 <td align="center">{{ item.name }}</td>
                 <td align="center">{{ item.mobile }}<br>{{ item.email }}</td>
             </tbody>
