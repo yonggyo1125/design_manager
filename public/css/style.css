@@ -402,6 +402,15 @@ aside .menus li:first-of-type { border-top: 0; }
 .body-customer .customer_form #frmCustomer { width: 55%; }
 .body-customer .customer_form .right_box { width: calc(45% - 15px); margin-left: 15px; }
 .body-customer .customer_form .right_box .tit { text-align: center; height: 40px; line-height: 38px; border: 1px solid #000000; border-radius: 3px; font-size: 1.1rem; font-weight: bold; }
+.body-customer .customer_form .cs_detail_box { padding: 10px; background: #f8f8f8; border-radius: 10px; }
+.body-customer .customer_form .cs_detail_box b { margin-bottom: 10px; display: block; }
+.body-customer .customer_form .cs_detail_box:first-of-type { margin-bottom: 10px; }
+
+.body-customer .customer_form .change_history { display: flex; justify-content: space-between; margin: 10px 0; }
+
+.body-customer .customer_form .change_history > .tab { width: 0; flex-grow: 1; text-align: center; padding: 10px; background: #f8f8f8; cursor: pointer; font-weight: bold; }
+.body-customer .customer_form .change_history > .tab.on { background: #222; color: #fff; }
+.body-customer .customer_form .history_list { max-height: 900px; overflow-y: auto; }
 
 /** customer/config.html */
 .body-customer-config #alimManagers li { box-shadow: 2px 2px 5px #d5d5d5; margin-bottom: 5px; padding: 10px; font-size: 12px; }

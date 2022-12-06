@@ -1,18 +1,23 @@
-<table class='table-rows mt10'>
+<ul class="tab_grp change_history">
+    <li class='tab new on'>신 디자인관리자</li>
+    <li class="tab old">구 디자인관리자</li>
+</ul>
+<div class="history_list new">
+<table class='table-rows'>
     <thead>
         <tr>
-            <th width='80'>구분</th>
-            <th width='80'>등록일시</th>
-            <th width='150'>처리자</th>
-            <th width='200'>주문번호</th>
-            <th>고객명정보</th>
+            <th width='80' nowrap>구분</th>
+            <th width='80' nowrwap>등록일시</th>
+            <th width='150' nowrap>처리자</th>
+            <th width='200' nowrap>주문번호</th>
+            <th nowrap>고객명정보</th>
         </tr>
     </thead>
     <tbody>
     {% if list.length > 0 %}
     {% for item in list %}
         <tr>
-            <td align="'center'"> {{ item.category }}</td>
+            <td align="center"> {{ item.category }}</td>
             <td align="center">{{ getLocalDate(item.createdAt, '%Y.%m.%d %H:%i:%s') }}</td>
             <td align="center">
                 {{ item['Manager.managerNm']}}
@@ -28,7 +33,7 @@
             <td align="center">
                 {{ item.customerNm }}
                 {% if item.cellPhone %}
-                    {{ item.cellPhone }}
+                <div>{{ item.cellPhone }}</div>
                 {% endif %}
                 {% if item.email %}
                 <div>{{ item.email }}</div>
@@ -38,7 +43,17 @@
         <tr>
             <td colspan="5">
                 <div class="mb10">
-                    {{ nl2br(item.memo) | safe }}
+                    {% if item.question %}
+                    <div class="cs_detail_box">
+                        <b>고객요청사항</b>
+                        {{ item.question | safe }}
+                    </div>
+                    {% endif %}
+                    <div class="cs_detail_box">
+                        <b>상담메모</b>
+                        {{ nl2br(item.memo) | safe }}
+                    </div>
+
                 </div>
                 <div class="right">
                     <span class="update_cs_info sbtn"
@@ -69,3 +84,5 @@
     {% endif %}
     </tbody>
 </table>
+</div>
+<div class="history_list old dn"></div>

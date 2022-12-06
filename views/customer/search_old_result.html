@@ -1,0 +1,77 @@
+<table class='table-rows'>
+    <thead>
+        <tr>
+            <th width="80" nowrap>구분</th>
+            <th width="80" nowrap>등록일시</th>
+            <th width="150" nowrap>처리자</th>
+            <th width="200" nowrap>주문번호</th>
+            <th width="150" nowrap>고객명정보</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if list.length > 0 %}
+    {% for item in list %}
+        <tr>
+            <td align="center">{{ item.category }}</td>
+            <td align="center">{{ item.regDt }}</td>
+            <td align="center">{{ item.cs_name }}<br>({{ item.id }})</td>
+            {% if item.ordno and item.ordno != '0' %}
+            <td align="center">
+                <a href="https://n-mk.com/team/admin/order2_view/{{ item.ordno }}" target="_blank">
+                {{ item.ordno }}
+                </a>
+            </td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            <td>
+                {{ item.name }}
+                {% if item.mobile %}
+                <div>{{ item.mobile }}</div>
+                {% endif %}
+                {% if item.email %}
+                <div>{{ item.email }}</div>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <div class="mb10">
+                    {% if item.question %}
+                    <div class="cs_detail_box">
+                        <b>고객요청사항</b>
+                        [{{ item.godo5Channel }}]<br>
+                        {{ item.question | safe }}
+                    </div>
+                    {% endif %}
+                    <div class="cs_detail_box">
+                        <b>상담메모</b>
+                        {{ nl2br(item.memo) | safe }}
+                    </div>
+
+                </div>
+                <div class="right">
+                    <span class="update_cs_info sbtn"
+                        data-customer-nm="{{ item.name }}"
+                        data-cell-phone="{{ item.mobile }}"
+                        data-email="{{ item.email }}"
+                        data-order-no="{{ item.ordno }}"
+                        data-email="{{ item.email }}"
+                        data-zonecode="{{ item.zonecode }}"
+                        data-address="{{ item.address }}" 
+                        data-address-sub="{{ item.address_sub }}"
+                    >
+                        <i class="xi-check-min"></i>
+                        상담정보로 사용
+                    </span>
+                    <span class="view_cs sbtn black" data-idx="{{ item.idx }}">
+                        <i class="xi-external-link"></i>
+                        자세히보기
+                    </span>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    {% endif %}
+    </tbody>
+</table>

@@ -17,7 +17,14 @@ module.exports = async (search, page, limit) => {
             url,
             data : { search, page, limit },
         });
- 
+        
+        if (search.idx) {
+            if (data.data.godo5files && typeof data.data.godo5files == 'string') {
+                data.data.godo5files = JSON.parse(data.data.godo5files);
+            }
+            return data.data || {};
+        }
+
         const list = data.data || [];
         for (const li of list) {
             if (li.godo5files && typeof li.godo5files == 'string') {

@@ -43,7 +43,6 @@ codefty.customerFrm = {
             } // endfor 
 
             if (!isPass) {
-               
                 alert('조회할 키워드를 한개 이상 입력하세요.');
                 return;
             }
@@ -62,7 +61,6 @@ codefty.customerFrm = {
             }
 
             params = params.join("&");
-            
             var url = "/customer/search_result?" + params;
 
             codefty.popup.close();
@@ -93,9 +91,41 @@ codefty.customerFrm = {
                             viewCsEls[i].addEventListener("click", function() {
                                 var id = this.dataset.id;
                                 var url = "/customer/view/" + id;
-                                codefty.popup.open(url, "상담내역 확인", 650, 750);
+                                codefty.popup.open(url, "상담내역 확인", 750, 800);
                             });
                         }
+
+                        /** 구 디자인관리자 클릭 처리 S */
+                        const changeHistoryTabEls = document.querySelectorAll("#search_html .change_history .tab");
+                        const historyListEls = document.querySelectorAll("#search_html .history_list");
+                        for (const el of changeHistoryTabEls) {
+                            el.addEventListener("click", function() {
+                                for (const _el of changeHistoryTabEls) {
+                                    _el.classList.remove("on");
+                                }    
+                                
+                                el.classList.add("on");
+
+                                for (const _el of  historyListEls) {
+                                    _el.classList.remove("dn");
+                                    _el.classList.add("dn");
+                                }
+                                let type = "new";
+                                if (el.classList.contains("old")) {
+                                    codefty.customerFrm.loadOldHistory(params);
+                                    type = "old";
+                                }
+
+                                const targetEl = document.querySelector(`#search_html .history_list.${type}`);
+                                if (targetEl) {
+                                    targetEl.classList.remove("dn");
+                                }
+                                
+
+                            });
+                        }
+                        /** 구 디자인관리자 클릭 처리 E */
+                        
                         /** 이벤트 바인딩 처리  E */ 
                     }
                 }
@@ -104,6 +134,49 @@ codefty.customerFrm = {
             xhr.send(null);
             
         });
+    },
+    /**
+     * 구 디자인관리자 조회
+     * 
+     * @param {*} params 
+     */
+    loadOldHistory(params) {
+        const url = "/customer/search_old_result?" + params;
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+        xhr.onreadystatechange = function() {
+            if (xhr.status == 200 && xhr.readyState == XMLHttpRequest.DONE) {
+                const el = document.querySelector("#search_html .history_list.old");
+                if (el) {
+                    el.innerHTML = xhr.responseText;
+
+                    var updateCsInfoEls = document.querySelectorAll(".update_cs_info");
+                    for (var i = 0; i < updateCsInfoEls.length; i++) {
+                        updateCsInfoEls[i].addEventListener("click", function() {
+                            var dataset = this.dataset;
+                            for (key in dataset) {
+                                var el = document.querySelector("#frmCustomer input[name='" + key + "']");
+                                if (el) {
+                                    el.value = dataset[key];
+                                }
+                            }
+                        });
+                    }
+
+                    var viewCsEls = document.querySelectorAll(".view_cs");
+                    for (var i = 0; i < viewCsEls.length; i++) {
+                        viewCsEls[i].addEventListener("click", function() {
+                            var idx = this.dataset.idx;
+                            var url = "/customer/view_old/" + idx;
+                            codefty.popup.open(url, "(구) 상담내역 확인", 750, 800);
+                        });
+                    }
+
+                }
+            }
+        };
+        xhr.send(null);
+
     }
 };
 

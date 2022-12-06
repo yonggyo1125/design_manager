@@ -1,0 +1,73 @@
+<table class='table-cols style2'>
+    <tr>
+        <th>상담구분</th>
+        <td>
+            {{ category }}
+        </td>
+    </tr>
+    <tr>
+        <th>처리자</th>
+        <td>{{ cs_name }}({{ id }})</td>
+    </tr>
+    <tr>
+        <th>상담상품</th>
+        <td>{{ order_item }}</td>
+    </tr>
+    <tr>
+        <th>고객요청사항</th>
+        <td>
+            [{{ godo5Channel }}]<br>
+            {{ question | safe }}
+        </td>
+    </tr>
+    <tr>
+        <th>상담메모</th>
+        <td>
+            {{ nl2br(memo) | safe }}
+        </td>
+    </tr>
+    {% if godo5files and godo5files.length > 0 %}
+    <tr>
+        <th>첨부된파일</th>
+        <td>
+        {% for file in godo5files %}
+            <span class="file_box mr2">
+                <a href="https://n-mk.kr/team/godo5/file?url={{ file.fileUrl }}&fileName={{ file.uploadFileNm }}" target="_blank">{{ file.uploadFileNm }}</a>
+            </span>
+        {% endfor %}
+        </td>
+    </tr>
+    {% endif %}
+
+    <tr>    
+        <th>주문번호</th>
+        {% if ordno and ordno != '0' %}
+        <td>
+            <a href="https://n-mk.com/team/admin/order2_view/{{ ordno }}" target="_blank">
+            {{ ordno }}
+            </a>
+        </td>
+        {% else %}
+        <td></td>
+        {% endif %}
+    </tr>
+    <tr>
+        <th>고객명</th>
+        <td>{{ name }}</td>
+    </tr>
+    <tr>
+        <th>연락처</th>
+        <td>{{ mobile }}</td>
+    </tr>
+    <tr>
+        <th>이메일</th>
+        <td>{{ email }}</td>
+    </tr>
+    <tr>
+        <th>주소</th>
+        <td>
+            {{ "[" + zonecode + "]" if zonecode }}
+            {{ address }} {{ address_sub }}
+        </td>
+    </tr>
+</table>

@@ -323,17 +323,39 @@ router.get("/search", (req, res) => {
     res.render("customer/search", data);
 });
 
-/** 상담 기록 검색 결과 */
+/** 상담 기록 검색 결과 - 신 디자인관리자 */
 router.get('/search_result', async (req, res) => {
     const list = await customerDao.gets(req.query.page, 'all', req, req.query);
     res.render("customer/search_result", { list });
 });
 
-/** 상담내역 확인 */
+/** 상담 기록 검색 결과 - 구 디자인관리자 */
+router.get("/search_old_result", async (req, res) => {
+    const search = req.query;
+   
+    if (!search) {
+        return res.send("");
+    }
+    
+    const list = await searchOldDesignManager(search, 1, 1000);
+    res.render("customer/search_old_result", { list });
+});
+
+
+/** 상담내역 확인 - 신규 */
 router.get("/view/:id", async (req, res) => {
     const id = req.params.id;
 
     const data = await customerDao.get(id);
     res.render("customer/view", data);
+});
+
+
+/** 상담내역 확인 - 구 디자인관리자 */
+router.get("/view_old/:idx", async (req, res) => {
+    const idx = req.params.idx;
+
+    let data = await searchOldDesignManager({idx});
+    res.render("customer/view_old", data);
 });
 module.exports = router;

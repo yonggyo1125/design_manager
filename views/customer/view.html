@@ -1,4 +1,4 @@
-<table class='table-cols'>
+<table class='table-cols style2'>
     <tr>
         <th>상담구분</th>
         <td>
@@ -12,6 +12,10 @@
     <tr>
         <th>상담상품</th>
         <td>{{ productNm }}</td>
+    </tr>
+    <tr>
+        <th>고객요청사항</th>
+        <td>{{ question | safe }}</td>
     </tr>
     <tr>
         <th>상담메모</th>
