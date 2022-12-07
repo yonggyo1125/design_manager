@@ -224,7 +224,7 @@ window.addEventListener("DOMContentLoaded", function() {
     for (var i = 0; i < csSearches.length; i++) {
         csSearches[i].addEventListener("click", function(e) {
             var dataset = this.dataset;
-            var url = "/customer?isPopup=1";
+            var url = "/customer?isPopup=1&withOldDesignManager=1";
             if (dataset.targetCustomerNm) {
                 var customerNmEl = document.querySelector("[name='" + dataset.targetCustomerNm + "']");
                 if (customerNmEl) dataset.customerNm = customerNmEl.value;

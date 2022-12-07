@@ -45,7 +45,7 @@ router.use(managerOnly, managerAuth(10), async (req, res, next) => {
 router.route("/")
     .get(async (req, res) => {
         const search = req.query;
-        const limit = req.query.limit || 20;
+        let limit = req.query.limit || 20;
         const list = await customerDao.gets(req.query.page, limit, req, search);
         const total = customerDao.total;
         const pagination = customerDao.pagination;
@@ -67,6 +67,11 @@ router.route("/")
         };
 
         if (search.withOldDesignManager) {
+            if (search.isPopup) {
+                search.searchType="or";
+                req.query.page = 1;
+                limit = 1000;
+            }
             const oldList = await searchOldDesignManager(search, req.query.page, limit);
             data.oldList = oldList;
         }
