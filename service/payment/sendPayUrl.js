@@ -29,7 +29,7 @@ module.exports = async (id, res) => {
     }
     mobile = mobile.replace(/\D/g, "");
     data.url = payUrl;
-    data.amount = item.amount;
+    data.amount = item.amount.toLocaleString();
     const siteConfig = await getConfig("siteConfig");
     data['companyBankInfo'] = siteConfig.companyBankInfo;
 
