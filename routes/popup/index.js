@@ -176,11 +176,11 @@ router.route("/draft/:uid")
             const data = req.body;
             const draftUid = req.params.uid;
             if (data.sendDegisnerResponseAlim) { // 답변알림톡 전송
-                await replyAlimTalkToClient(draftUid, "drequest");
+                await replyAlimTalkToClient(draftUid, "drequest1");
             }   
             
             if (data.sendCheckDraftAlim) { // 시안확인 알림톡 전송
-                await replyAlimTalkToClient(draftUid, "siantask");
+                await replyAlimTalkToClient(draftUid, "siantask1");
             }
 
 

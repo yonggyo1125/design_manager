@@ -33,6 +33,6 @@ module.exports = async (id, res) => {
     const siteConfig = await getConfig("siteConfig");
     data['companyBankInfo'] = siteConfig.companyBankInfo;
 
-    const result = kakaoAlimTalkApiSvc.send("versement2", mobile, data, data.orderNo);    
+    const result = kakaoAlimTalkApiSvc.send("versement3", mobile, data, data.orderNo);    
     return result;
 };  

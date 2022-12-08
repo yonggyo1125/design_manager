@@ -26,7 +26,7 @@ module.exports = async (orderNo, id, host) => {
         return false;
     }
 
-    const tmpltCode = "imanual";
+    const tmpltCode = "imanual1";
     const mobile = data.orderCellPhone;
     const replaceCodeData = {
         orderNm : data.orderNm,

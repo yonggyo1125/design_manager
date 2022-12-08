@@ -47,6 +47,10 @@ const sendStatusMessage = {
             replaceCodeData['totalPayPrice'] = orderInfo.shopTotalPayPrice;
         }
 
+        if (replaceCodeData['totalPayPrice']) {
+            replaceCodeData['totalPayPrice'] = replaceCodeData['totalPayPrice'].toLocaleString();
+        }
+
         let url = "https://dm.n-mk.kr/mypage";
         replaceCodeData['url'] = url;
         
