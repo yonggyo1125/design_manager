@@ -219,7 +219,7 @@ router.post("/mobile/callback", async (req, res) => {
 });
 
 router.route("/process/:id")
-    .all(async (req, res) => {
+    .get(async (req, res) => {
         try {
             const id = req.params.id;
             const data = await payDataSvc.get(id);
@@ -237,7 +237,7 @@ router.route("/process/:id")
                 } else {
                     app_scheme = "googlechromes://";
                 }
-
+                
                 data.app_scheme = app_scheme;
 
                 data.addScript = ["payment/form_mobile"];
