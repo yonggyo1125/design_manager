@@ -12,7 +12,7 @@
 <form id='mobileweb' name="mobileweb" method="post" accept-charset="euc-kr"> 
     <input type="hidden" name="idPaymentItem" value="{{ id }}">
     <input type="hidden" name="P_NEXT_URL" value="{{ host }}/payment/mobile/callback?idPaymentItem={{ id }}">  
-    <input type="hidden" name="P_RESERVED" value="twotrs_isp=Y&block_isp=Y&twotrs_isp_noti=N">
+    <input type="hidden" name="P_RESERVED" value="twotrs_isp=Y&block_isp=Y&twotrs_isp_noti=N&apprun_check=Y&app_scheme={{ app_scheme }}">
     <input type="hidden" name="P_MID" value="{{ config.mid }}"> 
     <input type="hidden" name="P_OID" value="{{ gid }}_{{ id }}">  
     <input type="hidden" name="P_GOODS" value="{{ title }}"> 

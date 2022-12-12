@@ -228,6 +228,18 @@ router.route("/process/:id")
             }
 
             if (isMobile(req)) {
+                let app_scheme = "";
+                const agent = req.userAgent.toUpperCase();
+                if (agent.indexOf("KAKAOTALK") != -1) {
+                    app_scheme = "kakaotalk://";
+                } else if(agent.indexOf("NAVER") != -1) {
+                    app_scheme = "naversearchapp://";
+                } else {
+                    app_scheme = "googlechromes://";
+                }
+                
+                data.app_scheme = app_scheme;
+
                 data.addScript = ["payment/form_mobile"];
                 res.render("payment/form_mobile", data);
             } else {
