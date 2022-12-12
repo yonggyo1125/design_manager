@@ -52,7 +52,7 @@ const paymentService = {
             if (data.payMethod == 'VBank') {
                 status = "confirm";
             }
-            
+
             await this.changeStatus(data.idPayment, status);
 
             /** 결제 완료 처리  */
@@ -71,7 +71,7 @@ const paymentService = {
         const data = req.body;
         let result;
         if (isMobile) {
-            result = await inicisPay.processMboile(data);
+            result = await inicisPay.processMobile(data);
         } else {
             result = await inicisPay.process(data);
         }
