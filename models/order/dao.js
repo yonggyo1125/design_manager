@@ -287,6 +287,7 @@ const order = {
                     idProductItem : productItem.id,
                     boardSizeType : data[`boardSizeType_${id}`] || 'portrait',
                     boardSize : data[`boardSize_${id}`] || 'direct',
+                    fileLinks : data[`fileLinks_${id}`],
                 }, { transaction });
                
                 

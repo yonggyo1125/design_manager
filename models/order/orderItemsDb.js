@@ -213,6 +213,9 @@ module.exports = class OrderItem extends Sequelize.Model {
             },
             itemShopSno : { // 쇼핑몰 품주 번호
                 type : Sequelize.STRING(60),
+            },
+            fileLinks : { // 외부 첨부 파일 링크 
+                type : Sequelize.TEXT,
             }
         }, {
             sequelize,

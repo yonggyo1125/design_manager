@@ -466,6 +466,7 @@ const orderService = {
                 data[`designStatus_${id}`] = item.designStatus || "";
             }
             data[`itemShopSno_${id}`] = item.itemShopSno || "";
+            data[`fileLinks_${id}`] = item.fileLinks || "";
         }
 
         delete data.items;
