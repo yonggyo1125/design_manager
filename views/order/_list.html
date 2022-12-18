@@ -59,7 +59,7 @@
                 </thead>
                 <tbody>
                    <tr>
-                        <td align="center">{{ item.totalPayPrice.toLocaleString() }}원</td>
+                        <td align="center">{{ item.shopTotalPayPrice.toLocaleString() if item.shopTotalPayPrice else item.totalPayPrice.toLocaleString() }}원</td>
                         <td align="center">{{ item.orderNm }}</td>
                         <td align="center">{{ item.orderCellPhone }}</td>
                         <td align="center">{{ getLocalDate(item.createdAt, '%Y.%m.%d') }}</td>

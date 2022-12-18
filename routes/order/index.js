@@ -82,7 +82,6 @@ const upload = fileDao.getUploads();
 const doManyRouter = require('./do_many'); // 일괄 처리
 const barcodeRouter = require('./barcode'); // 바코드 생성
 const deliveryReceiptRouter = require("./deliveryReceipt"); // 인수증
-const { route } = require('./do_many');
 /** 라우터 E */
 
 /**
