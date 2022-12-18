@@ -272,6 +272,15 @@
                                 </a>
                             {% endfor %}
                             {% endif %}
+                            {% if item.fileLinks and item.fileLinks.length > 0 %}
+                            {% for file in item.fileLinks %}
+                                {% if shopName and shopName.indexOf("n-mk.com") != -1 %}
+                                <a href="https://www.n-mk.com/shop/data/design_edit/{{ file }}" target="_blank" class='sbtn mb5'><i class='xi-file-download-o'></i> {{ file }}</a>
+                                {% else %}
+                                <a href="https://www.n-mk.co.kr/shop/data/design_edit/{{ file }}" target="_blank" class='sbtn mb5'><i class='xi-file-download-o'></i> {{ file }}</a>
+                                {% endif %}
+                            {% endfor %}
+                            {% endif %}
                         </td>
                         <th>샘플이미지</th>
                         <td class='sample_images'>

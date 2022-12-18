@@ -1955,6 +1955,7 @@ const order = {
 
          // 디자이너 신청이 처리중인지 체크
          li.isDesignerChanging = await designerChangeDao.isProcess(li.id);
+         li.fileLinks = li.fileLinks ? li.fileLinks.split("||"):[];
     },
     /**
      * 주문품목별 샘플 목록
