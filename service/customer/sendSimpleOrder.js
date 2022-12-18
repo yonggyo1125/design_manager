@@ -12,7 +12,7 @@ module.exports = async (mobile, name, host) => {
     }
     name = name || "고객";
     mobile = mobile.replace(/\D/g, "");
-    const url = host + "/mypage/simple";
+    const url = host + "/simple";
     const data = {
         customerNm : name,
         url,

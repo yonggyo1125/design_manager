@@ -6,6 +6,8 @@ const urlControls = {
      */
     anyOneAccessURL : function() {
         return [
+            // 간편주문서
+            '/simple',
             // 회원관련 
             '/manager/login',
             '/manager/join',
@@ -13,7 +15,7 @@ const urlControls = {
             '/manager/edit',
             '/manager/logout',
             '/manager/share',
-            '/mypage',
+            '/mypage',            
 
             // 결제 관련
             '/payment',

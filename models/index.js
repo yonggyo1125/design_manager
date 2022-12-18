@@ -79,6 +79,8 @@ const BoardTemplate = require('./board/boardTemplateDb'); // 게시글 양식
 
 const TransientAccess = require("./transientAccess/transientAccessDb"); // 임시 접속 코드 발급
 
+const SimpleOrder = require("./simple/simpleOrderDb"); // 간편 주문서
+
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
 
@@ -180,6 +182,8 @@ db.BoardTemplate = BoardTemplate;
 
 // 기타
 db.TransientAccess = TransientAccess;
+db.SimpleOrder = SimpleOrder; // 간편주문서 
+
 
 // 기본설정
 Config.init(sequelize);
@@ -270,6 +274,7 @@ BoardTemplate.init(sequelize);
 
 // 기타 설정
 TransientAccess.init(sequelize);
+SimpleOrder.init(sequelize); // 간편주문서
 
 // 기본설정
 Config.associate(db);
@@ -359,7 +364,7 @@ BoardTemplate.associate(db);
 
 // 기타
 TransientAccess.associate(db);
-
+SimpleOrder.associate(db); // 간편주문서
 
 /** 모델 연결 및 초기화 E */
 

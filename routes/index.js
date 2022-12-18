@@ -39,6 +39,9 @@ const guideRouter = require('./guide');
 /** 운송장 조회 라우터 */
 const deliveryRouter = require("./delivery");
 
+/** 간편주문서 라우터 */
+const simpleOrderRouter = require('./simple');
+
 const router = express.Router();
 
 
@@ -130,6 +133,9 @@ router.use("/guide", guideRouter);
 
 /** 운송장 조회 */
 router.use("/delivery", deliveryRouter);
+
+/** 간편 주문서  */
+router.use("/simple", simpleOrderRouter);
 
 /** 테스트 관련 */
 const testRouter = require('./test_func');

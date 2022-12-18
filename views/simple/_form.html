@@ -1,0 +1,45 @@
+<dl>
+    <dt class="required">주문자명</dt>
+    <dd>
+        <input type="text" name="orderNm" placeholder="주문자 성함을 기입해 주세요.">
+    </dd>
+</dl>
+<dl>
+    <dt class="required">휴대전화</dt>
+    <dd>
+        <input type="text" name="cellPhone" placeholder="-없이 숫자만 입력해 주세요.">
+    </dd>
+</dl>
+<dl>
+    <dt class="required">주소</dt>
+    <dd>
+        <div class='row1'>
+            <input type='text' name='zonecode'readonly>
+            <span class='searchAddress'  data-zonecode='zonecode' data-address='address'>
+                우편번호 찾기
+            </span>
+        </div>
+        <div class="row2">
+            <input type='text' name='address' readonly>
+        </div>
+        <input type='text' name='addressSub' placeholder="상세주소를 입력해 주세요.">
+    </dd>
+</dl>
+<dl>
+    <dt>주문상품</dt>
+    <dd>
+        <input type="text" name="productNm" placeholder="에어간판, 현수막, 시트지 등 원하는 품목명을 입력하세요.">
+    </dd>
+</dl>
+<dl>
+    <dt>요청사항</dt>
+    <dd>
+        <textarea name="orderMemo">주문사이즈: 
+
+주문수량: 
+
+들어갈문구: 
+
+요청사항: </textarea>
+    </dd>
+</dl>
