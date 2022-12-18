@@ -1,0 +1,51 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="top_box">
+    <div class='mtitle top flex_between'>
+        간편 주문서 검색
+        <div class="tit_btns">
+            <a href="/simple" class="sbtn" target="_blank">
+                <i class="xi-pen-o"></i> 간편 주문서
+            </a>
+        </div>
+    </div>
+    <form id='frmSearch' method='get' autocomplete='off'>
+        <input type='hidden' name="limit" value="{{ limit }}">
+        <table class='table-cols style2'>
+            <tr>
+                <th>접수일</th>
+                <td>
+                    <input type='date' name='sDate' value='{{ search.sDate }}' class='w120'> ~ 
+                    <input type='date' name='eDate' value='{{ search.eDate }}' class='w120'>
+                    <span class='quick_date' data-target-name='sDate,eDate'>
+                        <span class="date_span" data-span="-1_day">내일</span>
+                        <span class="date_span" data-span="0_day">오늘</span>
+                        <span class="date_span" data-span="1_day">하루전</span>
+                        <span class="date_span" data-span="2_day">이틀전</span>
+                        <span class='date_span' data-span='1_week'>1주</span>
+                        <span class='date_span' data-span='2_week'>2주</span>
+                        <span class='date_span' data-span='1_month'>1개월</span>
+                        <span class='date_span' data-span='2_month'>2개월</span>
+                        <span class='date_span' data-span='1_year'>1년</span>
+                    </span>
+                </td>
+            </tr>
+        </table>
+        <div class='table-btn'>
+            <input type='submit' value='검색하기'>
+        </div>
+    </form>
+</div>
+<!--// top_box -->
+<div class="content_box">
+    <div class='mtitle'>간편 주문서 접수 목록</div>
+    {% if limits and limits.length > 0 %}
+    <div class="limits_tab" data-target-id="frmSearch">
+    {% for num in limits %}
+        <span class="sbtn tab{{ ' on' if num == limit }}" data-limit="{{ num }}">{{ num }}개씩 보기</span>
+    {% endfor %}
+    </div>
+    {% endif %}
+</div>
+<!--// content_box -->
+{% endblock %}

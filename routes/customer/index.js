@@ -27,6 +27,9 @@ const searchOldDesignManager = require('../../service/customer/searchOldDesignMa
 // 간편주문서 전송
 const sendSimpleOrder = require("../../service/customer/sendSimpleOrder");
 
+// 간편주문서 라우터
+const simpleOrderRouter = require('./simple');
+
 const router = express.Router();
 
 /** 파일 업로드 설정  */
@@ -417,5 +420,8 @@ router.get("/send_simple_order", async (req, res) => {
     
 });
 /** 간편주문서 전송하기 E */
+
+// 간편주문서 라우터 
+router.use("/simple", simpleOrderRouter);
 
 module.exports = router;
