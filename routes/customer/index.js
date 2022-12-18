@@ -24,6 +24,9 @@ const getCsAgentStatistics = require('../../service/customer/getCsAgentStatistic
 // 구 디자인관리자 조회
 const searchOldDesignManager = require('../../service/customer/searchOldDesignManager');
 
+// 간편주문서 전송
+const sendSimpleOrder = require("../../service/customer/sendSimpleOrder");
+
 const router = express.Router();
 
 /** 파일 업로드 설정  */
@@ -363,4 +366,56 @@ router.get("/view_old/:idx", async (req, res) => {
     let data = await searchOldDesignManager({idx});
     res.render("customer/view_old", data);
 });
+
+/** 간편주문서 전송하기 S */
+router.get("/send_simple_order/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!id) {
+            throw new Error("잘못된 접근입니다.");
+        }
+
+        const data = await customerDao.get(id);
+        if (!data) {
+            throw new Error("등록되지 않은 상담내역입니다.");
+        }
+
+        if (!data.cellPhone) {
+            throw new Error("상담내역에 전송할 연락처를 등록하세요.");
+        }
+
+        // 간편주문서 전송
+        const result = await sendSimpleOrder(data.cellPhone, data.customerNm, res.locals.host);
+        if (!result) {
+            throw new Error("전송에 실패하였습니다.");
+        }
+
+        alert("전송되었습니다.", res);
+    } catch (err) {
+        console.error(err);
+        alert(err.message, res);
+    }
+});
+
+router.get("/send_simple_order", async (req, res) => {
+    try {
+        const { name, mobile } = req.query;
+        if (!name || !mobile) {
+            throw new Error("고객명과 연락처를 모두 입력하세요.");
+        }
+
+        // 간편주문서 전송
+        const result = await sendSimpleOrder(mobile, name, res.locals.host);
+        if (!result) {
+            throw new Error("전송에 실패하였습니다.");
+        }
+
+        res.json({ isSuccess : true });
+    } catch (err) {
+        res.json({ isSuccess : false, message : err.message });
+    }
+    
+});
+/** 간편주문서 전송하기 E */
+
 module.exports = router;

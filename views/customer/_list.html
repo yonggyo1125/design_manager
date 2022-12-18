@@ -77,6 +77,12 @@
                             <i class='xi-pen-o'></i>
                             수정하기
                         </a>
+                        {% if item.cellPhone %}
+                        <a href="/customer/send_simple_order/{{ item.id }}" class="sbtn red" target="ifrmProcess" onclick="return confirm('정말 전송하시겠습니까?');">
+                            <i class="xi-send"></i>
+                            간편주문서 전송하기
+                        </a>
+                         {% endif %}
                     </td>
                     {% endif %}
                 </tr>

@@ -289,4 +289,43 @@ window.addEventListener("DOMContentLoaded", function() {
     }
     /** 카카오 알림톡 전송 E */
 
+    /** 간편주문서 전송하기 S */
+    const sendSimpleOrderEl = document.querySelector(".sendSimpleOrder");
+    if (sendSimpleOrderEl) {
+        sendSimpleOrderEl.addEventListener("click", function() {
+            const name = frmCustomer.customerNm.value;
+            if (!name || name.trim() == "") {
+                alert("고객명을 입력하세요.");
+                frmCustomer.customerNm.focus();
+                return;
+            }
+
+            const mobile = frmCustomer.cellPhone.value;
+            if (!mobile || mobile.trim() == "") {
+                alert("연락처를 입력하세요.");
+                frmCustomer.cellPhone.focus();
+                return;
+            }
+
+            if (!confirm('정말 전송하시겠습니까?')) {
+                return;
+            }
+
+            const url = `/customer/send_simple_order?name=${name}&mobile=${mobile}`;
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.onreadystatechange = function() {
+                if (xhr.status == 200 && xhr.readyState == XMLHttpRequest.DONE) {
+                    const result = JSON.parse(xhr.responseText);
+                    if (result.isSuccess) {
+                        alert("전송되었습니다.");
+                    } else {
+                        alert(result.message);
+                    }
+                }
+            };
+            xhr.send(null);
+        });
+    }
+    /** 간편주문서 전송하기 E */
 });

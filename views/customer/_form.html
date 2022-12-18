@@ -1,5 +1,5 @@
 <div class='customer_form'>
-    <form id='frmCustomer' method="post" action="/customer/{{ mode }}" target="ifrmProcess" autocomplete='off' enctype='multipart/form-data'>
+    <form id='frmCustomer' name='frmCustomer' method="post" action="/customer/{{ mode }}" target="ifrmProcess" autocomplete='off' enctype='multipart/form-data'>
         <input type='hidden' name='gid' value='{{ gid }}'>
         <table class='table-cols'>
             <tr>
@@ -12,14 +12,19 @@
                     </select>
                     <input type='checkbox' name='addAsApply' value='1' id='addAsApply'>
                     <label for='addAsApply'>A/S 신청서 함께 등록</label>
-
                     <input type="checkbox" name="replyAlimTalk" value="1" id="replyAlimTalk">
                     <label for="replyAlimTalk">답변완료 메세지 전송</label>
                 </td>
             </tr>
             <tr>
                 <th>처리자</th>
-                <td>{{ manager.managerNm }}({{ manager.managerId }})</td>
+                <td>
+                    {{ manager.managerNm }}({{ manager.managerId }})&nbsp;&nbsp;
+                    <span class="sbtn red sendSimpleOrder">
+                        <i class="xi-send"></i>
+                        간편주문서 전송하기
+                    </span>
+                </td>
             </tr>
             <tr>
                 <th>상담상품</th>
