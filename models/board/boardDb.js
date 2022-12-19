@@ -147,7 +147,6 @@ module.exports = class Board extends Sequelize.Model {
             },
         }, {
             sequelize,
-            paranoid : true,
             timestamps : true,
             modelName : "Board",
             tableName : "boards",

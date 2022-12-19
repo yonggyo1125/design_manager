@@ -538,7 +538,7 @@ const boardDataDao = {
         
         try {
             const boardData = await BoardData.findByPk(id, {
-                attributes : ['category', 'listOrder'],
+                attributes : ['category', 'listOrder', 'idBoard'],
                 raw : true,
             }); 
 
@@ -547,6 +547,7 @@ const boardDataDao = {
             }
 
             const where = {
+                idBoard : boardData.idBoard,
                 listOrder : { [Op.lt] : boardData.listOrder },
                 depth : 0,
             };
@@ -588,7 +589,7 @@ const boardDataDao = {
         
         try {
             const boardData = await BoardData.findByPk(id, {
-                attributes : ['category', 'listOrder'],
+                attributes : ['category', 'listOrder', 'idBoard'],
                 raw : true,
             }); 
 
@@ -597,6 +598,7 @@ const boardDataDao = {
             }
 
             const where = {
+                idBoard : boardData.idBoard,
                 listOrder : { [Op.gt] : boardData.listOrder },
                 depth : 0,
             };
