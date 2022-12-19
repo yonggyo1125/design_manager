@@ -1,0 +1,193 @@
+{% extends '../layout/main.html' %}
+{% block content %}
+<div class="content_box mt50">
+    <div class='mtitle'>간편주문서 추가항목 설정</div>
+    <form id="frmUpdate" name="frmUpdate" method="post" action="/customer/simple/config" target="ifrmProcess" autocomplete="off">
+        <table class="table-cols">
+            <tbody>
+                <tr>
+                    <th>한줄텍스트1</th>
+                    <td>
+                        <dl class="mb5">
+                            <dt>사용여부</dt>
+                            <dd>
+                                <input type="radio" name="use_extra1" value="1" id="use_extra1_1"{{ ' checked' if use_extra1 }}>
+                                <label for="use_extra1_1">사용</label>
+                                <input type="radio" name="use_extra1" value="0" id="use_extra1_0"{{ ' checked' if not use_extra1 }}>
+                                <label for="use_extra1_0">미사용</label>
+                            </dd>
+                        </dl>
+                        <dl class="mb5">
+                            <dt>항목명</dt>
+                            <dd><input type="text" name="extra1_title" value="{{ extra1_title }}"></dd>
+                        </dl>
+                        <dl>
+                            <dt>안내문구</dt>
+                            <dd><input type="text" name="extra1_placeholder" value="{{ extra1_placeholder }}"></dd>
+                        </dl>
+                    </td>
+                </tr>
+                <tr>
+                    <th>한줄텍스트2</th>
+                    <td>
+                        <dl class="mb5">
+                            <dt>사용여부</dt>
+                            <dd>
+                                <input type="radio" name="use_extra2" value="1" id="use_extra2_1"{{ ' checked' if use_extra2 }}>
+                                <label for="use_extra2_1">사용</label>
+                                <input type="radio" name="use_extra2" value="0" id="use_extra2_0"{{ ' checked' if not use_extra2 }}>
+                                <label for="use_extra2_0">미사용</label>
+                            </dd>
+                        </dl>
+                        <dl class="mb5">
+                            <dt>항목명</dt>
+                            <dd><input type="text" name="extra2_title" value="{{ extra2_title }}"></dd>
+                        </dl>
+                        <dl>
+                            <dt>안내문구</dt>
+                            <dd><input type="text" name="extra2_placeholder" value="{{ extra2_placeholder }}"></dd>
+                        </dl>
+                    </td>
+                </tr>
+                <tr>
+                    <th>한줄텍스트3</th>
+                    <td>
+                        <dl class="mb5">
+                            <dt>사용여부</dt>
+                            <dd>
+                                <input type="radio" name="use_extra3" value="1" id="use_extra3_1"{{ ' checked' if use_extra3 }}>
+                                <label for="use_extra3_1">사용</label>
+                                <input type="radio" name="use_extra3" value="0" id="use_extra3_0"{{ ' checked' if not use_extra3 }}>
+                                <label for="use_extra3_0">미사용</label>
+                            </dd>
+                        </dl>
+                        <dl class="mb5">
+                            <dt>항목명</dt>
+                            <dd><input type="text" name="extra3_title" value="{{ extra3_title }}"></dd>
+                        </dl>
+                        <dl>
+                            <dt>안내문구</dt>
+                            <dd><input type="text" name="extra3_placeholder" value="{{ extra3_placeholder }}"></dd>
+                        </dl>
+                    </td>
+                </tr>
+                <tr>
+                    <th>한줄텍스트4</th>
+                    <td>
+                        <dl class="mb5">
+                            <dt>사용여부</dt>
+                            <dd>
+                                <input type="radio" name="use_extra4" value="1" id="use_extra4_1"{{ ' checked' if use_extra4 }}>
+                                <label for="use_extra4_1">사용</label>
+                                <input type="radio" name="use_extra4" value="0" id="use_extra4_0"{{ ' checked' if not use_extra4 }}>
+                                <label for="use_extra4_0">미사용</label>
+                            </dd>
+                        </dl>
+                        <dl class="mb5">
+                            <dt>항목명</dt>
+                            <dd><input type="text" name="extra4_title" value="{{ extra4_title }}"></dd>
+                        </dl>
+                        <dl>
+                            <dt>안내문구</dt>
+                            <dd><input type="text" name="extra4_placeholder" value="{{ extra4_placeholder }}"></dd>
+                        </dl>
+                    </td>
+                </tr>
+                <tr>
+                    <th>한줄텍스트5</th>
+                    <td>
+                        <dl class="mb5">
+                            <dt>사용여부</dt>
+                            <dd>
+                                <input type="radio" name="use_extra5" value="1" id="use_extra5_1"{{ ' checked' if use_extra5 }}>
+                                <label for="use_extra5_1">사용</label>
+                                <input type="radio" name="use_extra5" value="0" id="use_extra5_0"{{ ' checked' if not use_extra5 }}>
+                                <label for="use_extra5_0">미사용</label>
+                            </dd>
+                        </dl>
+                        <dl class="mb5">
+                            <dt>항목명</dt>
+                            <dd><input type="text" name="extra5_title" value="{{ extra5_title }}"></dd>
+                        </dl>
+                        <dl>
+                            <dt>안내문구</dt>
+                            <dd><input type="text" name="extra5_placeholder" value="{{ extra5_placeholder }}"></dd>
+                        </dl>
+                    </td>
+                </tr>
+                <tr>
+                    <th>여러줄텍스트1</th>
+                    <td>
+                        <dl class="mb5">
+                            <dt>사용여부</dt>
+                            <dd>
+                                <input type="radio" name="use_extraText1" value="1" id="use_extraText1_1"{{ ' checked' if use_extraText1 }}>
+                                <label for="use_extraText1_1">사용</label>
+                                <input type="radio" name="use_extraText1" value="0" id="use_extraText1_0"{{ ' checked' if not use_extraText1 }}>
+                                <label for="use_extraText1_0">미사용</label>
+                            </dd>
+                        </dl>
+                        <dl class="mb5">
+                            <dt>항목명</dt>
+                            <dd><input type="text" name="extraText1_title" value="{{ extraText1_title }}"></dd>
+                        </dl>
+                        <dl>
+                            <dt>안내문구</dt>
+                            <dd><input type="text" name="extraText1_placeholder" value="{{ extraText1_placeholder }}"></dd>
+                        </dl>
+                    </td>
+                </tr>
+                <tr>
+                    <th>여러줄텍스트2</th>
+                    <td>
+                        <dl class="mb5">
+                            <dt>사용여부</dt>
+                            <dd>
+                                <input type="radio" name="use_extraText2" value="1" id="use_extraText2_1"{{ ' checked' if use_extraText2 }}>
+                                <label for="use_extraText2_1">사용</label>
+                                <input type="radio" name="use_extraText2" value="0" id="use_extraText2_0"{{ ' checked' if not use_extraText2 }}>
+                                <label for="use_extraText2_0">미사용</label>
+                            </dd>
+                        </dl>
+                        <dl class="mb5">
+                            <dt>항목명</dt>
+                            <dd><input type="text" name="extraText2_title" value="{{ extraText2_title }}"></dd>
+                        </dl>
+                        <dl>
+                            <dt>안내문구</dt>
+                            <dd><input type="text" name="extraText2_placeholder" value="{{ extraText2_placeholder }}"></dd>
+                        </dl>
+                    </td>
+                </tr>
+                <tr>
+                    <th>여러줄텍스트3</th>
+                    <td>
+                        <dl class="mb5">
+                            <dt>사용여부</dt>
+                            <dd>
+                                <input type="radio" name="use_extraText3" value="1" id="use_extraText3_1"{{ ' checked' if use_extraText3 }}>
+                                <label for="use_extraText3_1">사용</label>
+                                <input type="radio" name="use_extraText3" value="0" id="use_extraText3_0"{{ ' checked' if not use_extraText3 }}>
+                                <label for="use_extraText3_0">미사용</label>
+                            </dd>
+                        </dl>
+                        <dl class="mb5">
+                            <dt>항목명</dt>
+                            <dd><input type="text" name="extraText3_title" value="{{ extraText3_title }}"></dd>
+                        </dl>
+                        <dl>
+                            <dt>안내문구</dt>
+                            <dd><input type="text" name="extraText3_placeholder" value="{{ extraText3_placeholder }}"></dd>
+                        </dl>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class='btns'>
+            <button type='submit' class='btn'>저장하기</button>
+            <button type='button' class='btn cancel_back white'>취소하기</button>
+        </div>
+    </form>
+</div>
+<!--// content_box -->
+{% endblock %}

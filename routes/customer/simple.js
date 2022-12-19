@@ -20,5 +20,19 @@ router.route("/")
         return res.render("customer/simple", data);
     });
 
+/**
+ * 추가항목 설정 
+ * 
+ */
+router.route("/config")
+    .get(async (req, res) => {
+        const data = {
+            subMenuUrl : "/customer",
+        };
+        return res.render("customer/simple_config", data);
+    })
+    .post(async (req, res) => {
+
+    });
 
 module.exports = router;
