@@ -14,7 +14,7 @@ module.exports = async (mobile, name, host) => {
     mobile = mobile.replace(/\D/g, "");
     const url = host + "/simple";
     const data = {
-        customerNm : name,
+        name,
         url,
     };
     const result = await kakaoAlimTalkApi.send("sendSimpleOrder", mobile, data);   
