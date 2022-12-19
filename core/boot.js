@@ -144,7 +144,8 @@ module.exports = async (req, res, next) => {
             }
 
             const showConfig = li.showConfig || {};
-            if (showConfig.location && showConfig.location.indexOf(menu) == -1) {
+    
+            if (!showConfig.location || (showConfig.location && showConfig.location.indexOf(menu) == -1)) {
                 continue;
             }
            
