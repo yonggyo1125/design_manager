@@ -49,7 +49,7 @@ module.exports = class SimpleOrder extends Sequelize.Model {
             extraText2 : { // 입력항목
                 type : Sequelize.TEXT,
             },
-            extraText2 : { // 입력항목
+            extraText3 : { // 입력항목
                 type : Sequelize.TEXT,
             },
             orderNo : { //  주문번호

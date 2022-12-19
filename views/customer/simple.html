@@ -18,7 +18,6 @@
                     <input type='date' name='sDate' value='{{ search.sDate }}' class='w120'> ~ 
                     <input type='date' name='eDate' value='{{ search.eDate }}' class='w120'>
                     <span class='quick_date' data-target-name='sDate,eDate'>
-                        <span class="date_span" data-span="-1_day">내일</span>
                         <span class="date_span" data-span="0_day">오늘</span>
                         <span class="date_span" data-span="1_day">하루전</span>
                         <span class="date_span" data-span="2_day">이틀전</span>
@@ -28,6 +27,18 @@
                         <span class='date_span' data-span='2_month'>2개월</span>
                         <span class='date_span' data-span='1_year'>1년</span>
                     </span>
+                </td>
+            </tr>
+            <tr>
+                <th>키워드 검색</th>
+                <td>
+                    <select name="sopt" class="wauto">
+                        <option value='all'{{ ' selected' if not search.sopt or search.sopt == 'all' }}>통합검색</option>
+                        <option value='orderNo'{{ ' selected' if search.sopt == 'orderNo' }}>주문번호</option>
+                        <option value='orderNm'{{ ' selected' if search.sopt == 'orderNm' }}>고객명</option>
+                        <option value='cellPhone'{{ ' selected' if search.sopt == 'cellPhone' }}>연락처</option>
+                    </select>
+                    <input type="text" name="skey" value="{{ search.skey }}" class="w300">
                 </td>
             </tr>
         </table>
