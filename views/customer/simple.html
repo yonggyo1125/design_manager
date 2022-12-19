@@ -98,12 +98,60 @@
                                 {{ '(' + item.zonecode + ')' if item.zonecode }} {{ item.address }} {{ item.addressSub }}
                             </td>
                         </tr>
+                        {% if item.extra1 %}
+                        <tr>
+                            <th>{{ config.extra1_title }}</th>
+                            <td>{{ item.extra1 }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if item.extra2 %}
+                        <tr>
+                            <th>{{ config.extra2_title }}</th>
+                            <td>{{ item.extra2 }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if item.extra3 %}
+                        <tr>
+                            <th>{{ config.extra3_title }}</th>
+                            <td>{{ item.extra3 }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if item.extra4 %}
+                        <tr>
+                            <th>{{ config.extra4_title }}</th>
+                            <td>{{ item.extra4 }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if item.extra5 %}
+                        <tr>
+                            <th>{{ config.extra5_title }}</th>
+                            <td>{{ item.extra5 }}</td>
+                        </tr>
+                        {% endif %}
                         <tr>
                             <th>요청사항</th>
                             <td>
                                 {{ nl2br(item.orderMemo) | safe }}
                             </td>
                         </tr>
+                        {% if item.extraText1 %}
+                        <tr>
+                            <th>{{ config.extraText1_title }}</th>
+                            <td>{{ nl2br(item.extraText1) | safe }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if item.extraText2 %}
+                        <tr>
+                            <th>{{ config.extraText2_title }}</th>
+                            <td>{{ nl2br(item.extraText2) | safe }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if item.extraText3 %}
+                        <tr>
+                            <th>{{ config.extraText3_title }}</th>
+                            <td>{{ nl2br(item.extraText3) | safe }}</td>
+                        </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>

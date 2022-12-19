@@ -12,6 +12,6 @@ input[type='text']:read-only { background: #f2f2f2; }
 #wrap .row1 { display: flex; justify-content: space-between; margin-bottom: 10px; }
 #wrap .row1 input[name='zonecode'] { width: 0; flex-grow: 1; margin-right: 5px; }
 #wrap .row2 { margin-bottom: 10px; }
-textarea[name='orderMemo'] { width: 100%; border: 1px solid #d2d2d2; border-radius: 5px; padding: 15px 10px; color: #d2d2d2; font-size: 13px; height: 180px; resize: none; }
+textarea { width: 100%; border: 1px solid #d2d2d2; border-radius: 5px; padding: 15px 10px; color: #d2d2d2; font-size: 13px; height: 180px; resize: none; }
 .guide { margin: 10px 0 5px; text-align: center; color: #212121; font-size: 12px; font-weight: 300; }
 button[type='submit'] { width: 100%; cursor: pointer; border: 0; height: 50px; border-radius: 5px; background: #8769f0; color: #fff; font-size: 20px; font-weight: 500; }

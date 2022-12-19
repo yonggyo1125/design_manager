@@ -31,6 +31,46 @@
         <input type="text" name="productNm" placeholder="에어간판, 현수막, 시트지 등 원하는 품목명을 입력하세요.">
     </dd>
 </dl>
+{% if use_extra1 == '1' %}
+<dl>
+    <dt>{{ extra1_title }}</dt>
+    <dd>
+        <input type="text" name="extra1" placeholder="{{ extra1_placeholder if extra1_placeholder }}">
+    </dd>
+</dl>
+{% endif %}
+{% if use_extra2 == '1' %}
+<dl>
+    <dt>{{ extra2_title }}</dt>
+    <dd>
+        <input type="text" name="extra2" placeholder="{{ extra2_placeholder if extra2_placeholder }}">
+    </dd>
+</dl>
+{% endif %}
+{% if use_extra3 == '1' %}
+<dl>
+    <dt>{{ extra3_title }}</dt>
+    <dd>
+        <input type="text" name="extra3" placeholder="{{ extra3_placeholder if extra3_placeholder }}">
+    </dd>
+</dl>
+{% endif %}
+{% if use_extra4 == '1' %}
+<dl>
+    <dt>{{ extra4_title }}</dt>
+    <dd>
+        <input type="text" name="extra4" placeholder="{{ extra4_placeholder if extra4_placeholder }}">
+    </dd>
+</dl>
+{% endif %}
+{% if use_extra5 == '1' %}
+<dl>
+    <dt>{{ extra5_title }}</dt>
+    <dd>
+        <input type="text" name="extra5" placeholder="{{ extra5_placeholder if extra5_placeholder }}">
+    </dd>
+</dl>
+{% endif %}
 <dl>
     <dt>요청사항</dt>
     <dd>
@@ -43,3 +83,27 @@
 요청사항: </textarea>
     </dd>
 </dl>
+{% if use_extraText1 == '1' %}
+<dl>
+    <dt>{{ extraText1_title }}</dt>
+    <dd>
+        <textarea name="extraText1" placeholder="{{ extraText1_placeholder if extraText1_placeholder }}"></textarea>
+    </dd>
+</dl>
+{% endif %}
+{% if use_extraText2 == '1' %}
+<dl>
+    <dt>{{ extraText2_title }}</dt>
+    <dd>
+        <textarea name="extraText2" placeholder="{{ extraText2_placeholder if extraText2_placeholder }}"></textarea>
+    </dd>
+</dl>
+{% endif %}
+{% if use_extraText3 == '1' %}
+<dl>
+    <dt>{{ extraText3_title }}</dt>
+    <dd>
+        <textarea name="extraText3" placeholder="{{ extraText3_placeholder if extraText3_placeholder }}"></textarea>
+    </dd>
+</dl>
+{% endif %}

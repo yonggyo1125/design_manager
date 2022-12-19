@@ -11,9 +11,9 @@
                         <dl class="mb5">
                             <dt>사용여부</dt>
                             <dd>
-                                <input type="radio" name="use_extra1" value="1" id="use_extra1_1"{{ ' checked' if use_extra1 }}>
+                                <input type="radio" name="use_extra1" value="1" id="use_extra1_1"{{ ' checked' if use_extra1 == "1" }}>
                                 <label for="use_extra1_1">사용</label>
-                                <input type="radio" name="use_extra1" value="0" id="use_extra1_0"{{ ' checked' if not use_extra1 }}>
+                                <input type="radio" name="use_extra1" value="0" id="use_extra1_0"{{ ' checked' if use_extra1 != "1" }}>
                                 <label for="use_extra1_0">미사용</label>
                             </dd>
                         </dl>
@@ -33,9 +33,9 @@
                         <dl class="mb5">
                             <dt>사용여부</dt>
                             <dd>
-                                <input type="radio" name="use_extra2" value="1" id="use_extra2_1"{{ ' checked' if use_extra2 }}>
+                                <input type="radio" name="use_extra2" value="1" id="use_extra2_1"{{ ' checked' if use_extra2 == "1" }}>
                                 <label for="use_extra2_1">사용</label>
-                                <input type="radio" name="use_extra2" value="0" id="use_extra2_0"{{ ' checked' if not use_extra2 }}>
+                                <input type="radio" name="use_extra2" value="0" id="use_extra2_0"{{ ' checked' if use_extra2 != "1" }}>
                                 <label for="use_extra2_0">미사용</label>
                             </dd>
                         </dl>
@@ -55,9 +55,9 @@
                         <dl class="mb5">
                             <dt>사용여부</dt>
                             <dd>
-                                <input type="radio" name="use_extra3" value="1" id="use_extra3_1"{{ ' checked' if use_extra3 }}>
+                                <input type="radio" name="use_extra3" value="1" id="use_extra3_1"{{ ' checked' if use_extra3 == "1" }}>
                                 <label for="use_extra3_1">사용</label>
-                                <input type="radio" name="use_extra3" value="0" id="use_extra3_0"{{ ' checked' if not use_extra3 }}>
+                                <input type="radio" name="use_extra3" value="0" id="use_extra3_0"{{ ' checked' if use_extra3 != "1" }}>
                                 <label for="use_extra3_0">미사용</label>
                             </dd>
                         </dl>
@@ -77,9 +77,9 @@
                         <dl class="mb5">
                             <dt>사용여부</dt>
                             <dd>
-                                <input type="radio" name="use_extra4" value="1" id="use_extra4_1"{{ ' checked' if use_extra4 }}>
+                                <input type="radio" name="use_extra4" value="1" id="use_extra4_1"{{ ' checked' if use_extra4 == "1" }}>
                                 <label for="use_extra4_1">사용</label>
-                                <input type="radio" name="use_extra4" value="0" id="use_extra4_0"{{ ' checked' if not use_extra4 }}>
+                                <input type="radio" name="use_extra4" value="0" id="use_extra4_0"{{ ' checked' if use_extra4 != "1" }}>
                                 <label for="use_extra4_0">미사용</label>
                             </dd>
                         </dl>
@@ -99,9 +99,9 @@
                         <dl class="mb5">
                             <dt>사용여부</dt>
                             <dd>
-                                <input type="radio" name="use_extra5" value="1" id="use_extra5_1"{{ ' checked' if use_extra5 }}>
+                                <input type="radio" name="use_extra5" value="1" id="use_extra5_1"{{ ' checked' if use_extra5 == "1" }}>
                                 <label for="use_extra5_1">사용</label>
-                                <input type="radio" name="use_extra5" value="0" id="use_extra5_0"{{ ' checked' if not use_extra5 }}>
+                                <input type="radio" name="use_extra5" value="0" id="use_extra5_0"{{ ' checked' if use_extra5 != "1" }}>
                                 <label for="use_extra5_0">미사용</label>
                             </dd>
                         </dl>
@@ -121,9 +121,9 @@
                         <dl class="mb5">
                             <dt>사용여부</dt>
                             <dd>
-                                <input type="radio" name="use_extraText1" value="1" id="use_extraText1_1"{{ ' checked' if use_extraText1 }}>
+                                <input type="radio" name="use_extraText1" value="1" id="use_extraText1_1"{{ ' checked' if use_extraText1 == "1" }}>
                                 <label for="use_extraText1_1">사용</label>
-                                <input type="radio" name="use_extraText1" value="0" id="use_extraText1_0"{{ ' checked' if not use_extraText1 }}>
+                                <input type="radio" name="use_extraText1" value="0" id="use_extraText1_0"{{ ' checked' if use_extraText1 != "1" }}>
                                 <label for="use_extraText1_0">미사용</label>
                             </dd>
                         </dl>
@@ -143,9 +143,9 @@
                         <dl class="mb5">
                             <dt>사용여부</dt>
                             <dd>
-                                <input type="radio" name="use_extraText2" value="1" id="use_extraText2_1"{{ ' checked' if use_extraText2 }}>
+                                <input type="radio" name="use_extraText2" value="1" id="use_extraText2_1"{{ ' checked' if use_extraText2 == "1" }}>
                                 <label for="use_extraText2_1">사용</label>
-                                <input type="radio" name="use_extraText2" value="0" id="use_extraText2_0"{{ ' checked' if not use_extraText2 }}>
+                                <input type="radio" name="use_extraText2" value="0" id="use_extraText2_0"{{ ' checked' if use_extraText2 != "1" }}>
                                 <label for="use_extraText2_0">미사용</label>
                             </dd>
                         </dl>
@@ -165,9 +165,9 @@
                         <dl class="mb5">
                             <dt>사용여부</dt>
                             <dd>
-                                <input type="radio" name="use_extraText3" value="1" id="use_extraText3_1"{{ ' checked' if use_extraText3 }}>
+                                <input type="radio" name="use_extraText3" value="1" id="use_extraText3_1"{{ ' checked' if use_extraText3 == "1" }}>
                                 <label for="use_extraText3_1">사용</label>
-                                <input type="radio" name="use_extraText3" value="0" id="use_extraText3_0"{{ ' checked' if not use_extraText3 }}>
+                                <input type="radio" name="use_extraText3" value="0" id="use_extraText3_0"{{ ' checked' if use_extraText3 != "1" }}>
                                 <label for="use_extraText3_0">미사용</label>
                             </dd>
                         </dl>

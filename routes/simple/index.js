@@ -1,15 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { alert } = require("../../library/common");
+const { alert, getConfig } = require("../../library/common");
 const applyOrder = require("../../service/simple/applyOrder");
 /**
  * 간편주문서
  * 
  */
 router.route("/")
-    .get((req, res) => {
+    .get(async (req, res) => {
+        const config = await getConfig("simpleConfig");
         const data = {
             addCss : ["simple/order"],
+            ...config,
         };
         res.render("simple/order", data);
     })
