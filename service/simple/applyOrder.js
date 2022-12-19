@@ -30,6 +30,14 @@ module.exports = async (data) => {
             addressSub : data.addressSub,
             productNm : data.productNm,
             orderMemo : data.orderMemo,
+            extra1 : data.extra1,
+            extra2 : data.extra2,
+            extra3 : data.extra3,
+            extra4 : data.extra4,
+            extra5 : data.extra5,
+            extraText1 : data.extraText1,
+            extraText2 : data.extraText2,
+            extraText3 : data.extraText3,
         });
 
         if (!order) {

@@ -46,6 +46,63 @@
     {% endfor %}
     </div>
     {% endif %}
+
+    <ul class="customer_list">
+    {% if list and list.length > 0 %}
+    {% for item in list %}
+        <li>
+            <div class="cs_no"></div>
+            <div class="cs_content">
+                <table class='table-rows mb10'>
+                    <thead>
+                        <tr>
+                            <th width="160">주문자명</th>
+                            <th width="150">휴대전화</th>
+                            <th>주문상품</th>
+                            <th width="250"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td align="center">{{ item.orderNm }}</td>
+                            <td align="center">{{ item.cellPhone }}</td>
+                            <td>{{ item.productNm }}</td>
+                            <td>
+                                {% if not item.orderNo %}
+                                <a href="/order/add?idSimpleOrder={{item.id}}" class="sbtn" target="_blank">
+                                    <i class="xi-pen-o"></i>주문서 접수하기
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table-cols style2">
+                    <tbody>
+                        <tr>
+                            <th>주소</th>
+                            <td>
+                                {{ '(' + item.zonecode + ')' if item.zonecode }} {{ item.address }} {{ item.addressSub }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>요청사항</th>
+                            <td>
+                                {{ nl2br(item.orderMemo) | safe }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </li>
+    {% endfor %}
+    {% else %}
+        <li class='no-list'>조회된 간편주문서가 없습니다.</li>
+    {% endif %}
+    </ul> 
+
+    <!--// customer_list -->
+    {{ pagination | safe }}
 </div>
 <!--// content_box -->
 {% endblock %}

@@ -27,7 +27,34 @@ module.exports = class SimpleOrder extends Sequelize.Model {
             },
             orderMemo : { // 요청사항
                 type : Sequelize.TEXT,
-            }
+            },
+            extra1 : { // 입력항목
+                type : Sequelize.STRING(100),
+            },
+            extra2 : { // 입력항목
+                type : Sequelize.STRING(100),
+            },
+            extra3 : { // 입력항목
+                type : Sequelize.STRING(100),
+            },
+            extra4 : { // 입력항목
+                type : Sequelize.STRING(100),
+            },
+            extra5 : { // 입력항목
+                type : Sequelize.STRING(100),
+            },
+            extraText1 : { // 입력항목
+                type : Sequelize.TEXT,
+            },
+            extraText2 : { // 입력항목
+                type : Sequelize.TEXT,
+            },
+            extraText2 : { // 입력항목
+                type : Sequelize.TEXT,
+            },
+            orderNo : { //  주문번호
+                type : Sequelize.BIGINT.UNSIGNED,
+            },
         }, {
             sequelize,
             paranoid : true,
