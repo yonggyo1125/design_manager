@@ -18,9 +18,6 @@ router.route("/")
         };
 
         return res.render("customer/simple", data);
-    })
-    .post((req, res) => {
-
     });
 
 

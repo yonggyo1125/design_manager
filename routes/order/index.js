@@ -74,6 +74,9 @@ const getShopOrderViewUrl = require("../../service/order/getShopOrderViewUrl");
 // 결제 요청 URL 전송
 const sendPayUrl = require("../../service/payment/sendPayUrl");
 
+// 간편주문서 정보로 업데이트
+const updateOrderInfoFromSimple = require("../../service/simple/updateOrderInfo");
+
 const router = express.Router();
 const upload = fileDao.getUploads();
 
@@ -187,6 +190,13 @@ router.route("/add")
                 data.itemsJson = JSON.stringify(data.items);
             }
         }
+
+        /** 간편 주문서가 있는 경우 기본 데이터 완성 처리 S */
+        const idSimpleOrder = req.query.idSimpleOrder;
+        if (idSimpleOrder) {
+            await updateOrderInfoFromSimple(idSimpleOrder, data);
+        }
+        /** 간편 주문서가 있는 경우 기본 데이터 완성 처리 E */
 
         data.mode  =  "add";
         data.addScript = ['order/form', 'fileUpload'];
