@@ -70,7 +70,7 @@
                             <th width="160">주문자명</th>
                             <th width="150">휴대전화</th>
                             <th>주문상품</th>
-                            <th width="250"></th>
+                            <th width="200">주문번호</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,8 +78,10 @@
                             <td align="center">{{ item.orderNm }}</td>
                             <td align="center">{{ item.cellPhone }}</td>
                             <td>{{ item.productNm }}</td>
-                            <td>
-                                {% if not item.orderNo %}
+                            <td align="center">
+                                {% if item.orderNo %}
+                                <a href='/order/{{ item.orderNo }}' class='highlight2' target="_blank">{{ item.orderNo }}</a>
+                                {% else %}
                                 <a href="/order/add?idSimpleOrder={{item.id}}" class="sbtn" target="_blank">
                                     <i class="xi-pen-o"></i>주문서 접수하기
                                 </a>

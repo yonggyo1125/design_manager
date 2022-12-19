@@ -1,4 +1,4 @@
-const { sequelize, OrderInfo, OrderItem, OrderItemSample, OrderAddPayment,  Manager, Sequelize : { Op, QueryTypes }, Sequelize } = require('../index');
+const { sequelize, OrderInfo, OrderItem, OrderItemSample, OrderAddPayment,  Manager, SimpleOrder, Sequelize : { Op, QueryTypes }, Sequelize } = require('../index');
 const { getException, logger, validateCellPhone, getLocalDate, getUTCDate, getConfig, dateFormat } = require('../../library/common');
 /** 예외 S */
 const OrderRegisterException = getException("Order/OrderRegisterException");
@@ -318,6 +318,14 @@ const order = {
 
                 await fileDao.updateDone(`order_${orderNo}_${id}`, transaction);
             }
+
+            /** 간편 주문서를 통해 접수한 경우 처리 S */
+            if (data.idSimpleOrder) {
+                await SimpleOrder.update({
+                    orderNo,
+                }, { where : { id : data.idSimpleOrder }, transaction});
+            }
+            /** 간편 주문서를 통해 접수한 경우 처리 E */
 
             /** 주문 품목 저장 E */
             await transaction.commit();

@@ -3,6 +3,9 @@
     {% if itemsJson %}
     <input type='hidden' id='itemsJson' value='{{ itemsJson }}'>
     {% endif %}
+    {% if idSimpleOrder %}
+    <input type="hidden" name="idSimpleOrder" value="{{ idSimpleOrder }}">
+    {% endif %}
     <div class='mtitle top flex_between'>
         주문{{ '수정' if mode == 'update' else '등록' }}
         <div class='tit_btns'>
