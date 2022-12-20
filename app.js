@@ -112,4 +112,12 @@ app.use(async (err, req, res, next) => {
     res.status(err.status).render("error");
 });
 
+
+if (process.env.NODE_ENV === 'production') {
+    process.on('uncaughtException', (err) => {
+        console.error("처리하지 못한 오류 - 확인 요망 : ", err.message);
+        console.error(err);
+    });
+}
+
 module.exports = app;
