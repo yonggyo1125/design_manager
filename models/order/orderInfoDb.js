@@ -36,7 +36,7 @@ module.exports = class OrderInfo extends Sequelize.Model {
                 type : Sequelize.STRING(50),
             },
             orderCellPhone : { // 주문자 연락처 
-                type : Sequelize.STRING(11),
+                type : Sequelize.STRING(15),
                 allowNull : false,
             },
             deliveryChargeType : { // 배송료 구분(pre - 선불, post - 후불)
@@ -81,7 +81,7 @@ module.exports = class OrderInfo extends Sequelize.Model {
                 type : Sequelize.STRING(30),
             },
             receiverCellPhone : { // 수령인 휴대전화
-                type : Sequelize.STRING(11),
+                type : Sequelize.STRING(15),
             },
             receiverZonecode : {
                 type : Sequelize.STRING(10), // 배송 우편번호

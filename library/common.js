@@ -438,6 +438,7 @@ const commonLib = {
 
     	return pattern.test(cellPhone);
 	},
+
 	/**
 	 * 전화번호 유효성 검사
 	 * 
@@ -446,7 +447,7 @@ const commonLib = {
 	 */
 	 validatePhone(phone) {
 		cellPhone = phone.replace(/[^\d]/g, "");
-    	const pattern = /^[\d]{0,3}[\d]{3,4}[\d]{4}$/;
+    	const pattern = /^[\d]{0,4}[\d]{3,4}[\d]{4}$/;
 
     	return pattern.test(phone);
 	},

@@ -146,7 +146,7 @@ module.exports = class OrderItem extends Sequelize.Model {
                 type : Sequelize.STRING(30),
             },
             receiverCellPhone : { // 수령인 휴대전화
-                type : Sequelize.STRING(11),
+                type : Sequelize.STRING(15),
             },
             receiverZonecode : {
                 type : Sequelize.STRING(10), // 배송 우편번호

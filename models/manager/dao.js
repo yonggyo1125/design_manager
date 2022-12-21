@@ -64,7 +64,7 @@ const ManagerDao = {
             const salt = await bcrypt.genSalt(10);
             const managerPw = await bcrypt.hash(data.managerPw, salt);
             let mobile = data.mobile;
-            if (mobile) mobile = mobile.replace(/\\D/g, "");
+            if (mobile) mobile = mobile.replace(/\D/g, "");
 
             const manager = await Manager.create({
                 managerType : data.managerType || "admin",

@@ -1,5 +1,5 @@
 const { sequelize, OrderInfo, OrderItem, OrderItemSample, OrderAddPayment,  Manager, SimpleOrder, Sequelize : { Op, QueryTypes }, Sequelize } = require('../index');
-const { getException, logger, validateCellPhone, getLocalDate, getUTCDate, getConfig, dateFormat } = require('../../library/common');
+const { getException, logger, validateCellPhone, validatePhone, getLocalDate, getUTCDate, getConfig, dateFormat } = require('../../library/common');
 /** 예외 S */
 const OrderRegisterException = getException("Order/OrderRegisterException");
 const OrderUpdateException = getException("Order/OrderUpdateException");
@@ -812,12 +812,12 @@ const order = {
         /** 필수 입력항목 체크 E */
 
         /** 주문자 휴대전화 검증  */
-        if (!validateCellPhone(data.orderCellPhone)) {
+        if (!validateCellPhone(data.orderCellPhone) && !validatePhone(data.orderCellPhone)) {
             throw new Exception("휴대전화번호 형식이 아닙니다(주문자 휴대전화)");
         }
 
         /** 수령인 휴대전화 검증 */
-        if (!validateCellPhone(data.receiverCellPhone)) {
+        if (!validateCellPhone(data.receiverCellPhone) && !validatePhone(data.receiverCellPhone)) {
             throw new Exception("휴대전화번호 형식이 아닙니다(수령인 휴대전화)");
         }
     },
