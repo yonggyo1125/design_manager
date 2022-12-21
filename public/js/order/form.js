@@ -70,7 +70,6 @@ codefty.order = {
                 if (isNaN(item.deliveryCharge)) deliveryCharge = 0;
 
                 var itemTotalPrice = itemPrice * itemCnt + deliveryCharge;
-
                 var html = tplHtml;
                 var id = itemUid;
                 /** HTML 치환 부분 S */
@@ -503,6 +502,15 @@ codefty.order = {
                     /** 사이즈 계산기 사용 품목인 경우 계산 설정 및 금액 계산 E */
                     
                     codefty.order.updateSummary();
+                }).catch(err => {
+                    /** 사이즈 계산기 사용하지 않는 품목인 경우 사이즈 계산기 감추기 */
+                    const sizeCalculatorWrapEl = document.getElementById(`size_calculator_wrap_${itemUid}`);
+                    if (sizeCalculatorWrapEl) {
+                        sizeCalculatorWrapEl.classList.remove("dn")
+                        sizeCalculatorWrapEl.classList.add("dn");
+                    }
+                    
+                  
                 });
             }
 

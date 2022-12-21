@@ -378,10 +378,12 @@
                 <tbody>
                     <tr>
                         <td align="center">
-                            <div  id="board_size_<%=id%>" class="board_size_wrap"></div>
-                            <input type='number' name='itemSizeWidth_<%=id%>' value='<%=itemSizeWidth%>' class='cal_size right' min='0'>
-                             X 
-                            <input type='number' name='itemSizeHeight_<%=id%>' value='<%=itemSizeHeight%>' class='cal_size right' min='0'>
+                            <div class="size_calculator_wrap" id="size_calculator_wrap_<%=id%>">
+                                <div  id="board_size_<%=id%>" class="board_size_wrap"></div>
+                                <input type='number' name='itemSizeWidth_<%=id%>' value='<%=itemSizeWidth%>' class='cal_size right' min='0'>
+                                X 
+                                <input type='number' name='itemSizeHeight_<%=id%>' value='<%=itemSizeHeight%>' class='cal_size right' min='0'>
+                            </div>
                         </td>
                         <td align="center"><%=addOptions%></td>
                         <td class="input_opts"><%=addTextOptions%></td>
