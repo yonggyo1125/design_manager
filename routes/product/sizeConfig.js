@@ -2,7 +2,8 @@ const boardSvc = require('../../service/product/boardSize');
 const sizeConfigSvc = require('../../service/product/sizeConfig');
 const { alert, confirm, reload } = require('../../library/common');
 
-const express = require('express')
+const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 
 

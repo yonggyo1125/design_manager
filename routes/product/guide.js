@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 const { uid, alert, confirm, logger, reload } = require('../../library/common'); 
 const guideDao = require('../../models/product/guideDao');

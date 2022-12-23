@@ -3,6 +3,7 @@ const { commonCheck, guestCheck, commentCheck } = require('../../middleware/boar
 const reviewCheck = require('../../middleware/board/review'); // 후기 체크 
 
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 
 const boardDataDao = require('../../models/board/boardDataDao');

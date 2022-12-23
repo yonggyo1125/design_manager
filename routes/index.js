@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const { go } = require("../library/common");
 
 const getLatest = require('../service/board/getLatest'); // 메뉴별 최근 게시글

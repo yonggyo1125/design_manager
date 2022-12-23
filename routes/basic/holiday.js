@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const { alert, reload, getException, getConfig, getYoils } = require('../../library/common');
 const holidayDao = require('../../models/holiday/dao');
 const HolidayUpdateException = getException("Holiday/HolidayUpdateException");

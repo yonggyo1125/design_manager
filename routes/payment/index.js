@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const { alert, go, isMobile, getConfig, getException, layerClose } = require('../../library/common');
 const router = express.Router();
 const paymentItemSvc = require('../../service/payment/item');

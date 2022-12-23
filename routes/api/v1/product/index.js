@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 const categoryDao = require('../../../../models/product/categoryDao');
 const productSvc = require('../../../../service/api/product');

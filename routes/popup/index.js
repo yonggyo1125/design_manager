@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const { alert, getException, sendPostMessage, layerClose } = require("../../library/common");
 /** 얘외 S */
 const SampleNotFoundException = getException("Product/SampleNotFoundException");

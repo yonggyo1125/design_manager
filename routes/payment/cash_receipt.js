@@ -1,6 +1,7 @@
 const inicisLib = require('../../service/inicis/lib');
 const { alert } = require('../../library/common');
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 
 const cashReceiptSvc = require('../../service/cash_receipt');

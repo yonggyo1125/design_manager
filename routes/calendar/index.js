@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const calendar  = require('../../library/calendar');
 const { getYoils } = require('../../library/common');
 const router = express.Router();

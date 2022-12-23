@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 const { alert } = require("../../library/common");
 const getGuide = require("../../service/product/getGuide");

@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const { alert, getException, reload } = require('../../library/common');
 const APIKeyIssueException = getException("API/APIKeyIssueException");
 const APIKeyCancelException = getException("API/APIKeyCancelException");

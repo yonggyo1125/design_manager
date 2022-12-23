@@ -1,5 +1,5 @@
-const { query } = require('express');
 const express = require('express');
+require('express-async-errors');
 const { alert, reload, getException, go } = require("../../library/common");
 
 /** 예외 S */

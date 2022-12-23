@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const { managerOnly, managerAuth } = require('../../middleware/manager');
 const { getConfig, saveConfig, alert } = require("../../library/common");
 const Exception = require("../../core/exception");

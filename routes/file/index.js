@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const { alert, getException, getConfig } = require('../../library/common');
 /** 예외 S */
 const FileUploadException = getException("File/FileUploadException");

@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const dao = require('../../models/manager/dao');
 const { alert, go, getException, layerClose } = require('../../library/common');
 /** 예외 S */

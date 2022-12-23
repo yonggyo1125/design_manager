@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 const { alert, go } = require("../../library/common");
 const getDeliveryTraceUrls = require("../../service/order/getDeliveryTraceUrls");

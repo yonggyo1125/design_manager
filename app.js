@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');

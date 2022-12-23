@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const { managerOnly, managerAuth } = require('../../middleware/manager');
 const menuSvc = require('../../service/menu');
 const orderDao = require('../../models/order/dao');

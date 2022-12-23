@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 const { alert, logger, confirm } = require("../../library/common");
 const reservationDao = require("../../models/kakaoAlimTalk/reservationDao");

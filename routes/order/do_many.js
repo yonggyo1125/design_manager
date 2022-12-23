@@ -1,6 +1,7 @@
 const { managerOnly, managerAuth } = require('../../middleware/manager');
 const { getException, alert, logger } = require('../../library/common');
 const express = require('express');
+require('express-async-errors');
 const multer = require('multer');
 const fs = require('fs').promises;
 const constants = require('fs').constants;

@@ -1,5 +1,5 @@
 const express = require('express');
-const { json } = require('sequelize');
+require('express-async-errors');
 const router = express.Router();
 const generateUrlAccessToken = require("../../../../service/utils/generateUrlAccessToken");
 

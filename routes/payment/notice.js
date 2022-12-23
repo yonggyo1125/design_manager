@@ -1,5 +1,6 @@
 const noticeSvc = require('../../service/payment/notice');
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 
 

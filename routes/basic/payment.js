@@ -1,6 +1,7 @@
 const { getConfig, saveConfig, alert } = require("../../library/common");
 const Exception = require("../../core/exception");
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 
 router.route("/")

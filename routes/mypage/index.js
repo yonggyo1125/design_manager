@@ -10,6 +10,7 @@ const orderStatusDao = require('../../models/order/orderStatusDao');
 const designStatusDao = require('../../models/order/designStatusDao');
 
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 
 router.use((req, res, next) => {

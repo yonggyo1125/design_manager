@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const multer = require('multer');
 const orderDao = require('../../models/order/dao');
 

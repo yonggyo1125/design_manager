@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const { getSigugun } = require('../../library/area');
 const router = express.Router();
 

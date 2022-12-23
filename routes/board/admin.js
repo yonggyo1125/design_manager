@@ -4,6 +4,7 @@ const levelDao = require('../../models/manager/levelDao');
 const kakaoTemplateDao = require('../../models/kakaoAlimTalk/templateDao');
 const { alert, confirm, logger, reload } = require('../../library/common');
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 
 // 게시판 등록, 수정

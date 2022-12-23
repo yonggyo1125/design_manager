@@ -1,5 +1,5 @@
 const express = require('express');
-const { Utils } = require('sequelize');
+require('express-async-errors');
 const router = express.Router();
 const { alert } = require('../../library/common');
 const orderDao = require('../../models/order/dao');

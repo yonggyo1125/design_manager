@@ -9,6 +9,7 @@ const deliveryDao = require('../../../../models/delivery/dao');
 
 
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 
 // 주문접수

@@ -1,6 +1,7 @@
 const { logger } = require('../../library/common');
 const oauthSvc = require('../../service/api/oauth');
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 
 /** 인증 요청  */

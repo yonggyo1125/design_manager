@@ -2,6 +2,7 @@ const { alert, confirm } = require('../../library/common');
 const menuSvc = require('../../service/menu');
 const levelSvc = require('../../service/manager/level');
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 
 /**

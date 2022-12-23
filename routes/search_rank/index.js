@@ -2,6 +2,7 @@ const searchRankJobSvc = require('../../service/searchRankJob');
 const searchRankStatSvc = require('../../service/searchRankJob/statistic');
 const { alert, getLocalDate } = require('../../library/common');
 const express = require('express');
+require('express-async-errors');
 const router = express.Router();
 
 const menuSvc = require('../../service/menu');

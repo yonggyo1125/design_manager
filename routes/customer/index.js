@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const { managerOnly, managerAuth } = require('../../middleware/manager');
 const { getYoils, getException, alert, saveConfig, getConfig, reload, dateFormat, go } = require("../../library/common");
 /** 예외 S */
