@@ -26,11 +26,17 @@ router.use("/token", async (req, res, next) => {
 
 /** 에러 처리 라우터  */
 router.use((err, req, res, next) => {
-    logger(err);
     const data = {
         error : err.code,
         error_description : err.message,
     };
-    return res.status(err.status || 500).json(data);
+    try {
+        logger(err);
+        return res.status(err.status || 500).json(data);
+    } catch (e) {
+        logger(e);
+        //return res.json(data);
+
+    } 
 });
 module.exports = router;
