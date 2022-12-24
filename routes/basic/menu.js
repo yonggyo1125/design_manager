@@ -77,7 +77,7 @@ router.route("/sub/:id")
         }
     })
     .post((req, res) => {
-
+        return res.send("");
     });
 
 /** 메뉴 수정 */

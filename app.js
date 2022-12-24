@@ -1,5 +1,6 @@
 const express = require('express');
 require('express-async-errors');
+const timeout = require('connect-timeout')
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -18,6 +19,7 @@ const NotFoundException = require("./core/Exception/NotFoundException"); // ì—†ë
 const shareSessionCookie = require('./service/manager/shareSessionCookie');
 
 const app = express();
+app.use(timeout("10s"));
 
 dotenv.config();
 
@@ -41,6 +43,10 @@ sequelize.sync({ force : false })
         console.error(err);
     });
 
+
+app.use((req, res, next) => {
+    if (!req.timedout) next();
+});
 
 app.use((req, res, next) => {
     if (process.env.NODE_ENV === 'production') {
