@@ -9,7 +9,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
     const result = await axios({
         method: "GET",
-        url : "https://n-mk.com/shop/dbport/board.php?id=notice",
+        url : "https://n-mk.com/shop/dbport/board.php?id=project",
     });
     
     let listOrder = Date.now();
@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
         contents = contents.replace(/http:\/\/n-mk.com/g, "https://dm.n-mk.kr");
         const params = {
             gid : li.gid,
-            poster : li.post_name,
+            poster : li.post_name || "강진석",
             guestPw : li.password,
             isNotice : li.is_notice == "1"?true:false,
             category : li.category,
@@ -33,7 +33,7 @@ router.get("/", async (req, res) => {
             useEditor : true,
             extra1 : li.idx,
             listOrder,
-            idBoard : "notice",
+            idBoard : "project",
             idManager : 2,
         };
 
