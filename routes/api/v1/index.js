@@ -51,7 +51,11 @@ router.use((err, req, res, next) => {
         error : err.code || 500,
         error_description : err.message,
     };
-    return res.status(err.status || 500).json(data);
+    try {
+        return res.status(err.status || 500).json(data);
+    } catch (e) {
+        return res.json(data);
+    }
 });
 
 module.exports = router;
