@@ -12,8 +12,6 @@ process.on('uncaughtException', (err) => {
 
 
 process.on('SIGINT', () => {
-    app.close(() => {
-        console.log('server closed');
-        process.exit(0);
-    });
+    console.log('server closed');
+    process.exit(0);
 });
