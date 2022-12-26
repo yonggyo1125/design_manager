@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
             ipAddr : li.ip,
             userAgent : "",
             useEditor : true,
-            extra1 : li.idx,
+            extra1 : li.idx || null,
             listOrder,
             idBoard : "Rebate_application",
             idManager : 2,
