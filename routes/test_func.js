@@ -9,7 +9,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
     const result = await axios({
         method: "GET",
-        url : "https://n-mk.com/shop/dbport/board.php?id=Rebate_application",
+        url : "https://n-mk.com/shop/dbport/board.php?id=work_statement",
     });
     
     let listOrder = Date.now();
@@ -32,9 +32,9 @@ router.get("/", async (req, res) => {
             ipAddr : li.ip,
             userAgent : "",
             useEditor : true,
-            extra1 : li.idx || null,
+            extra1 : "" + li.idx,
             listOrder,
-            idBoard : "Rebate_application",
+            idBoard : "work_statement",
             idManager : 2,
         };
 
