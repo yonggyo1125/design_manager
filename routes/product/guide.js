@@ -45,7 +45,14 @@ router.route("/")
  * 
  */
 router.route("/add")
-    .get((req, res) => {
+    .get(async (req, res) => {
+        const subMenus = await menuSvc.getsByType("customer");
+        if (subMenus) {
+            res.locals.subMenus = subMenus;
+        }
+    
+        res.locals.menuOn="customer";
+        res.locals.topBoards = await req.getBoards('customer');
         const data = {
             subMenuUrl : "/product/guide",
             addScript : ["ckeditor/ckeditor", "fileUpload", "guide/form"],
@@ -66,6 +73,13 @@ router.route("/add")
     });
 /** 사용 안내 수정 S */
 router.get("/edit/:id", async (req, res) => {
+    const subMenus = await menuSvc.getsByType("customer");
+    if (subMenus) {
+        res.locals.subMenus = subMenus;
+    }
+    
+    res.locals.menuOn="customer";
+    res.locals.topBoards = await req.getBoards('customer');
     const id = req.params.id;
     const data = await guideDao.get(id);
 

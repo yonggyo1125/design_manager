@@ -51,7 +51,10 @@ module.exports = class Comment extends Sequelize.Model {
             isSentAdminKakaoAlimTalk : { // 관리자 알림톡 전송 여부
                 type : Sequelize.BOOLEAN,
                 defaultValue : false,
-            }
+            },
+            extra1 : { 
+                type : Sequelize.STRING(100),                
+            } 
         }, {
             sequelize,
             paranoid : true,

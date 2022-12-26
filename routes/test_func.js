@@ -1,11 +1,11 @@
 const axios = require('axios');
 const express = require('express');
-const { BoardData } = require("../models");
+const { Comment, BoardData, Sequelize : { Op } } = require("../models");
 require('express-async-errors');
 const router = express.Router();
 
 //const generateUrlAccessToken = require("../service/utils/generateUrlAccessToken");
-
+/** 
 router.get("/", async (req, res) => {
     const result = await axios({
         method: "GET",
@@ -50,4 +50,47 @@ router.get("/", async (req, res) => {
     return res.send("");
     
 });
+*/
+
+router.get("/", async (req, res) => {
+    const list = await BoardData.findAll({ 
+        attributes: ["id", "extra1"],
+        where: { totalComments : { [Op.gt] : 0 }} 
+    });
+    for (const li of list) {
+        
+        const idx = li.extra1;
+        if (!idx) continue; 
+
+        let url = `https://n-mk.com/shop/dbport/comment.php?idx=${idx}`;
+        const result = await axios({
+            method : "GET",
+            url,
+        });
+        if (!result) continue;
+        let gid = Date.now();
+        for (const data of result.data) {
+            gid++;
+            const cnt = await BoardData.count({ where : { extra1 : "" + data.idx}});
+            if (cnt > 0) continue;
+
+            const params = {
+                gid, 
+                commenter : data.post_name,
+                content : data.contents,
+                ipAddr : data.ip,
+                useEditor : false,
+                listOrder : gid,
+                extra1 : data.idx,
+                idBoardData : li.id,
+                idManager : 2,
+            };
+            await Comment.create(params);
+        }
+
+    }
+
+    res.send("");
+});
+
 module.exports = router;
