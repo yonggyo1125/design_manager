@@ -5,6 +5,7 @@ const { uid, alert, confirm, logger, reload } = require('../../library/common');
 const guideDao = require('../../models/product/guideDao');
 const saveGuide = require("../../service/product/saveGuide"); // 사용안내 저장
 const deleteGuide = require("../../service/product/deleteGuide"); // 사용안내 삭제
+const menuSvc = require('../../service/menu');
 
 /**
  * 사용안내관리 목록 
@@ -14,7 +15,15 @@ router.route("/")
     .get(async (req, res) => {
         const search = req.query;
         const list = await guideDao.gets(search.page, search.limit, req, search);
+        const subMenus = await menuSvc.getsByType("customer");
+        if (subMenus) {
+            res.locals.subMenus = subMenus;
+        }
+    
+        res.locals.menuOn="customer";
+        res.locals.topBoards = await req.getBoards('customer');
         const data = { 
+            subMenuUrl : "/customer",
             list, 
             pagination :  guideDao.pagination,
             total : guideDao.total,
