@@ -233,7 +233,7 @@ header .board_links a:not(.first):before { content: ''; display: block; height: 
 header .more_board { cursor: pointer; }
 
 /** 게시판 상단 더보기 팝업 */
-.board_links_more { position: absolute; border: 1px solid #596b99; padding: 15px; background: #fff; min-height: 200px; top: 60px; right: 20px; min-width: 380px; border-radius: 3px; }
+.board_links_more { position: absolute; border: 1px solid #596b99; padding: 15px; background: #fff; top: 60px; right: 20px; min-width: 380px; border-radius: 3px; }
 .board_links_more a { display: inline-block; margin-right: 15px; }
 .board_links_more a:hover{ text-decoration: underline; }
 /** 상단 공통 E */
