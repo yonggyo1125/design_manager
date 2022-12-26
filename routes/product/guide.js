@@ -23,7 +23,6 @@ router.route("/")
         res.locals.menuOn="customer";
         res.locals.topBoards = await req.getBoards('customer');
         const data = { 
-            subMenuUrl : "/customer",
             list, 
             pagination :  guideDao.pagination,
             total : guideDao.total,
