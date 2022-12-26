@@ -9,7 +9,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
     const result = await axios({
         method: "GET",
-        url : "https://n-mk.com/shop/dbport/board.php?id=Rebate_application",
+        url : "https://n-mk.com/shop/dbport/board.php?id=tax_invoice",
     });
     
     let listOrder = Date.now();
@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
             useEditor : true,
             extra1 : "" + li.idx,
             listOrder,
-            idBoard : "Rebate_application",
+            idBoard : "tax_invoice",
             idManager : 2,
         };
 
