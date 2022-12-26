@@ -19,6 +19,7 @@ router.get("/", async (req, res) => {
         if (cnt > 0) continue;
         let contents = li.contents;
         contents = contents.replace(/http:\/\/n-mk.com/g, "https://dm.n-mk.kr");
+        try {
         const params = {
             gid : li.gid,
             poster : li.post_name || "강진석",
@@ -31,14 +32,19 @@ router.get("/", async (req, res) => {
             ipAddr : li.ip,
             userAgent : "",
             useEditor : true,
-            extra1 : li.idx || "",
+            extra1 : li.idx,
             listOrder,
             idBoard : "Rebate_application",
             idManager : 2,
         };
 
         await BoardData.create(params); 
+        } catch (e) {
+            console.log(e);
+            continue;
+        }
     }
+
 
 
     return res.send("");
