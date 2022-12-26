@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
         listOrder++;
         const cnt = await BoardData.count({ where : {extra1 : "" + li.idx}});
         if (cnt > 0) continue;
-        let contents = li.contents;
+        let contents = "" + li.contents;
         contents = contents.replace(/http:\/\/n-mk.com/g, "https://dm.n-mk.kr");
         try {
         const params = {
