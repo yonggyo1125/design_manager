@@ -9,13 +9,13 @@ const router = express.Router();
 router.get("/", async (req, res) => {
     const result = await axios({
         method: "GET",
-        url : "https://n-mk.com/shop/dbport/board.php?id=work_statement",
+        url : "https://n-mk.com/shop/dbport/board.php?id=Rebate_application",
     });
     
     let listOrder = Date.now();
     for (const li of result.data) {
         listOrder++;
-        const cnt = await BoardData.count({ where : {extra1 : li.idx}});
+        const cnt = await BoardData.count({ where : {extra1 : "" + li.idx}});
         if (cnt > 0) continue;
         let contents = li.contents;
         contents = contents.replace(/http:\/\/n-mk.com/g, "https://dm.n-mk.kr");
@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
             useEditor : true,
             extra1 : "" + li.idx,
             listOrder,
-            idBoard : "work_statement",
+            idBoard : "Rebate_application",
             idManager : 2,
         };
 
