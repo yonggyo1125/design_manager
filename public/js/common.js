@@ -577,7 +577,7 @@ window.addEventListener("DOMContentLoaded", function() {
 
         moreBoardContentEl.addEventListener("mouseleave", function() {
             this.classList.remove("dn");
-            this.classList.remove("dn");
+            this.classList.add("dn");
         });
     }
     /** 게시판 더보기 버튼 클릭 처리 E */
