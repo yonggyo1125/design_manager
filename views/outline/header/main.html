@@ -8,6 +8,9 @@
         <div class='right'>
             <div class="btns">
             {% if isLogin %}
+                {% if topBoards and topBoards.length > 4 %}
+                <a class="more_board">게시판 더보기</a>
+                 {% endif %}
                 <a href='/manager/info'>회원정보수정</a>
                 <a href='/manager/logout'>로그아웃</a>
             {% else %}
@@ -20,11 +23,13 @@
             <div class="board_links">
                 {% if topBoards and topBoards.length > 0 %}
                     {% for item in topBoards %}
+                    {% if loop.index < 5 %}
                     <a href="/board/list/{{ item.id }}"{{ " class=first" if loop.index == 1 }}>{{ item.title }}</a>
+                    {% endif %}
                     {% endfor %}
                 {% endif %}
-                <a href="#">조직도</a>
-                <a href="{{ openMarketManagerURL }}">오픈마켓 관리</a>
+                <a href="/board/view/72">조직도</a>
+               
             </div>
             {% endif %}
             
