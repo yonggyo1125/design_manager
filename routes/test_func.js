@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
             ipAddr : li.ip,
             userAgent : "",
             useEditor : true,
-            extra1 : li.idx,
+            extra1 : li.idx || 0,
             listOrder,
             idBoard : "manage_material",
             idManager : 2,
