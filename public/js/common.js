@@ -565,5 +565,15 @@ window.addEventListener("DOMContentLoaded", function() {
     }
 
     /** API 연동 쇼핑몰 주문상세 보기 처리 E */
-
+    
+    /** 게시판 더보기 버튼 클릭 처리 S */
+    const moreBoardEl = document.querySelector("nav .more_board");
+    const moreBoardContentEl = document.querySelector("nav .board_links_more");
+    if (moreBoardEl && moreBoardContentEl) {
+        moreBoardEl.addEventListener("click", function() {
+            const classList = moreBoardContentEl.classList;
+            classList.toggle("dn");
+        });
+    }
+    /** 게시판 더보기 버튼 클릭 처리 E */
 }); 

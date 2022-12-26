@@ -29,10 +29,16 @@
                     {% endfor %}
                 {% endif %}
                 <a href="/board/view/72">조직도</a>
-               
             </div>
             {% endif %}
             
         </div>
     </div>
+    {% if isLogin and topBoards and topBoards.length > 3 %}
+    <div class="board_links_more dn">
+        {% for item in topBoards %}
+        <a href="/board/list/{{ item.id }}">{{ item.title }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
 </nav>

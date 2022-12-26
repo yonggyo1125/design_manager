@@ -230,7 +230,12 @@ header nav .btns a { display: inline-block; border: 1px solid #596b99; font-size
 header nav .btns a.on { color: #fff; background-color: #596b99; }
 header .board_links a { color: #484b5b; font-size: 16px; font-weight: bold; line-height: 28px; padding: 0 23px; position: relative; }
 header .board_links a:not(.first):before { content: ''; display: block; height: 15px; width: 1px; background-color: #484b5b; position: absolute; left: 0; top: 3px; }
+header .more_board { cursor: pointer; }
 
+/** 게시판 상단 더보기 팝업 */
+.board_links_more { position: absolute; border: 1px solid #596b99; padding: 15px; background: #fff; min-height: 200px; top: 60px; right: 20px; min-width: 380px; border-radius: 3px; }
+.board_links_more a { display: inline-block; margin-right: 15px; }
+.board_links_more a:hover{ text-decoration: underline; }
 /** 상단 공통 E */
 
 /** 내용 영역 공통 S */
